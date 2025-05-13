@@ -1,6 +1,6 @@
-import type { ResultService } from "../../../types/Base/ResultService";
-import type { Brand } from "../../../types/ProductClassification/Brand/Brand";
-import { BRAND_API_URL } from "../../apiConfig";
+import type { ResultService } from "../../../../types/Base/ResultService";
+import type { Brand } from "../../../../types/ProductClassification/Brand/Brand";
+import { BRAND_API_URL } from "../../../apiConfig";
 
 // Cache for storing fetched brands
 let brandCache: Brand[] | null = null;

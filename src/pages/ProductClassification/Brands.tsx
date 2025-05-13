@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card, Col, Row, Button, ConfigProvider, Modal, Form, Input } from 'antd';
-import ListBrand from '../ProductClassification/Components/ListBrand.Component';
+import ListBrand from './Components/ProductClassification.ListBrand';
 import { PlusOutlined } from '@ant-design/icons';
 import { useButtonStyles } from '../../../src/hooks/useButtonStyles';
 import { saveBrandByDapper } from '../../services/ProductClassification/Brand.Service/BrandService';
