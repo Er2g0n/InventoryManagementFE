@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllBrands, deleteBrandByDapper } from "../../../services/ProductClassification/Brand.Service/BrandService";
 import type { Brand } from "../../../types/ProductClassification/Brand/Brand";
 import type { ResultService } from "../../../types/Base/ResultService";
 import { type TableColumnsType, Table, type TableProps, Button, Space, ConfigProvider, Popconfirm } from "antd";
 import { useButtonStyles } from "../../../hooks/useButtonStyles";
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { deleteBrandByDapper, getAllBrands } from "../../../services/MasterData/Product/ProductClassification/BrandService";
 
 interface ListBrandProps {
   refreshTrigger: number;

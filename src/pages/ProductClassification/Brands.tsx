@@ -3,9 +3,9 @@ import { Card, Col, Row, Button, ConfigProvider, Modal, Form, Input } from 'antd
 import ListBrand from './Components/ProductClassification.ListBrand';
 import { PlusOutlined } from '@ant-design/icons';
 import { useButtonStyles } from '../../../src/hooks/useButtonStyles';
-import { saveBrandByDapper } from '../../services/ProductClassification/Brand.Service/BrandService';
 import type { Brand } from '../../types/ProductClassification/Brand/Brand';
 import useNotification from '../../../src/hooks/useNotification';
+import { saveBrandByDapper } from '../../services/MasterData/Product/ProductClassification/BrandService';
 
 type FieldType = {
   brandCode: string;

@@ -1,4 +1,4 @@
-import type { BaseEntity } from "../Base/BaseEntity";
+import type { BaseEntity } from "../../Base/BaseEntity";
 
 export interface Brand extends BaseEntity {
   brandCode: string;
