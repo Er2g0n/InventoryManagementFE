@@ -2,7 +2,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes";
 import { HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import store from "./store/store";
+
 
 const router = createBrowserRouter(routes);
 
