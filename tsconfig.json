@@ -28,6 +28,8 @@
       "@assets/*": ["src/assets/*"],
       "@pages/*": ["src/pages/*"],
       "@redux/*" : ["src/redux/*"],
+      "@features/*" : ["src/features/*"],
+
         "@/*": ["src/*"],
       
     }

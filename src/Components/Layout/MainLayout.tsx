@@ -24,6 +24,7 @@ import {
 import Loading from "@/Components/Loading";
 // import PageErrorBoundary from "@pages/PageErrorBoundary";
 import LeftNavigation from "@/Components/Navigation/LeftNavigation";
+import PageErrorBoundary from "@pages/PageErrorBoundary";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -189,9 +190,9 @@ function MainLayout () {
           }}
         >
           <Suspense fallback={<Loading />}>
-            {/* <PageErrorBoundary> */}
+            <PageErrorBoundary>
               <Outlet />
-            {/* </PageErrorBoundary> */}
+            </PageErrorBoundary>
           </Suspense>
         </Content>
 

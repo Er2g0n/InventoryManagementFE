@@ -15,7 +15,6 @@ import { HandleRoutes, WEB_ENPOINT } from "@/routes";
 import { watch } from "fs";
 
 const { Title } = Typography;
-const { SubMenu, Item } = Menu;
 
 interface LeftNavigationProps {
   collapsed: boolean;
@@ -26,14 +25,14 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
   ({ collapsed }) => {
     // Type cast cho handle
     const matches = useMatches();
-    const nowRoutes = useMemo(() => {
-      const lastMatch = matches[matches.length - 1] as UIMatch<
-        any,
-        HandleRoutes
-      >;
+    // const nowRoutes = useMemo(() => {
+    //   const lastMatch = matches[matches.length - 1] as UIMatch<
+    //     any,
+    //     HandleRoutes
+    //   >;
 
-      return lastMatch;
-    }, [matches]);
+    //   return lastMatch;
+    // }, [matches]);
     // Type cast cho handle
 
     // const pattern = (lastMatch.handle as HandleWithPattern | undefined)?.pattern;
@@ -44,21 +43,21 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
       if (!collapsed) {
         const newOpenKeys: string[] = [];
 
-        if (nowRoutes.handle?.pattern && nowRoutes.handle?.pattern == "/") {
-          setOpenKeys([]);
-        } else {
-          const newOpenKeys: string[] = [];
-          const pathKey = nowRoutes.handle?.pattern.toLowerCase().split("/");
-          let currentPath = "";
+        // if (nowRoutes.handle?.pattern && nowRoutes.handle?.pattern == "/") {
+        //   setOpenKeys([]);
+        // } else {
+        //   const newOpenKeys: string[] = [];
+        //   const pathKey = nowRoutes.handle?.pattern.toLowerCase().split("/");
+        //   let currentPath = "";
 
-          pathKey.shift();
-          for (const element of pathKey) {
-            currentPath += "/" + element;
-            newOpenKeys.push(currentPath + "key");
-          }
+        //   pathKey.shift();
+        //   for (const element of pathKey) {
+        //     currentPath += "/" + element;
+        //     newOpenKeys.push(currentPath + "key");
+        //   }
 
-          setOpenKeys(newOpenKeys);
-        }
+        //   setOpenKeys(newOpenKeys);
+        // }
       }
     }, [matches, collapsed]);
 
@@ -71,12 +70,12 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
     const getSelectedKeys = (): string[] => {
       // eslint-disable-next-line no-console
       // console.log(nowRoutes, "fdfsdf");
-      return [nowRoutes.handle?.pattern ?? "/"];
+      return ["/"];
     };
 
     return (
-      <div className="tw:flex tw:flex-col tw:h-full">
-        <div className="tw:flex tw:justify-center tw:items-center tw:h-16 tw:m-4">
+      <div className="flex flex-col h-full">
+        <div className="flex justify-center items-center h-16 m-4">
           <Title level={4} style={{ margin: 0, color: "white" }}>
             {collapsed ? "App" : "My App"}
           </Title>
@@ -90,60 +89,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           onOpenChange={onOpenChange}
           style={{ borderRight: 0 }}
         >
-          <Item key={WEB_ENPOINT.Home} icon={<HomeOutlined />}>
-            <Link to={WEB_ENPOINT.Home}>Home</Link>
-          </Item>
-
-          <Item key={WEB_ENPOINT.Read} icon={<ReadOutlined />}>
-            <Link to={WEB_ENPOINT.Read}>Read</Link>
-          </Item>
-
-          <Item key={WEB_ENPOINT.Route} icon={<AppstoreOutlined />}>
-            <Link to={WEB_ENPOINT.Route}>Route</Link>
-          </Item>
-          {/* Develop Module 2: Master Data */}
-          <SubMenu
-            icon={<ShoppingOutlined />}
-            title="Master Data"
-          >
-            <Item key={WEB_ENPOINT.StatusMaster.index}>
-              <Link to={WEB_ENPOINT.StatusMaster.index}>Status Master</Link>
-            </Item>
-            <Item key={WEB_ENPOINT.Brand.id}>
-              <Link to={`${WEB_ENPOINT.Brand.index}/1`}>Warehouse</Link>
-            </Item>
-          </SubMenu>
-
-          {/*  */}
-          <SubMenu
-            key={(WEB_ENPOINT.Brand.index + "key").toLowerCase()}
-            icon={<ShoppingOutlined />}
-            title="Product Classification"
-          >
-            <Item key={WEB_ENPOINT.Brand.index}>
-              <Link to={WEB_ENPOINT.Brand.index}>All Brands</Link>
-            </Item>
-            <Item key={WEB_ENPOINT.Brand.id}>
-              <Link to={`${WEB_ENPOINT.Brand.index}/1`}>id Brand</Link>
-            </Item>
-            <Item key={WEB_ENPOINT.ProductType.index}>
-              <Link to={WEB_ENPOINT.ProductType.index}>Product Type</Link>
-            </Item>
-          </SubMenu>
-          <SubMenu
-            key={WEB_ENPOINT.CurrentStock.index + "key"}
-            icon={<DatabaseOutlined />}
-            title="Current Stock"
-          >
-            <Item key="stock-list">
-              <Link to={WEB_ENPOINT.CurrentStock.index}>All Stock</Link>
-            </Item>
-            <Item key="stock-text-link">
-              <Link to={`${WEB_ENPOINT.CurrentStock.index}/1`}>
-                Test link Stock
-              </Link>
-            </Item>
-          </SubMenu>
+      
         </Menu>
       </div>
     );

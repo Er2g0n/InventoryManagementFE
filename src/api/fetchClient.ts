@@ -10,6 +10,7 @@ import {
 } from "axios-cache-interceptor";
 import type { AxiosRequestConfig } from "axios";
 import { CacheAxiosResponse, CacheProperties } from "axios-cache-interceptor";
+import { ResultService } from "@/types/Base/ResultService";
 // Create axios instance with default config
 const axiosInstance: AxiosInstance & CacheInstance = setupCache(
   axios.create({
@@ -75,12 +76,6 @@ axiosInstance.interceptors.response.use(
 );
 
 
-export interface ApiResponse<T> {
-  message: string;
-  code: string;
-  sent: Date;
-  data: T;
-}
 export type myAxiosRequestConfig = AxiosRequestConfig & {
   cache?: boolean | Partial<CacheProperties<CacheAxiosResponse, unknown>>;
 };
@@ -90,44 +85,39 @@ export const fetchClient = async <T, D = any>(
   url: string,
   data?: D,
   config?: myAxiosRequestConfig
-): Promise<T> => {
+): Promise<ResultService<T>> => {
   try {
     let response;
-
     const myConfig = { cache: false, ...config } as myAxiosRequestConfig;
-
     switch (method) {
     case "GET":
       // add logic isactice memory cache
-
       if (myConfig.cache) {
         delete myConfig.cache;
       }
       // end logic unactive memory cache
-
-
       response = await axiosInstance.get<
-          ApiResponse<T>,
-          CacheAxiosResponse<ApiResponse<T>>
+          ResultService<T>,
+          CacheAxiosResponse<ResultService<T>>
         >(url, myConfig);
 
       break;
     case "POST":
       response = await axiosInstance.post<
-          ApiResponse<T>,
-          CacheAxiosResponse<ApiResponse<T>>
+          ResultService<T>,
+          CacheAxiosResponse<ResultService<T>>
         >(url, data, config);
       break;
     case "PUT":
       response = await axiosInstance.put<
-          ApiResponse<T>,
-          CacheAxiosResponse<ApiResponse<T>>
+          ResultService<T>,
+          CacheAxiosResponse<ResultService<T>>
         >(url, data, config);
       break;
     case "DELETE":
       response = await axiosInstance.delete<
-          ApiResponse<T>,
-          CacheAxiosResponse<ApiResponse<T>>
+          ResultService<T>,
+          CacheAxiosResponse<ResultService<T>>
         >(url, {
           ...config,
           data // For DELETE requests, data needs to be passed as config.data
@@ -135,15 +125,14 @@ export const fetchClient = async <T, D = any>(
       break;
     case "PATCH":
       response = await axiosInstance.patch<
-          ApiResponse<T>,
-          CacheAxiosResponse<ApiResponse<T>>
+          ResultService<T>,
+          CacheAxiosResponse<ResultService<T>>
         >(url, data, config);
       break;
     default:
       throw new Error(`Unsupported method: ${method}`);
     }
-
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error(`Error in ${method} request to ${url}:`, error);
     throw error;
