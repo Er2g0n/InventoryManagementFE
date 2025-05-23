@@ -42,7 +42,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
 
     useEffect(() => {
       if (!collapsed) {
-        let newOpenKeys: string[] = [];
+        const newOpenKeys: string[] = [];
 
         if (nowRoutes.handle?.pattern && nowRoutes.handle?.pattern == "/") {
           setOpenKeys([]);
@@ -70,7 +70,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
     // Determine which menu item should be active based on current path
     const getSelectedKeys = (): string[] => {
       // eslint-disable-next-line no-console
-      console.log(nowRoutes, "fdfsdf");
+      // console.log(nowRoutes, "fdfsdf");
       return [nowRoutes.handle?.pattern ?? "/"];
     };
 
@@ -118,13 +118,16 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           <SubMenu
             key={(WEB_ENPOINT.Brand.index + "key").toLowerCase()}
             icon={<ShoppingOutlined />}
-            title="Brands"
+            title="Product Classification"
           >
             <Item key={WEB_ENPOINT.Brand.index}>
               <Link to={WEB_ENPOINT.Brand.index}>All Brands</Link>
             </Item>
             <Item key={WEB_ENPOINT.Brand.id}>
               <Link to={`${WEB_ENPOINT.Brand.index}/1`}>id Brand</Link>
+            </Item>
+            <Item key={WEB_ENPOINT.ProductType.index}>
+              <Link to={WEB_ENPOINT.ProductType.index}>Product Type</Link>
             </Item>
           </SubMenu>
           <SubMenu

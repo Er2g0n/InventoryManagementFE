@@ -21,9 +21,9 @@ import {
   LogoutOutlined
 } from "@ant-design/icons";
 
-import Loading from "@components/Loading";
-import PageErrorBoundary from "@pages/PageErrorBoundary";
-import LeftNavigation from "@/components/Navigation/LeftNavigation";
+import Loading from "@/Components/Loading";
+// import PageErrorBoundary from "@pages/PageErrorBoundary";
+import LeftNavigation from "@/Components/Navigation/LeftNavigation";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -189,9 +189,9 @@ function MainLayout () {
           }}
         >
           <Suspense fallback={<Loading />}>
-            <PageErrorBoundary>
+            {/* <PageErrorBoundary> */}
               <Outlet />
-            </PageErrorBoundary>
+            {/* </PageErrorBoundary> */}
           </Suspense>
         </Content>
 
