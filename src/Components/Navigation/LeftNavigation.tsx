@@ -5,14 +5,11 @@ import { Link, UIMatch, useMatches } from "react-router-dom";
 import { Menu, Typography } from "antd";
 import type { MenuProps } from "antd";
 import {
-  HomeOutlined,
-  ReadOutlined,
   ShoppingOutlined,
-  DatabaseOutlined,
-  AppstoreOutlined
 } from "@ant-design/icons";
-import { HandleRoutes, WEB_ENPOINT } from "@/routes";
-import { watch } from "fs";
+
+import SubMenu from "antd/es/menu/SubMenu";
+import MenuItem from "antd/es/menu/MenuItem";
 
 const { Title } = Typography;
 
@@ -89,7 +86,24 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           onOpenChange={onOpenChange}
           style={{ borderRight: 0 }}
         >
-      
+          <SubMenu
+            icon={<ShoppingOutlined />}
+            title="Master Data"
+          >
+            <MenuItem >
+              <Link to={"product"}>Produtc </Link>
+            </MenuItem>
+            <MenuItem >
+              <Link  to={"/product/Category"}>Type</Link>
+            </MenuItem>
+              <MenuItem >
+              <Link  to={"/product/Category"}>Warehouse</Link>
+            </MenuItem>
+             <Menu.Item >
+              <Link  to={"/product/VehicalModel"}>VehicalModel</Link>
+            </Menu.Item>
+          </SubMenu>
+         
         </Menu>
       </div>
     );
