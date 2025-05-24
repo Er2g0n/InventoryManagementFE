@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, UIMatch, useMatches } from "react-router-dom";
+import { Link, UIMatch, useLocation, useMatches } from "react-router-dom";
 import { Menu, Typography } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -22,39 +22,23 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
   ({ collapsed }) => {
     // Type cast cho handle
     const matches = useMatches();
-    // const nowRoutes = useMemo(() => {
-    //   const lastMatch = matches[matches.length - 1] as UIMatch<
-    //     any,
-    //     HandleRoutes
-    //   >;
-
-    //   return lastMatch;
-    // }, [matches]);
-    // Type cast cho handle
-
-    // const pattern = (lastMatch.handle as HandleWithPattern | undefined)?.pattern;
+      const location = useLocation();
     const [openKeys, setOpenKeys] = useState<string[]>([]);
-    // Update open keys based on current path
 
     useEffect(() => {
       if (!collapsed) {
         const newOpenKeys: string[] = [];
+         const pathname = location.pathname;
+         
+       const segments = pathname.split('/').filter(Boolean); // remove empty segments
+ 
 
-        // if (nowRoutes.handle?.pattern && nowRoutes.handle?.pattern == "/") {
-        //   setOpenKeys([]);
-        // } else {
-        //   const newOpenKeys: string[] = [];
-        //   const pathKey = nowRoutes.handle?.pattern.toLowerCase().split("/");
-        //   let currentPath = "";
+      for (let i = 1; i <= segments.length; i++) {
+        newOpenKeys.push('/' + segments.slice(0, i).join('/'));
+      }
+      setOpenKeys(newOpenKeys);
 
-        //   pathKey.shift();
-        //   for (const element of pathKey) {
-        //     currentPath += "/" + element;
-        //     newOpenKeys.push(currentPath + "key");
-        //   }
-
-        //   setOpenKeys(newOpenKeys);
-        // }
+  
       }
     }, [matches, collapsed]);
 
@@ -62,13 +46,14 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
     const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
       setOpenKeys(keys as string[]);
     };
+    const selectedKeys = useMemo<string[]>(()=>{
+      const select = [];
+      select.push(location.pathname)
+      return select;
+      
+    },[])
 
-    // Determine which menu item should be active based on current path
-    const getSelectedKeys = (): string[] => {
-      // eslint-disable-next-line no-console
-      // console.log(nowRoutes, "fdfsdf");
-      return ["/"];
-    };
+ ;
 
     return (
       <div className="flex flex-col h-full">
@@ -81,7 +66,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
         <Menu
           theme="dark"
           mode="inline"
-          selectedKeys={getSelectedKeys()}
+          selectedKeys={selectedKeys}
           openKeys={collapsed ? [] : openKeys}
           onOpenChange={onOpenChange}
           style={{ borderRight: 0 }}
@@ -89,18 +74,19 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           <SubMenu
             icon={<ShoppingOutlined />}
             title="Master Data"
+            key={"/product"}
           >
-            <MenuItem >
-              <Link to={"product"}>Produtc </Link>
+            <MenuItem key={"/product"}>
+              <Link to={"/product"}>Product</Link>
             </MenuItem>
-            <MenuItem >
-              <Link  to={"/product/Category"}>Type</Link>
+            <MenuItem key={"/product/category"}>
+              <Link  to={"/product/category"}>Category</Link>
             </MenuItem>
-              <MenuItem >
-              <Link  to={"/product/Category"}>Warehouse</Link>
+            <MenuItem key={"/product/type"}>
+              <Link  to={"/product/type"}>Type</Link>
             </MenuItem>
-             <Menu.Item >
-              <Link  to={"/product/VehicalModel"}>VehicalModel</Link>
+             <Menu.Item key={"/product/cehicalModel"}>
+              <Link  to={"/product/cehicalModel"}>VehicalModel</Link>
             </Menu.Item>
           </SubMenu>
          
