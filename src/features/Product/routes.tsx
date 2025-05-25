@@ -1,6 +1,5 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/constants/endpoint";
 import MainPage from "./pages/main";
 
 const CategoryPage = lazy(()=> import("./pages/CategoryPage"));
@@ -10,7 +9,7 @@ export const WEB_ENPOINT = {
   main: "/",
   Category: "/Category",
   Type: "/Type",
-  VehicalModel : "/VehicalModel",
+  VehicalModel : "/VehicalModel"
 };
 const routes : RouteObject[] = [
     {
@@ -18,23 +17,23 @@ const routes : RouteObject[] = [
     children: [
       {
         index: true,
-        element: <MainPage />,
+        element: <MainPage />
      
       },
       {
         path: "Category",
-        element: <CategoryPage />,
+        element: <CategoryPage />
       
       },
       {
         path: "Type",
-        element: <TypePage />,
+        element: <TypePage />
       },
       {
         path: "VehicalModel",
-        element: <TypePage />,
-      },
-    ]}  
+        element: <VehicalModelPage />
+      }
+    ]}
 ];
 
 export default routes;

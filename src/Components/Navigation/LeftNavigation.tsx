@@ -85,8 +85,8 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             <MenuItem key={"/product/type"}>
               <Link  to={"/product/type"}>Type</Link>
             </MenuItem>
-             <Menu.Item key={"/product/cehicalModel"}>
-              <Link  to={"/product/cehicalModel"}>VehicalModel</Link>
+             <Menu.Item key={"/product/vehicalModel"}>
+              <Link  to={"/product/vehicalModel"}>VehicalModel</Link>
             </Menu.Item>
           </SubMenu>
          
