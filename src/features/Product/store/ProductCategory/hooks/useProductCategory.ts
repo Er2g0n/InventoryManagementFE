@@ -8,7 +8,7 @@ import {
 } from '../actions';
 
 export const useProductCategories = () => {
-  const dispatch : AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const productCategories = useSelector((state: RootState) => state.productCategory.productCategories);
   const loading = useSelector((state: RootState) => state.productCategory.loading);
   const error = useSelector((state: RootState) => state.productCategory.error);
