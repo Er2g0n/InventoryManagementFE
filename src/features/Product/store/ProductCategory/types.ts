@@ -21,11 +21,7 @@ export enum ProductCategoryActionTypes {
 
   //delete
   DELETE_PRODUCT_CATEGORY_SUCCESS = 'productCategory/DELETE_PRODUCT_CATEGORY_SUCCESS',
-
-
-  ADD_PRODUCT_CATEGORY = 'productCategory/ADD_PRODUCT_CATEGORY',
-  UPDATE_PRODUCT_CATEGORY = 'productCategory/UPDATE_PRODUCT_CATEGORY',
-  REMOVE_PRODUCT_CATEGORY = 'productCategory/REMOVE_PRODUCT_CATEGORY',
+   DELETE_PRODUCT_CATEGORY_FAILURE = 'productCategory/DELETE_PRODUCT_CATEGORY_FAILURE',
 }
 
 export interface FetchProductCategoriesRequest {
@@ -61,21 +57,12 @@ export interface DeleteProductCategorySuccess {
   payload: string;
 }
 
-
-export interface AddProductCategory {
-  type: typeof ProductCategoryActionTypes.ADD_PRODUCT_CATEGORY;
-  payload: ProductCategory;
-}
-
-export interface UpdateProductCategory {
-  type: typeof ProductCategoryActionTypes.UPDATE_PRODUCT_CATEGORY;
-  payload: ProductCategory;
-}
-
-export interface RemoveProductCategory {
-  type: typeof ProductCategoryActionTypes.REMOVE_PRODUCT_CATEGORY;
+export interface DeleteProductCategoryFailure {
+  type: typeof ProductCategoryActionTypes.DELETE_PRODUCT_CATEGORY_FAILURE;
   payload: string;
 }
+
+
 
 export type ProductCategoryAction =
   | FetchProductCategoriesRequest
@@ -85,6 +72,4 @@ export type ProductCategoryAction =
   | SaveProductCategorySuccess
   | SaveProductCategoryFailure
   | DeleteProductCategorySuccess
-  | AddProductCategory
-  | UpdateProductCategory
-  | RemoveProductCategory;
+  | DeleteProductCategoryFailure;

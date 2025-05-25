@@ -7,6 +7,7 @@ import {
   SaveProductCategorySuccess,
   SaveProductCategoryFailure,
   DeleteProductCategorySuccess,
+  DeleteProductCategoryFailure,
 } from './types'; // Import action creators directly
 
 const initialState: ProductCategoryState = {
@@ -59,6 +60,9 @@ const productCategorySlice = createSlice({
         state.productCategories = state.productCategories.filter(
           (pc) => pc.categoryCode !== action.payload
         );
+      })
+      .addCase(ProductCategoryActionTypes.DELETE_PRODUCT_CATEGORY_FAILURE, (state, action: DeleteProductCategoryFailure) => {
+        state.error = action.payload;
       });
   },
 });

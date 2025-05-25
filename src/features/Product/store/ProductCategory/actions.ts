@@ -56,6 +56,12 @@ export const deleteProductCategorySuccess = (
   type: ProductCategoryActionTypes.DELETE_PRODUCT_CATEGORY_SUCCESS,
   payload: categoryCode,
 });
+export const deleteProductCategoryFailure = (
+  error: string
+): ProductCategoryAction => ({
+  type: ProductCategoryActionTypes.DELETE_PRODUCT_CATEGORY_FAILURE,
+  payload: error,
+});
 
 export const fetchProductCategories = (): ThunkAction<
   void,
@@ -69,7 +75,7 @@ export const fetchProductCategories = (): ThunkAction<
     if (response.code === "0" && response.data) {
       dispatch(fetchProductCategoriesSuccess(response.data));
     } else {
-      throw new Error('Failed to fetch product categories');
+      dispatch(fetchProductCategoriesFailure(response.message || 'Failed to fetch Data'));
     }
   } catch (error:any) {
     dispatch(fetchProductCategoriesFailure(error.message || 'Failed to fetch'));
@@ -85,7 +91,7 @@ export const addOrUpdateProductCategory = (
     if (response.code === "0" && response.data) {
       dispatch(saveProductCategorySuccess(response.data));
     } else {
-      throw new Error(response.message || 'Failed to save product category');
+      dispatch(saveProductCategoryFailure(response.message || 'Failed to save'));
     }
   } catch (error:any) {
     dispatch(saveProductCategoryFailure(error.message || 'Failed to save'));
@@ -100,7 +106,7 @@ export const removeProductCategory = (
     if (response.code === "0") {
       dispatch(deleteProductCategorySuccess(categoryCode));
     } else {
-      throw new Error('Failed to delete product category');
+      dispatch(deleteProductCategoryFailure(response.message || 'Failed to delete'));
     }
   } catch (error:any) {
     throw new Error(error.message || 'Failed to delete');
