@@ -40,7 +40,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
 
   
       }
-    }, [matches, collapsed]);
+    }, [matches, collapsed,location]);
 
     // Handle menu open change
     const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
@@ -51,7 +51,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
       select.push(location.pathname)
       return select;
       
-    },[])
+    },[location])
 
  ;
 
@@ -87,6 +87,24 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             </MenuItem>
              <Menu.Item key={"/product/vehicalModel"}>
               <Link  to={"/product/vehicalModel"}>VehicalModel</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu
+            icon={<ShoppingOutlined />}
+            title="Warehouse"
+            key={"/warehouse"}
+          >
+            <MenuItem key={"/warehouse"}>
+              <Link to={"/warehouse"}>Main</Link>
+            </MenuItem>
+            <MenuItem key={"/warehouse/issue"}>
+              <Link  to={"/warehouse/issue"}>Issue</Link>
+            </MenuItem>
+            <MenuItem key={"/warehouse/receipt"}>
+              <Link  to={"/warehouse/receipt"}>Receipt</Link>
+            </MenuItem>
+             <Menu.Item key={"/warehouse/stock"}>
+              <Link  to={"/warehouse/stock"}>Stock</Link>
             </Menu.Item>
           </SubMenu>
          

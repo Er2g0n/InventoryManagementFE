@@ -3,7 +3,7 @@
 export default function StockPage () {
   return (
     <div>
-      <h1>Product Category page</h1>
+      <h1>Ware house Stock</h1>
     </div>
   );
 }
