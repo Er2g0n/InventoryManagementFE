@@ -4,7 +4,7 @@ import { ROUTES } from "@/constants/endpoint";
 import MainPage from "./pages/main";
 
 const CategoryPage = lazy(()=> import("./pages/CategoryPage"));
-const TypePage = lazy(()=> import("./pages/main"));
+const TypePage = lazy(()=> import("./pages/TypePage"));
 const VehicalModelPage = lazy(()=> import("./pages/VehicleModelPage"));
 export const WEB_ENPOINT = {
   main: "/",

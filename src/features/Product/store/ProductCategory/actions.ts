@@ -1,0 +1,108 @@
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '@/store/store';
+import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
+import {
+  ProductCategoryActionTypes,
+  FetchProductCategoriesRequest,
+  FetchProductCategoriesSuccess,
+  FetchProductCategoriesFailure,
+  SaveProductCategoryRequest,
+  SaveProductCategorySuccess,
+  SaveProductCategoryFailure,
+  DeleteProductCategorySuccess,
+  ProductCategoryAction,
+} from './types';
+import { deleteProductCategory, getAllProductCategory, saveProductCategory } from '@features/Product/Services/ProductCategoryService';
+
+export const fetchProductCategoriesRequest = (): FetchProductCategoriesRequest => ({
+  type: ProductCategoryActionTypes.FETCH_PRODUCT_CATEGORIES_REQUEST,
+});
+
+export const fetchProductCategoriesSuccess = (
+  productCategories: ProductCategory[]
+): FetchProductCategoriesSuccess => ({
+  type: ProductCategoryActionTypes.FETCH_PRODUCT_CATEGORIES_SUCCESS,
+  payload: productCategories,
+});
+
+export const fetchProductCategoriesFailure = (
+  error: string
+): FetchProductCategoriesFailure => ({
+  type: ProductCategoryActionTypes.FETCH_PRODUCT_CATEGORIES_FAILURE,
+  payload: error,
+});
+
+export const saveProductCategoryRequest = (): SaveProductCategoryRequest => ({
+  type: ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_REQUEST,
+});
+
+export const saveProductCategorySuccess = (
+  productCategory: ProductCategory
+): SaveProductCategorySuccess => ({
+  type: ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_SUCCESS,
+  payload: productCategory,
+});
+
+export const saveProductCategoryFailure = (
+  error: string
+): SaveProductCategoryFailure => ({
+  type: ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_FAILURE,
+  payload: error,
+});
+
+export const deleteProductCategorySuccess = (
+  categoryCode: string
+): DeleteProductCategorySuccess => ({
+  type: ProductCategoryActionTypes.DELETE_PRODUCT_CATEGORY_SUCCESS,
+  payload: categoryCode,
+});
+
+export const fetchProductCategories = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  ProductCategoryAction
+> => async (dispatch) => {
+  dispatch(fetchProductCategoriesRequest());
+  try {
+    const response = await getAllProductCategory();
+    if (response.code === "0" && response.data) {
+      dispatch(fetchProductCategoriesSuccess(response.data));
+    } else {
+      throw new Error('Failed to fetch product categories');
+    }
+  } catch (error:any) {
+    dispatch(fetchProductCategoriesFailure(error.message || 'Failed to fetch'));
+  }
+};
+
+export const addOrUpdateProductCategory = (
+  productCategory: ProductCategory
+): ThunkAction<void, RootState, unknown, ProductCategoryAction> => async (dispatch) => {
+  dispatch(saveProductCategoryRequest());
+  try {
+    const response = await saveProductCategory(productCategory);
+    if (response.code === "0" && response.data) {
+      dispatch(saveProductCategorySuccess(response.data));
+    } else {
+      throw new Error(response.message || 'Failed to save product category');
+    }
+  } catch (error:any) {
+    dispatch(saveProductCategoryFailure(error.message || 'Failed to save'));
+  }
+};
+
+export const removeProductCategory = (
+  categoryCode: string
+): ThunkAction<void, RootState, unknown, ProductCategoryAction> => async (dispatch) => {
+  try {
+    const response = await deleteProductCategory(categoryCode);
+    if (response.code === "0") {
+      dispatch(deleteProductCategorySuccess(categoryCode));
+    } else {
+      throw new Error('Failed to delete product category');
+    }
+  } catch (error:any) {
+    throw new Error(error.message || 'Failed to delete');
+  }
+};
