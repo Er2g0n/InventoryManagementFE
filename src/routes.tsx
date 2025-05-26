@@ -5,27 +5,8 @@ import MainLayout from "@/Components/Layout/MainLayout";
 import NotFoundPage from "@pages/NotFoundPage";
 import { ProductRoutes } from "@features/Product";
 import { Home } from "@pages/Home";
+import { WarehouseRoute } from "@features/Warehouse";
 
-export const WEB_ENPOINT = {
-  Home: "/",
-  Read: "/read",
-  Route: "/route",
-  Brand: {
-    index: "/Brand",
-    id: "/Brand/:id"
-  },
-  CurrentStock: {
-    index: "/current-stock"
-  },
-
-
-
-  StatusMaster: {
-    index: "/StatusMaster"
-  },
-
-  
-};
 export type HandleRoutes = {
   pattern: string;
 };
@@ -42,7 +23,8 @@ const routes: RouteObject[] = [
         element : <Home />
 
       },
-     ...ProductRoutes
+     ...ProductRoutes,
+     ...WarehouseRoute
     ]
   },
   {
