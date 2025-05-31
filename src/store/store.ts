@@ -1,4 +1,4 @@
-import { AnyAction, configureStore, ThunkDispatch } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 
 import {
   TypedUseSelectorHook,
