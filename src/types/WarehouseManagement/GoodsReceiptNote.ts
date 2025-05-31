@@ -1,16 +1,16 @@
 import { BaseEntity } from "../Base/BaseEntity";
 
-export interface GoodsIssueNote extends BaseEntity {
-  ginCode: string;
+export interface GoodsReceiptNote extends BaseEntity {
+  grnCode: string;
   warehouseID: number;
-  customerID: number;
+  supplierID: number;
   transactionTypeID: number;
-  issueDate: string;
+  receiptDate: string;
   notes: string;
 }
 
-export interface GoodsIssueNoteLine extends BaseEntity {
-  refGINCode: string;
+export interface GoodsReceiptNoteLine extends BaseEntity {
+  refGRNCode: string;
   productID: number;
   productVariantID: number;
   uoMID: number;
@@ -19,4 +19,5 @@ export interface GoodsIssueNoteLine extends BaseEntity {
   convertedQuantity: number;
   storageBinID: number;
 }
+
 

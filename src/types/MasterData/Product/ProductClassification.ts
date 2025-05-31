@@ -1,18 +1,22 @@
-import type { BaseEntity } from "../../Base/BaseEntity";
+import { BaseEntity } from "@/types/Base/BaseEntity";
+
+export interface VehicleModel extends BaseEntity {
+  modelCode: string;
+  modelName: string;
+  brandCode: string;
+}
+
+export interface ProductType extends BaseEntity {
+  productTypeCode: string;
+  productTypeName: string;
+}
+
+export interface ProductCategory extends BaseEntity {
+  categoryCode: string;
+  categoryName: string;
+}
 
 export interface Brand extends BaseEntity {
   brandCode: string;
   brandName: string;
 }
-
-export interface BrandDto {
-  brandCode: string;
-  brandName: string;
-  id?: number;
-  rowPointer?: string;
-  createdBy: string;
-  updatedBy: string;
-  createdDate?: string;
-  updatedDate?: string;
-}
-  
