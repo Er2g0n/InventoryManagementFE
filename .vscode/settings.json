@@ -1,6 +1,16 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit" 
-  }
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact"
+],
+  "eslint.nodePath": "${workspaceFolder}/node_modules",
+  "eslint.runtime": "node",
+  "eslint.format.enable": true,
+  "eslint.enable": false, 
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
 }
