@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender } from '@tanstack/react-table';
-import { Button, Popconfirm, Space, Input } from 'antd';
+import { Button, Popconfirm, Space, Input, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
 import { useProductCategories } from '@features/Product/store/ProductCategory/hooks/useProductCategory';
@@ -118,18 +118,13 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             onClick={() => onEdit(row.original)}
             style={{ borderRadius: '6px' }}
           />
-          <Popconfirm
-            title="Are you sure to delete this category?"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={() => handleDelete(row.original.categoryCode)}
-          >
-            <Button
-              danger
-              size="middle"
-              icon={<DeleteOutlined />}
-              style={{ borderRadius: '6px' }}
-            />
-          </Popconfirm>
+          <Button
+            danger
+            size="middle"
+            icon={<DeleteOutlined />}
+            onClick={() => showDeleteConfirm(row.original)}
+            style={{ borderRadius: '6px' }}
+          />
         </Space>
       ),
     },
@@ -155,6 +150,26 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       setPageSize(newState.pageSize);
     },
   });
+
+  const showDeleteConfirm = (record: ProductCategory) => {
+    Modal.confirm({
+      title: (
+        <div>
+          <div>Bạn có chắc chắn muốn xóa:</div>
+          <div style={{ fontWeight: 600, marginTop: 4 }}>
+            {record.categoryCode} - {record.categoryName}
+          </div>
+        </div>
+      ),
+      icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        handleDelete(record.categoryCode);
+      },
+    });
+  };
 
   // Di chuyển kiểm tra loading và error xuống sau khi gọi tất cả hooks
   if (loading && productCategories.length === 0) {
