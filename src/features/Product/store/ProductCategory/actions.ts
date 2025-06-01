@@ -77,8 +77,8 @@ export const fetchProductCategories = (): ThunkAction<
     } else {
       dispatch(fetchProductCategoriesFailure(response.message || 'Failed to fetch Data'));
     }
-  } catch (error:any) {
-    dispatch(fetchProductCategoriesFailure(error.message || 'Failed to fetch'));
+  } catch (error) {
+    dispatch(fetchProductCategoriesFailure(error instanceof Error ? error.message : 'Failed to fetch'));
   }
 };
 
@@ -93,8 +93,8 @@ export const addOrUpdateProductCategory = (
     } else {
       dispatch(saveProductCategoryFailure(response.message || 'Failed to save'));
     }
-  } catch (error:any) {
-    dispatch(saveProductCategoryFailure(error.message || 'Failed to save'));
+  } catch (error) {
+    dispatch(saveProductCategoryFailure(error instanceof Error ? error.message : 'Failed to save'));
   }
 };
 
@@ -108,7 +108,7 @@ export const removeProductCategory = (
     } else {
       dispatch(deleteProductCategoryFailure(response.message || 'Failed to delete'));
     }
-  } catch (error:any) {
-    throw new Error(error.message || 'Failed to delete');
+  } catch (error) {
+    dispatch(deleteProductCategoryFailure(error instanceof Error ? error.message : 'Failed to delete'));
   }
 };
