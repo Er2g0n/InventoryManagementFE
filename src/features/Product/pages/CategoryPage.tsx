@@ -29,16 +29,16 @@ const CategoryPage: React.FC = () => {
     <Row gutter={24}>
       <Col span={24}>
         <Card
-          title="Product Type Management"
+          title="Product Category Management"
           extra={
             <ConfigProvider>
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={handleAddProductType}
-                aria-label="Thêm loại sản phẩm"
+                aria-label="Thêm danh mục"
               >
-                Thêm loại sản phẩm
+                Thêm danh mục
               </Button>
             </ConfigProvider>
           }

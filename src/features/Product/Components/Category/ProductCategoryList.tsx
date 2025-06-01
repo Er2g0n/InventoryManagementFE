@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender } from '@tanstack/react-table';
-import { Button, Popconfirm, Space, Input, Modal } from 'antd';
+import { Button, Space, Input, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
 import { useProductCategories } from '@features/Product/store/ProductCategory/hooks/useProductCategory';

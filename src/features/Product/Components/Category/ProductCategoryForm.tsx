@@ -37,29 +37,29 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
             // onChange: productCategorySchema,
             onBlur: productCategorySchema,
 
-            onSubmitAsync: async ({ value }) => {
-                const errors: Record<string, string[]> = {};
+            // onSubmitAsync: async ({ value }) => {
+            //     const errors: Record<string, string[]> = {};
 
-                const isDuplicate = checkDuplicate(
-                    value.categoryName,
-                    productCategories,
-                    currentProductCategory?.id
-                );
-                console.log("Checking for duplicates:", value.categoryName, isDuplicate);
-                if (isDuplicate) {
-                    errors.categoryName = [
-                        ...(errors.categoryName || []),
-                        "Tên loại sản phẩm đã tồn tại"
-                    ];
-                }
-                console.log("Validation errors:", errors);
-                if (Object.keys(errors).length > 0) {
-                    return errors;
-                }
+            //     const isDuplicate = checkDuplicate(
+            //         value.categoryName,
+            //         productCategories,
+            //         currentProductCategory?.id
+            //     );
+            //     console.log("Checking for duplicates:", value.categoryName, isDuplicate);
+            //     if (isDuplicate) {
+            //         errors.categoryName = [
+            //             ...(errors.categoryName || []),
+            //             "Tên loại sản phẩm đã tồn tại"
+            //         ];
+            //     }
+            //     console.log("Validation errors:", errors);
+            //     if (Object.keys(errors).length > 0) {
+            //         return [{ message: "Tên danh mục đã tồn tại" }];
+            //     }
 
-                console.log("No validation errors found");
-                return undefined;
-            }
+            //     console.log("No validation errors found");
+            //     return undefined;
+            // }
 
         },
 
@@ -115,7 +115,7 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
 
     return (
         <Modal
-            title={isEditing ? "Chỉnh sửa loại sản phẩm" : "Thêm loại sản phẩm mới"}
+            title={isEditing ? "Chỉnh sửa danh mục" : "Thêm danh mục mới"}
             open={isModalOpen}
             onCancel={handleCancel}
             footer={null}
@@ -136,7 +136,7 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
                         onBlur: (value) => {
                             const isDuplicate = checkDuplicate(value.value, productCategories, currentProductCategory?.id);
                             if (isDuplicate) {
-                               return [{ message: "Tên loại sản phẩm đã tồn tại" }];
+                               return [{ message: "Tên danh mục đã tồn tại" }];
                             }
                             return undefined;
                         },
