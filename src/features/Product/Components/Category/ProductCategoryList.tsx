@@ -180,7 +180,8 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
   }
 
   return (
-    <div style={{ padding: '0px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '0px 16px', width: '100%', margin: '0 auto' }}>
+
       {/* Thanh tìm kiếm */}
       <Input
         type="text"
@@ -197,7 +198,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
         }}
       />
       {/* Bảng */}
-      <div style={{ overflowX: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+      <div style={{width: '100%', overflowX: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff' }}>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
