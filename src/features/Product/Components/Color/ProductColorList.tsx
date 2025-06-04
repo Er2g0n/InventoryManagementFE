@@ -1,4 +1,4 @@
- // Assuming you have a useColors hook
+// Assuming you have a useColors hook
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
@@ -24,10 +24,10 @@ const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit, refreshTrigger
 
     const handleDelete = async (colorCode: string) => {
         const rs = await deleteColor(colorCode);
-        if(rs.success){
+        if (rs.success) {
             message.success(rs.message);
-           await loadColors();
-        }else{
+            await loadColors();
+        } else {
             message.error(rs.message);
         }
     };
@@ -61,6 +61,24 @@ const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit, refreshTrigger
             ),
             accessorKey: 'colorCode',
             filterFn: 'equals',
+        },
+        {
+            id: "preview",
+            header: "Preview",
+            cell: ({ row }) => {
+                const code = row.original.colorCode;
+                return (
+                    <div
+                        style={{
+                            width: 24,
+                            height: 24,
+                            backgroundColor: code,
+                            border: "1px solid #e8e8e8",
+                            borderRadius: 4,
+                        }}
+                    />
+                );
+            },
         },
         {
             header: ({ column }) => (
