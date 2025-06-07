@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
 import {
   fetchProductCategories,
   addOrUpdateProductCategory,
   removeProductCategory
 } from '../actions';
+import { ProductCategory } from '@/types/MasterData/Product/ProductClassification';
 
 export const useProductCategories = () => {
   const dispatch = useDispatch<AppDispatch>();

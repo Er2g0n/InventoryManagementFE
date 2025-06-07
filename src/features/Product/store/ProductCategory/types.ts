@@ -1,5 +1,5 @@
+import { ProductCategory } from "@/types/MasterData/Product/ProductClassification";
 
-import { ProductCategory } from "@/types/ProductClassification/ProductCategory";
 
 // Định nghĩa trạng thái của slice
 export interface ProductCategoryState {

@@ -1,9 +1,9 @@
 import { Button, Card, Col, ConfigProvider, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState, useCallback } from "react";
-import { ProductCategory } from "@/types/ProductClassification/ProductCategory";
 import ListProductCategory from "../Components/Category/ProductCategoryList";
 import FormProductCategory from "../Components/Category/ProductCategoryForm";
+import { ProductCategory } from "@/types/MasterData/Product/ProductClassification";
 
 
 const CategoryPage: React.FC = () => {

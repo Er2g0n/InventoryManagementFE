@@ -1,9 +1,9 @@
 import { Button, Modal, Input, message } from "antd";
 import { useCallback } from "react";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
-import { ProductCategory } from "@/types/ProductClassification/ProductCategory";
 import { useProductCategories } from "@features/Product/store/ProductCategory/hooks/useProductCategory";
 import { productCategorySchema } from "@features/Product/schemas/ProductCategorySchema";
+import { ProductCategory } from "@/types/MasterData/Product/ProductClassification";
 
 type FormValues = {
     categoryName: string;
