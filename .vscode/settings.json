@@ -13,4 +13,7 @@
   "eslint.format.enable": true,
   "eslint.enable": false, 
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
 }
