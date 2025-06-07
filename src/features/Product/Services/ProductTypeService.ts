@@ -1,7 +1,7 @@
-import { ProductType } from "@/types/ProductClassification/ProductType";
 import httpMethod from "@/constants/httpMethod";
 import { fetchClient } from "@/api/fetchClient";
 import { ResultService } from "@/types/Base/ResultService";
+import { ProductType } from "@/types/MasterData/Product/ProductClassification";
 
 export async function getAllProductType (): Promise<ResultService<ProductType[]>> {
   const response = await fetchClient<ProductType[]>(

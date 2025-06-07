@@ -1,7 +1,7 @@
 import httpMethod from "@/constants/httpMethod";
 import { fetchClient } from "@/api/fetchClient";
-import { ProductCategory } from "@/types/ProductClassification/ProductCategory";
 import { ResultService } from "@/types/Base/ResultService";
+import { ProductCategory } from "@/types/MasterData/Product/ProductClassification";
 
 export async function getAllProductCategory (): Promise<ResultService<ProductCategory[]>> {
   const response = await fetchClient<ProductCategory[]>(

@@ -1,6 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '@/store/store';
-import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
 import {
   ProductCategoryActionTypes,
   FetchProductCategoriesRequest,
@@ -13,6 +12,7 @@ import {
   ProductCategoryAction,
 } from './types';
 import { deleteProductCategory, getAllProductCategory, saveProductCategory } from '@features/Product/Services/ProductCategoryService';
+import { ProductCategory } from '@/types/MasterData/Product/ProductClassification';
 
 export const fetchProductCategoriesRequest = (): FetchProductCategoriesRequest => ({
   type: ProductCategoryActionTypes.FETCH_PRODUCT_CATEGORIES_REQUEST,

@@ -1,9 +1,9 @@
 "use client";
 
-export default function VehicalModelPage () {
+export default function VehicleModelPage () {
   return (
     <div>
-      <h1>Product Category page</h1>
+      <h1>Product Vehicle Model page</h1>
     </div>
   );
 }
