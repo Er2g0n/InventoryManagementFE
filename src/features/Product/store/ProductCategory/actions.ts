@@ -72,8 +72,8 @@ export const fetchProductCategories = (): ThunkAction<
   dispatch(fetchProductCategoriesRequest());
   try {
     const response = await getAllProductCategory();
-    if (response.code === "0" && response.data) {
-      dispatch(fetchProductCategoriesSuccess(response.data));
+    if (response.code === "0") {
+      dispatch(fetchProductCategoriesSuccess(response.data!));
     } else {
       dispatch(fetchProductCategoriesFailure(response.message || 'Failed to fetch Data'));
     }
@@ -88,8 +88,8 @@ export const addOrUpdateProductCategory = (
   dispatch(saveProductCategoryRequest());
   try {
     const response = await saveProductCategory(productCategory);
-    if (response.code === "0" && response.data) {
-      dispatch(saveProductCategorySuccess(response.data));
+    if (response.code === "0") {
+      dispatch(saveProductCategorySuccess(productCategory));
     } else {
       dispatch(saveProductCategoryFailure(response.message || 'Failed to save'));
     }

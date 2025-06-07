@@ -88,7 +88,7 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
                 };
 
                 await saveProductCategory(productCategory);
-                setRefreshTrigger(refreshTrigger + 1);
+                // setRefreshTrigger(refreshTrigger + 1);
                 message.success("Product category saved successfully");
             } catch (error) {
                 console.error("Error saving product category:", error);

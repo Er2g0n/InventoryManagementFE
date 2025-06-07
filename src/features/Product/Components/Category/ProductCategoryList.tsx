@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender } from '@tanstack/react-table';
+import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import { Button, Space, Input, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from '@ant-design/icons';
 import { ProductCategory } from '@/types/ProductClassification/ProductCategory';
 import { useProductCategories } from '@features/Product/store/ProductCategory/hooks/useProductCategory';
 
@@ -15,10 +15,12 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [sorting, setSorting] = useState<SortingState>([]);
+
 
   useEffect(() => {
     loadProductCategories();
-  }, [refreshTrigger]);
+  }, []);
 
   const handleDelete = (categoryCode: string) => {
     deleteProductCategory(categoryCode);
@@ -86,7 +88,18 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: 'Created Date',
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
+        >
+          Created Date
+          <span style={{ float: 'right' }}>
+
+            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
+          </span>
+        </div>
+      ),
       accessorKey: 'createdDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -99,7 +112,19 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: 'Updated Date',
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
+        >
+          Updated Date
+          <span style={{ float: 'right' }}>
+
+            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
+          </span>
+
+        </div>
+      ),
       accessorKey: 'updatedDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -134,6 +159,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
     data: productCategories,
     columns,
     state: {
+      sorting,
       globalFilter,
       pagination: {
         pageIndex,
@@ -149,6 +175,8 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       setPageIndex(newState.pageIndex);
       setPageSize(newState.pageSize);
     },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const showDeleteConfirm = (record: ProductCategory) => {
@@ -198,7 +226,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
         }}
       />
       {/* Bảng */}
-      <div style={{width: '100%', overflowX: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+      <div style={{ width: '100%', overflowX: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff' }}>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
