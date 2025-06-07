@@ -13,7 +13,6 @@ export async function getAllProductCategory (): Promise<ResultService<ProductCat
     response.message = "Failed to Fetch Data";
     return response;
   }
-  response.code = "0";
   return response;
     
 }
@@ -32,7 +31,7 @@ export async function saveProductCategory (
     response.message = "Failed to save this product category";
     return response;
   }
-  response.code = "0";
+  
   response.message = "Product category saved successfully";
 
   return response;
@@ -48,7 +47,7 @@ export async function getProductCategoryByCode (categoryCode: string): Promise<R
     response.message = "Failed to get data";
     return response;
   }
-  response.code = "0";
+  
   // response.message = "Product type retrieved successfully";
 
   return response;
@@ -67,7 +66,7 @@ export async function deleteProductCategory (
     response.message = "Failed to delete this product category";
     return response;
   }
-  response.code = "0";
+ 
   response.message = "Product category deleted successfully";
   return response;
 }
