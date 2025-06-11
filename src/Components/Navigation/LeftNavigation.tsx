@@ -22,38 +22,38 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
   ({ collapsed }) => {
     // Type cast cho handle
     const matches = useMatches();
-      const location = useLocation();
+    const location = useLocation();
     const [openKeys, setOpenKeys] = useState<string[]>([]);
 
     useEffect(() => {
       if (!collapsed) {
         const newOpenKeys: string[] = [];
-         const pathname = location.pathname;
-         
-       const segments = pathname.split('/').filter(Boolean); // remove empty segments
- 
+        const pathname = location.pathname;
 
-      for (let i = 1; i <= segments.length; i++) {
-        newOpenKeys.push('/' + segments.slice(0, i).join('/'));
-      }
-      setOpenKeys(newOpenKeys);
+        const segments = pathname.split('/').filter(Boolean); // remove empty segments
 
-  
+
+        for (let i = 1; i <= segments.length; i++) {
+          newOpenKeys.push('/' + segments.slice(0, i).join('/'));
+        }
+        setOpenKeys(newOpenKeys);
+
+
       }
-    }, [matches, collapsed,location]);
+    }, [matches, collapsed, location]);
 
     // Handle menu open change
     const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
       setOpenKeys(keys as string[]);
     };
-    const selectedKeys = useMemo<string[]>(()=>{
+    const selectedKeys = useMemo<string[]>(() => {
       const select = [];
       select.push(location.pathname)
       return select;
-      
-    },[location])
 
- ;
+    }, [location])
+
+      ;
 
     return (
       <div className="flex flex-col h-full">
@@ -80,24 +80,28 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
               <Link to={"/product"}>Product</Link>
             </MenuItem>
             <MenuItem key={"/product/category"}>
-              <Link  to={"/product/category"}>Category</Link>
+              <Link to={"/product/category"}>Category</Link>
             </MenuItem>
             <MenuItem key={"/product/type"}>
-              <Link  to={"/product/type"}>Type</Link>
+              <Link to={"/product/type"}>Type</Link>
             </MenuItem>
             <MenuItem key={"/product/color"}>
-              <Link  to={"/product/color"}>Color</Link>
+              <Link to={"/product/color"}>Color</Link>
             </MenuItem>
 
             <MenuItem key={"/product/brand"}>
-              <Link  to={"/product/brand"}>Brand</Link>
+              <Link to={"/product/brand"}>Brand</Link>
             </MenuItem>
-             <Menu.Item key={"/product/vehicleModel"}>
-              <Link  to={"/product/vehicleModel"}>Vehicle Model</Link>
+            <MenuItem key={"/product/TransactionType"}>
+              <Link to={"/product/TransactionType"}>Transaction Type</Link>
+            </MenuItem>
+            <Menu.Item key={"/product/vehicleModel"}>
+              <Link to={"/product/vehicleModel"}>Vehicle Model</Link>
             </Menu.Item>
-                    <Menu.Item key={"/product/unitOfMeasure"}>
-              <Link  to={"/product/unitOfMeasure"}>Unit Of Measure</Link>
+            <Menu.Item key={"/product/unitOfMeasure"}>
+              <Link to={"/product/unitOfMeasure"}>Unit Of Measure</Link>
             </Menu.Item>
+
           </SubMenu>
           <SubMenu
             icon={<ShoppingOutlined />}
@@ -108,7 +112,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
               <Link to={"/warehouse"}>Main</Link>
             </MenuItem>
           </SubMenu>
-         
+
         </Menu>
       </div>
     );

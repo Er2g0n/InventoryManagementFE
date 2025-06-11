@@ -5,13 +5,11 @@ import { TransactionType } from "@/types/MasterData/TransactionType";
 
 export async function TransactionType_GetAll(): Promise<ResultService<TransactionType[]>> {
     const response = await fetchClient<TransactionType[]>(httpMethod.GET,"TransactionType",);
-    if(response.data == null){
-        response.code ="-1";
+    if(response.data === null){
         response.message = "Failed to Fetch Data";
         return response;
     }
 
-    response.code ="0";
     return response;
 }
 
