@@ -3,6 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "@/store/store";
 import { Color } from "@/types/MasterData/Product/ProductProperties";
 import { deleteColor, getAllColor, saveColor } from "@features/Product/Services/ProductColorService";
+import { ResultService } from "@/types/Base/ResultService";
 
 export const fetchColorsRequest = (): FetchColorsRequest => ({
   type: ColorActionTypes.FETCH_COLORS_REQUEST,
@@ -24,10 +25,10 @@ export const saveColorRequest = (): SaveColorRequest => ({
 });
 
 export const saveColorSuccess = (
-  message: string
+ response: ResultService<Color>
 ): SaveColorSuccess => ({
   type: ColorActionTypes.SAVE_COLOR_SUCCESS,
-  payload: message,
+  payload: response,
 });
 export const saveColorFailure = (error: string): SaveColorFailure => ({
   type: ColorActionTypes.SAVE_COLOR_FAILURE,
@@ -73,7 +74,7 @@ export const addOrUpdateColor = (
   try {
     const response = await saveColor(color);
     if (response.code == "0") {
-      const successAction = saveColorSuccess(response.message);
+      const successAction = saveColorSuccess(response);
       dispatch(successAction);
       return successAction;
     } else {

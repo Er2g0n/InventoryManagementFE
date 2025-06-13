@@ -1,42 +1,40 @@
-import { ProductType } from "@/types/MasterData/Product/ProductClassification";
-import { productTypeSchema } from "@features/Product/schemas/ProductTypeSchema";
-import { useProductTypes } from "@features/Product/store/ProductType/hooks/useProductType";
-import { AnyFieldApi, useForm } from "@tanstack/react-form";
-import { Button, Input, message, Modal } from "antd";
+import { Button, Modal, Input, message } from "antd";
 import { useCallback } from "react";
+import { AnyFieldApi, useForm } from "@tanstack/react-form";
+import { Material } from "@/types/MasterData/Product/ProductProperties";
+import { useMaterials } from "@features/Product/store/Material/hooks/useMaterial";
+import { productMaterialSchema } from "@features/Product/schemas/ProductMaterialSchema";
+
 
 type FormValues = {
-    productTypeName: string;
-}
+    materialName: string;
+};
 
-interface FormProductTypeProps {
+interface FormMaterialProps {
     isModalOpen: boolean;
     setIsModalOpen: (open: boolean) => void;
     isEditing: boolean;
-    currentProductType: ProductType | null;
-    
+    currentMaterial: Material | null;
 }
 
-const FormProductType: React.FC<FormProductTypeProps> = ({
+const FormMaterial: React.FC<FormMaterialProps> = ({
     isModalOpen,
     setIsModalOpen,
     isEditing,
-    currentProductType,
-    
+    currentMaterial,
 }) => {
-    const { productTypes, saveProductType } = useProductTypes();
+    const { materials, saveMaterial } = useMaterials();
 
     const form = useForm({
         defaultValues: {
-            productTypeName: isEditing && currentProductType ? currentProductType.productTypeName : ""
+            materialName: isEditing && currentMaterial ? currentMaterial.materialName : ""
         },
         validators: {
-            onBlur: productTypeSchema
+            onBlur: productMaterialSchema,
         },
         onSubmit: async ({ value }) => {
             await onSubmit(value);
-        }
-
+        },
     });
 
     const handleCancel = useCallback(() => {
@@ -47,56 +45,55 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
     const onSubmit = useCallback(
         async (values: FormValues) => {
             try {
-                const productType: ProductType = {
-                    id: isEditing && currentProductType ? currentProductType.id : 0,
-                    productTypeCode: isEditing && currentProductType ? currentProductType.productTypeCode : "",
-                    productTypeName: values.productTypeName,
+                const material: Material = {
+                    id: isEditing && currentMaterial ? currentMaterial.id : 0,
+                    materialCode: isEditing && currentMaterial ? currentMaterial.materialCode : "",
+                    materialName: values.materialName,
                     createdBy: "admin",
                     updatedBy: "admin",
-                    createdDate: isEditing && currentProductType ? currentProductType.createdDate : new Date().toISOString(),
+                    createdDate: isEditing && currentMaterial ? currentMaterial.createdDate : new Date().toISOString(),
                     updatedDate: new Date().toISOString(),
                 };
 
-                const result = await saveProductType(productType);
+                const result = await saveMaterial(material);
                 if (!result.success) {
-                    message.error(result.message || "Error saving product type");
+                    message.error(result.message || "Lỗi khi lưu chất liệu");
                     return;
                 }
-                message.success("Product type saved successfully");
-            }
-            catch (error) {
-                message.error("Error saving product type:");
-            }
-            finally{
+                message.success(result.message);
+            } catch (error) {
+                console.error("Error saving material:", error);
+                message.error("Failed to save material");
+            } finally {
                 handleCancel();
             }
         },
-        [isEditing, currentProductType, saveProductType, handleCancel]
+        [isEditing, currentMaterial, saveMaterial, handleCancel]
     );
 
     const checkDuplicate = (
         name: string,
-        productTypes: ProductType[],
+        materials: Material[],
         currentId?: number
     ): boolean => {
-        return productTypes.some(
-            (c) =>
-                c.productTypeName.trim().toLowerCase() === name.trim().toLowerCase() &&
-                c.id !== currentId
+        return materials.some(
+            (m) =>
+                m.materialName.trim().toLowerCase() === name.trim().toLowerCase() &&
+                m.id !== currentId
         );
     };
 
-     return (
+    return (
         <Modal
-            title={isEditing ? "Chỉnh sửa loại sản phẩm" : "Thêm loại sản phẩm mới"}
+            title={isEditing ? "Chỉnh sửa chất liệu" : "Thêm chất liệu mới"}
             open={isModalOpen}
             onCancel={handleCancel}
             footer={null}
         >
             {isEditing && (
                 <div style={{ marginBottom: 16 }}>
-                    <label>Category Code</label>
-                    <Input value={currentProductType?.productTypeCode} readOnly />
+                    <label>Material Code</label>
+                    <Input value={currentMaterial?.materialCode} readOnly />
                 </div>
             )}
             <form onSubmit={(event) => {
@@ -104,12 +101,12 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                 form.handleSubmit();
             }}>
                 {form.Field({
-                    name: "productTypeName",
+                    name: "materialName",
                     validators: {
                         onBlur: (value) => {
-                            const isDuplicate = checkDuplicate(value.value, productTypes, currentProductType?.id);
+                            const isDuplicate = checkDuplicate(value.value, materials, currentMaterial?.id);
                             if (isDuplicate) {
-                               return [{ message: "Tên loại sản phẩm đã tồn tại" }];
+                               return [{ message: "Tên chất liệu đã tồn tại" }];
                             }
                             return undefined;
                         },
@@ -121,17 +118,15 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                         }
                         return (
                             <div style={{ marginBottom: 16 }}>
-                                <label>Category Name</label>
+                                <label>Material Name</label>
                                 <Input
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     onBlur={field.handleBlur}
-                                    placeholder="Enter Product Type Name"
+                                    placeholder="Enter Material Name"
                                     status={field.state.meta.errors?.length > 0 ? "error" : undefined}
-
                                 />
                                 <FieldInfo field={field} />
-            
                             </div>
                         );
                     }
@@ -147,7 +142,7 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
             </form>
         </Modal>
     );
-}
+};
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
@@ -155,9 +150,8 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
             {field.state.meta.errors.length > 0 ? (
                 <span style={{ color: "red" }}>{field.state.meta.errors.map((err) => err.message).join(',')}</span>
             ) : null}
-           
         </>
     )
 }
 
-export default FormProductType;
+export default FormMaterial;

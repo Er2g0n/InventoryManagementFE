@@ -1,3 +1,4 @@
+import { ResultService } from "@/types/Base/ResultService";
 import { ProductCategory } from "@/types/MasterData/Product/ProductClassification";
 
 
@@ -44,7 +45,7 @@ export interface SaveProductCategoryRequest {
 
 export interface SaveProductCategorySuccess {
   type: typeof ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_SUCCESS;
-  payload: ProductCategory;
+  payload: ResultService<ProductCategory>;
 }
 
 export interface SaveProductCategoryFailure {

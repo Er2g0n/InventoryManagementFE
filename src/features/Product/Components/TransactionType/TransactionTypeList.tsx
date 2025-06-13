@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender, getSortedRowModel, SortingState } from '@tanstack/react-table';
-import { Button, Space, Input, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from '@ant-design/icons';
-import { useProductCategories } from '@features/Product/store/ProductCategory/hooks/useProductCategory';
-import { ProductCategory } from '@/types/MasterData/Product/ProductClassification';
+import { TransactionType } from "@/types/MasterData/TransactionType";
+import { useTransactionTypes } from "@features/Product/store/TransactionType/hooks/useTransactionType";
+import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
+import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Space } from "antd";
+import React, { useEffect, useState } from "react";
 
-interface ListProductCategoryProps {
-  onEdit: (productCategory: ProductCategory) => void;
+interface ListTransactionTypeProps {
+  onEdit: (transactionType: TransactionType) => void;
+  refreshTrigger: number;
 }
 
-const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ onEdit }) => {
-  const { productCategories, loading, error, loadProductCategories, deleteProductCategory } = useProductCategories();
+const ListTransactionType: React.FC<ListTransactionTypeProps> = React.memo(({ onEdit, refreshTrigger }) => {
+  const { transactionTypes, loading, error, loadTransactionType, deleteTransactionType } = useTransactionTypes();
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [sorting, setSorting] = useState<SortingState>([]);
-
 
   useEffect(() => {
-    loadProductCategories();
-  }, []);
+    loadTransactionType();
 
-  const handleDelete = (categoryCode: string) => {
-    deleteProductCategory(categoryCode);
+  }, [refreshTrigger])
+
+  const handleDelete = (TransactionTypeCode: string) => {
+    deleteTransactionType(TransactionTypeCode);
   };
 
-  const uniqueCategoryCodes = [...new Set(productCategories.map(pc => pc.categoryCode))];
-  const uniqueCategoryNames = [...new Set(productCategories.map(pc => pc.categoryName))];
+  const uniqueTransactionTypeCodes = [...new Set(transactionTypes.map(tt => tt.transactionTypeCode))];
+  const uniqueTransactionTypeNames = [...new Set(transactionTypes.map(tt => tt.transactionTypeName))];
 
-  const columns: ColumnDef<ProductCategory>[] = [
+  const columns: ColumnDef<TransactionType>[] = [
     {
       header: ({ column }) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontWeight: 600 }}>Category Code</span>
+          <span style={{ fontWeight: 600 }}>TransactionType Code</span>
           <select
             value={(column.getFilterValue() as string) || ''}
             onChange={e => column.setFilterValue(e.target.value)}
@@ -46,19 +46,19 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             }}
           >
             <option value="">All</option>
-            {uniqueCategoryCodes.map(code => (
+            {uniqueTransactionTypeCodes.map(code => (
               <option key={code} value={code}>{code}</option>
             ))}
           </select>
         </div>
       ),
-      accessorKey: 'categoryCode',
+      accessorKey: 'transactionTypeCode',
       filterFn: 'equals',
     },
     {
       header: ({ column }) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontWeight: 600 }}>Category Name</span>
+          <span style={{ fontWeight: 600 }}>Transaction Name</span>
           <select
             value={(column.getFilterValue() as string) || ''}
             onChange={e => column.setFilterValue(e.target.value)}
@@ -72,13 +72,13 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             }}
           >
             <option value="">All</option>
-            {uniqueCategoryNames.map(name => (
+            {uniqueTransactionTypeNames.map(name => (
               <option key={name} value={name}>{name}</option>
             ))}
           </select>
         </div>
       ),
-      accessorKey: 'categoryName',
+      accessorKey: 'transactionTypeName',
       filterFn: 'includesString',
     },
     {
@@ -87,18 +87,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: ({ column }) => (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
-        >
-          Created Date
-          <span style={{ float: 'right' }}>
-
-            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
-          </span>
-        </div>
-      ),
+      header: 'Created Date',
       accessorKey: 'createdDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -111,19 +100,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: ({ column }) => (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
-        >
-          Updated Date
-          <span style={{ float: 'right' }}>
-
-            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
-          </span>
-
-        </div>
-      ),
+      header: 'Updated Date',
       accessorKey: 'updatedDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -140,7 +117,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             size="middle"
             icon={<EditOutlined />}
             onClick={() => onEdit(row.original)}
-            style={{ borderRadius: '6px' }}
+            style={{ borderRadius: 'px' }}
           />
           <Button
             danger
@@ -154,18 +131,16 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
     },
   ];
 
-  const table = useReactTable<ProductCategory>({
-    data: productCategories,
+  const table = useReactTable<TransactionType>({
+    data: transactionTypes,
     columns,
     state: {
-      sorting,
       globalFilter,
       pagination: {
         pageIndex,
         pageSize,
       },
     },
-    autoResetPageIndex: false,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -175,17 +150,15 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       setPageIndex(newState.pageIndex);
       setPageSize(newState.pageSize);
     },
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
   });
 
-  const showDeleteConfirm = (record: ProductCategory) => {
+  const showDeleteConfirm = (model: TransactionType) => {
     Modal.confirm({
       title: (
         <div>
           <div>Bạn có chắc chắn muốn xóa:</div>
           <div style={{ fontWeight: 600, marginTop: 4 }}>
-            {record.categoryCode} - {record.categoryName}
+            {model.transactionTypeCode} - {model.transactionTypeName}
           </div>
         </div>
       ),
@@ -194,13 +167,12 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       okType: 'danger',
       cancelText: 'Hủy',
       onOk() {
-        handleDelete(record.categoryCode);
+        handleDelete(model.transactionTypeCode);
       },
     });
   };
 
-  // Di chuyển kiểm tra loading và error xuống sau khi gọi tất cả hooks
-  if (loading && productCategories.length === 0) {
+  if (loading && transactionTypes.length === 0) {
     return <div style={{ padding: 20, textAlign: 'center' }}>Loading...</div>;
   }
   if (error) {
@@ -321,4 +293,4 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
   );
 });
 
-export default ListProductCategory;
+export default ListTransactionType;

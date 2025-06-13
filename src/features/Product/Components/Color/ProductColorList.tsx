@@ -9,10 +9,9 @@ import { useColors } from '@features/Product/store/Color/hooks/useColor';
 
 interface ListColorProps {
     onEdit: (color: Color) => void;
-    refreshTrigger: number;
 }
 
-const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit, refreshTrigger }) => {
+const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit }) => {
     const { colors, loading, error, loadColors, deleteColor } = useColors();
     const [globalFilter, setGlobalFilter] = useState('');
     const [pageIndex, setPageIndex] = useState(0);
@@ -20,7 +19,7 @@ const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit, refreshTrigger
 
     useEffect(() => {
         loadColors();
-    }, [refreshTrigger]);
+    }, []);
 
     const handleDelete = async (colorCode: string) => {
         const rs = await deleteColor(colorCode);
@@ -166,6 +165,7 @@ const ListColor: React.FC<ListColorProps> = React.memo(({ onEdit, refreshTrigger
                 pageSize,
             },
         },
+        autoResetPageIndex: false,
         onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),

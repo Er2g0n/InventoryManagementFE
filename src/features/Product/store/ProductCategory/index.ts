@@ -43,12 +43,12 @@ const productCategorySlice = createSlice({
       .addCase(ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_SUCCESS, (state, action: SaveProductCategorySuccess) => {
         state.loading = false;
         const index = state.productCategories.findIndex(
-          (pc) => pc.categoryCode === action.payload.categoryCode
+          (pc) => pc.categoryCode === action.payload.data!.categoryCode
         );
         if (index !== -1) {
-          state.productCategories[index] = action.payload;
+          state.productCategories[index] = action.payload.data!;
         } else {
-          state.productCategories.push(action.payload);
+          state.productCategories.push(action.payload.data!);
         }
       })
       .addCase(ProductCategoryActionTypes.SAVE_PRODUCT_CATEGORY_FAILURE, (state, action:SaveProductCategoryFailure) => {

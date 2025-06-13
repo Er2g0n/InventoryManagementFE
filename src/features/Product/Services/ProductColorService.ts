@@ -13,7 +13,6 @@ export async function getAllColor (): Promise<ResultService<Color[]>> {
     response.message = "Failed to fetch data";
     return response;
   }
-  response.code = "0";
   return response;
 }
 
@@ -46,7 +45,6 @@ export async function getColorByCode (colorCode: string): Promise<ResultService<
     response.message = "Failed to get data";
     return response;
   }
-  response.code = "0";
   // response.message = "Color retrieved successfully";
 
   return response;
@@ -65,7 +63,6 @@ export async function deleteColor (
     response.message = "Failed to delete this color";
     return response;
   }
-  response.code = "0";
   response.message = "Color deleted successfully";
   return response;
 }

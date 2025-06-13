@@ -12,7 +12,6 @@ const ColorPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [currentColor, setCurrentColor] = useState<Color | null>(null); // Changed from ProductType to Color
-    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handleAddColor = useCallback(() => {
         setIsEditing(false);
@@ -45,7 +44,7 @@ const ColorPage: React.FC = () => {
                     }
                     variant="borderless"
                 >
-                    <ListColor onEdit={handleEditColor} refreshTrigger={refreshTrigger} />
+                    <ListColor onEdit={handleEditColor} />
                 </Card>
             </Col>
             <FormColor
@@ -53,8 +52,6 @@ const ColorPage: React.FC = () => {
                 setIsModalOpen={setIsModalOpen}
                 isEditing={isEditing}
                 currentColor={currentColor}
-                refreshTrigger={refreshTrigger}
-                setRefreshTrigger={setRefreshTrigger}
             />
         </Row>
     );

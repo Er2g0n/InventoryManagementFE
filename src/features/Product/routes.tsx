@@ -5,13 +5,18 @@ import MainPage from "./pages/main";
 const CategoryPage = lazy(()=> import("./pages/CategoryPage"));
 const TypePage = lazy(()=> import("./pages/TypePage"));
 const ColorPage = lazy(() => import("./pages/ColorPage"));
+const MaterialPage = lazy(() => import("./pages/MaterialPage"));
 const BrandPage = lazy(() => import("./pages/BrandPage"));
 const VehicleModelPage = lazy(()=> import("./pages/VehicleModelPage"));
+const TransactionTypePage = lazy(()=> import("./pages/TransactionTypePage"));
 export const WEB_ENDPOINT = {
   main: "/",
   Category: "/Category",
   Type: "/Type",
   Color: "/Color",
+  Material: "/Material",
+  VehicleModelPage : "/VehicleModel",
+  TransactionTypePage:"/TransactionType",
   Brand: "/Brand",
   VehicleModelPage : "/VehicleModel"
 };
@@ -39,6 +44,10 @@ const routes : RouteObject[] = [
 
       },
       {
+        path: "Material",
+        element: <MaterialPage />
+      },
+      {
         path: "Brand",
         element: <BrandPage />
 
@@ -46,6 +55,10 @@ const routes : RouteObject[] = [
       {
         path: "VehicleModel",
         element: <VehicleModelPage />
+      },
+      {
+        path: "TransactionType",
+        element: <TransactionTypePage />
       }
     ]}
 ];

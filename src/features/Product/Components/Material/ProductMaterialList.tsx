@@ -2,37 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { useReactTable, ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import { Button, Space, Input, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from '@ant-design/icons';
-import { useProductCategories } from '@features/Product/store/ProductCategory/hooks/useProductCategory';
-import { ProductCategory } from '@/types/MasterData/Product/ProductClassification';
+import { Material } from '@/types/MasterData/Product/ProductProperties';
+import { useMaterials } from '@features/Product/store/Material/hooks/useMaterial';
 
-interface ListProductCategoryProps {
-  onEdit: (productCategory: ProductCategory) => void;
+
+interface ListMaterialProps {
+  onEdit: (material: Material) => void;
 }
 
-const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ onEdit }) => {
-  const { productCategories, loading, error, loadProductCategories, deleteProductCategory } = useProductCategories();
+const ListMaterial: React.FC<ListMaterialProps> = React.memo(({ onEdit }) => {
+  const { materials, loading, error, loadMaterials, deleteMaterial } = useMaterials();
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-
   useEffect(() => {
-    loadProductCategories();
+    loadMaterials();
   }, []);
 
-  const handleDelete = (categoryCode: string) => {
-    deleteProductCategory(categoryCode);
+  const handleDelete = (materialCode: string) => {
+    deleteMaterial(materialCode);
   };
 
-  const uniqueCategoryCodes = [...new Set(productCategories.map(pc => pc.categoryCode))];
-  const uniqueCategoryNames = [...new Set(productCategories.map(pc => pc.categoryName))];
+  const uniqueMaterialCodes = [...new Set(materials.map(m => m.materialCode))];
+  const uniqueMaterialNames = [...new Set(materials.map(m => m.materialName))];
 
-  const columns: ColumnDef<ProductCategory>[] = [
+  const columns: ColumnDef<Material>[] = [
     {
       header: ({ column }) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontWeight: 600 }}>Category Code</span>
+          <span style={{ fontWeight: 600 }}>Material Code</span>
           <select
             value={(column.getFilterValue() as string) || ''}
             onChange={e => column.setFilterValue(e.target.value)}
@@ -46,19 +46,19 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             }}
           >
             <option value="">All</option>
-            {uniqueCategoryCodes.map(code => (
+            {uniqueMaterialCodes.map(code => (
               <option key={code} value={code}>{code}</option>
             ))}
           </select>
         </div>
       ),
-      accessorKey: 'categoryCode',
+      accessorKey: 'materialCode',
       filterFn: 'equals',
     },
     {
       header: ({ column }) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontWeight: 600 }}>Category Name</span>
+          <span style={{ fontWeight: 600 }}>Material Name</span>
           <select
             value={(column.getFilterValue() as string) || ''}
             onChange={e => column.setFilterValue(e.target.value)}
@@ -72,13 +72,13 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
             }}
           >
             <option value="">All</option>
-            {uniqueCategoryNames.map(name => (
+            {uniqueMaterialNames.map(name => (
               <option key={name} value={name}>{name}</option>
             ))}
           </select>
         </div>
       ),
-      accessorKey: 'categoryName',
+      accessorKey: 'materialName',
       filterFn: 'includesString',
     },
     {
@@ -94,7 +94,6 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
         >
           Created Date
           <span style={{ float: 'right' }}>
-
             {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
           </span>
         </div>
@@ -118,10 +117,8 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
         >
           Updated Date
           <span style={{ float: 'right' }}>
-
             {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
           </span>
-
         </div>
       ),
       accessorKey: 'updatedDate',
@@ -154,8 +151,8 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
     },
   ];
 
-  const table = useReactTable<ProductCategory>({
-    data: productCategories,
+  const table = useReactTable<Material>({
+    data: materials,
     columns,
     state: {
       sorting,
@@ -179,13 +176,13 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const showDeleteConfirm = (record: ProductCategory) => {
+  const showDeleteConfirm = (record: Material) => {
     Modal.confirm({
       title: (
         <div>
           <div>Bạn có chắc chắn muốn xóa:</div>
           <div style={{ fontWeight: 600, marginTop: 4 }}>
-            {record.categoryCode} - {record.categoryName}
+            {record.materialCode} - {record.materialName}
           </div>
         </div>
       ),
@@ -194,13 +191,12 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
       okType: 'danger',
       cancelText: 'Hủy',
       onOk() {
-        handleDelete(record.categoryCode);
+        handleDelete(record.materialCode);
       },
     });
   };
 
-  // Di chuyển kiểm tra loading và error xuống sau khi gọi tất cả hooks
-  if (loading && productCategories.length === 0) {
+  if (loading && materials.length === 0) {
     return <div style={{ padding: 20, textAlign: 'center' }}>Loading...</div>;
   }
   if (error) {
@@ -209,7 +205,6 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
 
   return (
     <div style={{ padding: '0px 16px', width: '100%', margin: '0 auto' }}>
-
       {/* Thanh tìm kiếm */}
       <Input
         type="text"
@@ -321,4 +316,4 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
   );
 });
 
-export default ListProductCategory;
+export default ListMaterial;

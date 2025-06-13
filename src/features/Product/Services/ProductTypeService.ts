@@ -9,12 +9,11 @@ export async function getAllProductType (): Promise<ResultService<ProductType[]>
     "ProductType",
   );
   
-  if (response.code == "-1") {
+  if (response.code !== "0") {
     
     response.message = "Failed to Fetch Data";
     return response;
   }
-  response.code = "0";
   return response;
     
 }
@@ -29,11 +28,10 @@ export async function saveProductType (
     productType
   );
   
-  if ( response.code == "-1") {
+  if ( response.code !== "0") {
     response.message = "Failed to save this product type";
     return response;
   }
-  response.code = "0";
   response.message = "Saved successfully";
 
   return response;
@@ -45,12 +43,11 @@ export async function getProductTypeByCode (productTypeCode: string): Promise<Re
     `ProductType/${productTypeCode}`,
   );
   
-  if (response.code == "-1") {
+  if (response.code !== "0") {
     
     response.message = "Failed to get data";
     return response;
   }
-  response.code = "0";
   // response.message = "Product type retrieved successfully";
 
   return response;
@@ -66,12 +63,11 @@ export async function deleteProductType (
   );
  
 
-  if (response.code == "-1") {
+  if (response.code !== "0") {
    
     response.message = "Failed to delete this product type";
     return response;
   }
-  response.code = "0";
   response.message = "Product type deleted successfully";
   return response;
 }

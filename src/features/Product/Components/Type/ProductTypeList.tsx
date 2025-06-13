@@ -8,10 +8,9 @@ import { Button, Input, Modal, Space } from "antd";
 
 interface ListProductTypeProps {
     onEdit: (productType: ProductType) => void;
-    refreshTrigger: number;
 }
 
-const ListProductType: React.FC<ListProductTypeProps> = React.memo(({ onEdit, refreshTrigger }) => {
+const ListProductType: React.FC<ListProductTypeProps> = React.memo(({ onEdit }) => {
     const { productTypes, loading, error, loadProductTypes, deleteProductType } = useProductTypes();
     const [globalFilter, setGlobalFilter] = useState('');
     const [pageIndex, setPageIndex] = useState(0);
@@ -19,7 +18,7 @@ const ListProductType: React.FC<ListProductTypeProps> = React.memo(({ onEdit, re
 
     useEffect(() => {
         loadProductTypes();
-    }, [refreshTrigger]);
+    }, []);
 
     const handleDelete = (productTypeCode: string) => {
         deleteProductType(productTypeCode);
@@ -141,6 +140,7 @@ const ListProductType: React.FC<ListProductTypeProps> = React.memo(({ onEdit, re
                 pageSize,
             },
         },
+        autoResetPageIndex: false, // Ngăn ko cho quay về trang đầu khi thay đổi dữ liệu
         onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),

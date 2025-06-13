@@ -12,8 +12,6 @@ interface FormColorProps {
     setIsModalOpen: (open: boolean) => void;
     isEditing: boolean;
     currentColor: Color | null;
-    refreshTrigger: number;
-    setRefreshTrigger: (value: number) => void;
 }
 
 const FormColor: React.FC<FormColorProps> = ({
@@ -21,8 +19,6 @@ const FormColor: React.FC<FormColorProps> = ({
     setIsModalOpen,
     isEditing,
     currentColor,
-    refreshTrigger,
-    setRefreshTrigger,
 }) => {
     const { colors, saveColor } = useColors();
     const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
@@ -83,7 +79,6 @@ const FormColor: React.FC<FormColorProps> = ({
 
                 const result = await saveColor(color);
                 if (result.success) {
-                    setRefreshTrigger(refreshTrigger + 1);
                     message.success(result.message);
                 } else {
                     message.error(result.message || "Lỗi khi lưu màu");
@@ -94,7 +89,7 @@ const FormColor: React.FC<FormColorProps> = ({
                 handleCancel();
             }
         },
-        [isEditing, currentColor, saveColor, refreshTrigger, setRefreshTrigger, handleCancel]
+        [isEditing, currentColor, saveColor, handleCancel]
     );
 
     const checkDuplicateCode = (code: string, colors: Color[], currentId?: number): boolean => {

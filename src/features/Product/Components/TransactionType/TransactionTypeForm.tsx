@@ -1,41 +1,45 @@
-import { ProductType } from "@/types/MasterData/Product/ProductClassification";
-import { productTypeSchema } from "@features/Product/schemas/ProductTypeSchema";
-import { useProductTypes } from "@features/Product/store/ProductType/hooks/useProductType";
+import { TransactionType } from "@/types/MasterData/TransactionType";
+import { TransactionTypeSchema } from "@features/Product/schemas/TransactionTypeSchema";
+import { useTransactionTypes } from "@features/Product/store/TransactionType/hooks/useTransactionType";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
-import { Button, Input, message, Modal } from "antd";
+import { Button, Input, Modal, message } from "antd";
 import { useCallback } from "react";
 
 type FormValues = {
-    productTypeName: string;
+    transactionTypeName: string;
 }
 
-interface FormProductTypeProps {
+interface FormTransactionTypeProps {
     isModalOpen: boolean;
     setIsModalOpen: (open: boolean) => void;
     isEditing: boolean;
-    currentProductType: ProductType | null;
-    
+    currentTransactionType: TransactionType | null;
+    refreshTrigger: number;
+    setRefreshTrigger: (value: number) => void;
 }
 
-const FormProductType: React.FC<FormProductTypeProps> = ({
+const FormTransactionType: React.FC<FormTransactionTypeProps> = ({
     isModalOpen,
     setIsModalOpen,
     isEditing,
-    currentProductType,
-    
+    currentTransactionType,
+    refreshTrigger,
+    setRefreshTrigger,
 }) => {
-    const { productTypes, saveProductType } = useProductTypes();
-
+    const { transactionTypes, saveTransactionType } = useTransactionTypes();
     const form = useForm({
         defaultValues: {
-            productTypeName: isEditing && currentProductType ? currentProductType.productTypeName : ""
+            transactionTypeName: isEditing && currentTransactionType ? currentTransactionType.transactionTypeName : ""
         },
+
         validators: {
-            onBlur: productTypeSchema
+            onBlur: TransactionTypeSchema,
+
         },
+
         onSubmit: async ({ value }) => {
             await onSubmit(value);
-        }
+        },
 
     });
 
@@ -47,48 +51,46 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
     const onSubmit = useCallback(
         async (values: FormValues) => {
             try {
-                const productType: ProductType = {
-                    id: isEditing && currentProductType ? currentProductType.id : 0,
-                    productTypeCode: isEditing && currentProductType ? currentProductType.productTypeCode : "",
-                    productTypeName: values.productTypeName,
+                const transactionType: TransactionType = {
+                    id: isEditing && currentTransactionType ? currentTransactionType.id : 0,
+                    transactionTypeCode: isEditing && currentTransactionType ? currentTransactionType.transactionTypeCode : "",
+                    transactionTypeName: values.transactionTypeName,
                     createdBy: "admin",
                     updatedBy: "admin",
-                    createdDate: isEditing && currentProductType ? currentProductType.createdDate : new Date().toISOString(),
+                    createdDate: isEditing && currentTransactionType ? currentTransactionType.createdDate : new Date().toISOString(),
                     updatedDate: new Date().toISOString(),
+                    documentTypeID: 0
                 };
 
-                const result = await saveProductType(productType);
-                if (!result.success) {
-                    message.error(result.message || "Error saving product type");
-                    return;
-                }
-                message.success("Product type saved successfully");
-            }
-            catch (error) {
-                message.error("Error saving product type:");
-            }
-            finally{
+                await saveTransactionType(transactionType);
+                setRefreshTrigger(refreshTrigger + 1);
+                message.success("Saved successfully");
+            } catch (error) {
+                console.error("Error while saving:", error);
+                message.error("Failed to save");
+            } finally {
                 handleCancel();
             }
         },
-        [isEditing, currentProductType, saveProductType, handleCancel]
+        [isEditing, currentTransactionType, saveTransactionType, refreshTrigger, setRefreshTrigger, handleCancel]
     );
 
     const checkDuplicate = (
         name: string,
-        productTypes: ProductType[],
+        TransactionTypes: TransactionType[],
         currentId?: number
     ): boolean => {
-        return productTypes.some(
-            (c) =>
-                c.productTypeName.trim().toLowerCase() === name.trim().toLowerCase() &&
-                c.id !== currentId
+        return TransactionTypes.some(
+            (tt) =>
+                tt.transactionTypeName.trim().toLowerCase() === name.trim().toLowerCase() &&
+                tt.id !== currentId
         );
     };
 
-     return (
+
+    return (
         <Modal
-            title={isEditing ? "Chỉnh sửa loại sản phẩm" : "Thêm loại sản phẩm mới"}
+            title={isEditing ? "Chỉnh sửa danh mục" : "Thêm danh mục mới"}
             open={isModalOpen}
             onCancel={handleCancel}
             footer={null}
@@ -96,7 +98,7 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
             {isEditing && (
                 <div style={{ marginBottom: 16 }}>
                     <label>Category Code</label>
-                    <Input value={currentProductType?.productTypeCode} readOnly />
+                    <Input value={currentTransactionType?.transactionTypeCode} readOnly />
                 </div>
             )}
             <form onSubmit={(event) => {
@@ -104,12 +106,12 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                 form.handleSubmit();
             }}>
                 {form.Field({
-                    name: "productTypeName",
+                    name: "transactionTypeName",
                     validators: {
                         onBlur: (value) => {
-                            const isDuplicate = checkDuplicate(value.value, productTypes, currentProductType?.id);
+                            const isDuplicate = checkDuplicate(value.value, transactionTypes, currentTransactionType?.id);
                             if (isDuplicate) {
-                               return [{ message: "Tên loại sản phẩm đã tồn tại" }];
+                                return [{ message: "Tên danh mục đã tồn tại" }];
                             }
                             return undefined;
                         },
@@ -121,17 +123,15 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                         }
                         return (
                             <div style={{ marginBottom: 16 }}>
-                                <label>Category Name</label>
+                                <label>Transaction Type Name</label>
                                 <Input
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     onBlur={field.handleBlur}
-                                    placeholder="Enter Product Type Name"
+                                    placeholder="Enter Transaction Type Name"
                                     status={field.state.meta.errors?.length > 0 ? "error" : undefined}
-
                                 />
                                 <FieldInfo field={field} />
-            
                             </div>
                         );
                     }
@@ -147,7 +147,7 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
             </form>
         </Modal>
     );
-}
+};
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
@@ -155,9 +155,8 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
             {field.state.meta.errors.length > 0 ? (
                 <span style={{ color: "red" }}>{field.state.meta.errors.map((err) => err.message).join(',')}</span>
             ) : null}
-           
         </>
     )
 }
 
-export default FormProductType;
+export default FormTransactionType
