@@ -13,10 +13,10 @@
   "eslint.format.enable": true,
   "eslint.enable": false, 
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "[typescriptreact]": {
+  "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "[typescript]": {
+  "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
 }
