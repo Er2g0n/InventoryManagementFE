@@ -14,8 +14,6 @@ interface FormProductCategoryProps {
     setIsModalOpen: (open: boolean) => void;
     isEditing: boolean;
     currentProductCategory: ProductCategory | null;
-    refreshTrigger: number;
-    setRefreshTrigger: (value: number) => void;
 }
 
 const FormProductCategory: React.FC<FormProductCategoryProps> = ({
@@ -23,8 +21,7 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
     setIsModalOpen,
     isEditing,
     currentProductCategory,
-    refreshTrigger,
-    setRefreshTrigger,
+    
 }) => {
     const { productCategories, saveProductCategory } = useProductCategories();
 
@@ -87,9 +84,13 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
                     updatedDate: new Date().toISOString(),
                 };
 
-                await saveProductCategory(productCategory);
+                const result = await saveProductCategory(productCategory);
+                if (!result.success) {
+                    message.error(result.message || "Lỗi khi lưu danh mục sản phẩm");
+                    return;
+                }
                 // setRefreshTrigger(refreshTrigger + 1);
-                message.success("Product category saved successfully");
+                message.success(result.message);
             } catch (error) {
                 console.error("Error saving product category:", error);
                 message.error("Failed to save product category");
@@ -97,7 +98,7 @@ const FormProductCategory: React.FC<FormProductCategoryProps> = ({
                 handleCancel();
             }
         },
-        [isEditing, currentProductCategory, saveProductCategory, refreshTrigger, setRefreshTrigger, handleCancel]
+        [isEditing, currentProductCategory, saveProductCategory, handleCancel]
     );
 
     const checkDuplicate = (

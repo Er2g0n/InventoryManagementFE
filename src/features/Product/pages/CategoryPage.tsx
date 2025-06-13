@@ -10,7 +10,6 @@ const CategoryPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProductCategory, setCurrentProductCategory] = useState<ProductCategory | null>(null);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleAddProductType = useCallback(() => {
     setIsEditing(false);
@@ -44,7 +43,7 @@ const CategoryPage: React.FC = () => {
           }
           variant="borderless"
         >
-          <ListProductCategory onEdit={handleEditProductType} refreshTrigger={refreshTrigger} />
+          <ListProductCategory onEdit={handleEditProductType}/>
         </Card>
       </Col>
       <FormProductCategory
@@ -53,8 +52,7 @@ const CategoryPage: React.FC = () => {
         setIsModalOpen={setIsModalOpen}
         isEditing={isEditing}
         currentProductCategory={currentProductCategory}
-        refreshTrigger={refreshTrigger}
-        setRefreshTrigger={setRefreshTrigger}
+       
       />
     </Row>
   );

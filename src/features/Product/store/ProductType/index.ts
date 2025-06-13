@@ -34,12 +34,12 @@ const ProductTypeSlide = createSlice({
             .addCase(ProductTypeActionTypes.SAVE_PRODUCT_TYPE_SUCCESS, (state, action: SaveProductTypeSuccess) => {
                 state.loading = false;
                 const index = state.productTypes.findIndex(
-                    (pt) => pt.productTypeCode === action.payload.productTypeCode
+                    (pt) => pt.productTypeCode === action.payload.data!.productTypeCode
                 );
                 if (index !== -1) {
-                    state.productTypes[index] = action.payload;
+                    state.productTypes[index] = action.payload.data!;
                 } else {
-                    state.productTypes.push(action.payload);
+                    state.productTypes.push(action.payload.data!);
                 }
             })
             .addCase(ProductTypeActionTypes.SAVE_PRODUCT_TYPE_FAILURE, (state, action: SaveProductTypeFailure) => {

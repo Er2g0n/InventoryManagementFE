@@ -7,10 +7,9 @@ import { ProductCategory } from '@/types/MasterData/Product/ProductClassificatio
 
 interface ListProductCategoryProps {
   onEdit: (productCategory: ProductCategory) => void;
-  refreshTrigger: number;
 }
 
-const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ onEdit, refreshTrigger }) => {
+const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ onEdit }) => {
   const { productCategories, loading, error, loadProductCategories, deleteProductCategory } = useProductCategories();
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
@@ -166,6 +165,7 @@ const ListProductCategory: React.FC<ListProductCategoryProps> = React.memo(({ on
         pageSize,
       },
     },
+    autoResetPageIndex: false,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

@@ -1,12 +1,31 @@
-import { ProductType } from "@/types/MasterData/Product/ProductClassification";
-import { DeleteProductTypeFailure, DeleteProductTypeSuccess, FetchProductTypesFailure, FetchProductTypesRequest, FetchProductTypesSuccess, ProductTypeAction, ProductTypeActionTypes, SaveProductTypeFailure, SaveProductTypeRequest, SaveProductTypeSuccess } from "./types";
-import { ThunkAction } from "redux-thunk";
-import { RootState } from "@/store/store";
-import { deleteProductType, getAllProductType, saveProductType } from "@features/Product/Services/ProductTypeService";
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '@/store/store';
+import {
+  ProductTypeActionTypes,
+  FetchProductTypesRequest,
+  FetchProductTypesSuccess,
+  FetchProductTypesFailure,
+  SaveProductTypeRequest,
+  SaveProductTypeSuccess,
+  SaveProductTypeFailure,
+  DeleteProductTypeSuccess,
+  DeleteProductTypeFailure,
+  ProductTypeAction
+} from './types';
+
+import {
+  getAllProductType,
+  saveProductType,
+  deleteProductType
+} from '@features/Product/Services/ProductTypeService';
+
+import { ProductType } from '@/types/MasterData/Product/ProductClassification';
+import { ResultService } from '@/types/Base/ResultService';
 
 export const fetchProductTypesRequest = (): FetchProductTypesRequest => ({
   type: ProductTypeActionTypes.FETCH_PRODUCT_TYPES_REQUEST,
 });
+
 export const fetchProductTypesSuccess = (
   productTypes: ProductType[]
 ): FetchProductTypesSuccess => ({
@@ -14,7 +33,9 @@ export const fetchProductTypesSuccess = (
   payload: productTypes,
 });
 
-export const fetchProductTypesFailure = (error: string): FetchProductTypesFailure => ({
+export const fetchProductTypesFailure = (
+  error: string
+): FetchProductTypesFailure => ({
   type: ProductTypeActionTypes.FETCH_PRODUCT_TYPES_FAILURE,
   payload: error,
 });
@@ -24,28 +45,35 @@ export const saveProductTypeRequest = (): SaveProductTypeRequest => ({
 });
 
 export const saveProductTypeSuccess = (
-  productType: ProductType
+  response: ResultService<ProductType>
 ): SaveProductTypeSuccess => ({
   type: ProductTypeActionTypes.SAVE_PRODUCT_TYPE_SUCCESS,
-  payload: productType,
+  payload: response,
 });
-export const saveProductTypeFailure = (error: string): SaveProductTypeFailure => ({
+
+export const saveProductTypeFailure = (
+  error: string
+): SaveProductTypeFailure => ({
   type: ProductTypeActionTypes.SAVE_PRODUCT_TYPE_FAILURE,
   payload: error,
 });
 
-export const deleteProductTypeSuccess = (typeCode: string): DeleteProductTypeSuccess => ({
+export const deleteProductTypeSuccess = (
+  typeCode: string
+): DeleteProductTypeSuccess => ({
   type: ProductTypeActionTypes.DELETE_PRODUCT_TYPE_SUCCESS,
   payload: typeCode,
 });
 
-export const deleteProductTypeFailure = (error: string): DeleteProductTypeFailure => ({
+export const deleteProductTypeFailure = (
+  error: string
+): DeleteProductTypeFailure => ({
   type: ProductTypeActionTypes.DELETE_PRODUCT_TYPE_FAILURE,
   payload: error,
 });
 
 export const fetchProductTypes = (): ThunkAction<
-  void,
+  Promise<ProductTypeAction>,
   RootState,
   unknown,
   ProductTypeAction
@@ -54,54 +82,66 @@ export const fetchProductTypes = (): ThunkAction<
   try {
     const response = await getAllProductType();
     if (response.code === "0" && response.data) {
-      dispatch(fetchProductTypesSuccess(response.data));
+      const successAction = fetchProductTypesSuccess(response.data);
+      dispatch(successAction);
+      return successAction;
     } else {
-      dispatch(fetchProductTypesFailure(response.message || "Failed to fetch product types."));
+      const failureAction = fetchProductTypesFailure(response.message || 'Failed to fetch product types');
+      dispatch(failureAction);
+      return failureAction;
     }
-
   } catch (error) {
-    dispatch(fetchProductTypesFailure(error instanceof Error ? error.message : "An error occurred while fetching product types."));
+    const failureAction = fetchProductTypesFailure(
+      error instanceof Error ? error.message : 'Failed to fetch product types'
+    );
+    dispatch(failureAction);
+    return failureAction;
   }
-}
+};
 
 export const addOrUpdateProductType = (
   productType: ProductType
-): ThunkAction<
-  void,
-  RootState,
-  unknown,
-  ProductTypeAction
-> => async (dispatch) => {
+): ThunkAction<Promise<ProductTypeAction>, RootState, unknown, ProductTypeAction> => async (dispatch) => {
   dispatch(saveProductTypeRequest());
   try {
     const response = await saveProductType(productType);
-    if (response.code === "0" && response.data) {
-      dispatch(saveProductTypeSuccess(response.data));
+    if (response.code === "0") {
+      const successAction = saveProductTypeSuccess(response);
+      dispatch(successAction);
+      return successAction;
     } else {
-      dispatch(saveProductTypeFailure(response.message || "Failed to save product type."));
+      const failureAction = saveProductTypeFailure(response.message || 'Failed to save product type');
+      dispatch(failureAction);
+      return failureAction;
     }
   } catch (error) {
-    dispatch(saveProductTypeFailure(error instanceof Error ? error.message : "An error occurred while saving product type."));
+    const failureAction = saveProductTypeFailure(
+      error instanceof Error ? error.message : 'Failed to save product type'
+    );
+    dispatch(failureAction);
+    return failureAction;
   }
-}
-
+};
 
 export const removeProductType = (
-productTypeCode: string
-): ThunkAction<
-  void,
-  RootState,
-  unknown,
-  ProductTypeAction
-> => async (dispatch) => {
+  typeCode: string
+): ThunkAction<Promise<ProductTypeAction>, RootState, unknown, ProductTypeAction> => async (dispatch) => {
   try {
-    const response = await deleteProductType(productTypeCode);
+    const response = await deleteProductType(typeCode);
     if (response.code === "0") {
-      dispatch(deleteProductTypeSuccess(productTypeCode));
+      const successAction = deleteProductTypeSuccess(typeCode);
+      dispatch(successAction);
+      return successAction;
     } else {
-      dispatch(deleteProductTypeFailure(response.message || "Failed to delete product type."));
+      const failureAction = deleteProductTypeFailure(response.message || 'Failed to delete product type');
+      dispatch(failureAction);
+      return failureAction;
     }
   } catch (error) {
-    dispatch(deleteProductTypeFailure(error instanceof Error ? error.message : "An error occurred while deleting product type."));
+    const failureAction = deleteProductTypeFailure(
+      error instanceof Error ? error.message : 'Failed to delete product type'
+    );
+    dispatch(failureAction);
+    return failureAction;
   }
-}
+};

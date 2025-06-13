@@ -34,12 +34,12 @@ const colorSlice = createSlice({
       .addCase(ColorActionTypes.SAVE_COLOR_SUCCESS, (state, action: SaveColorSuccess) => {
         state.loading = false;
         const index = state.colors.findIndex(
-          (color) => color.colorCode === action.payload.colorCode
+          (color) => color.colorCode === action.payload.data!.colorCode
         );
         if (index !== -1) {
-          state.colors[index] = action.payload;
+          state.colors[index] = action.payload.data!;
         } else {
-          state.colors.push(action.payload);
+          state.colors.push(action.payload.data!);
         }
       })
       .addCase(ColorActionTypes.SAVE_COLOR_FAILURE, (state, action: SaveColorFailure) => {

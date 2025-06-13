@@ -36,7 +36,7 @@ export const useColors = () => {
       dispatch(addOrUpdateColor(color))
         .then((action) => {
           if (action.type === ColorActionTypes.SAVE_COLOR_SUCCESS) {
-            resolve({ success: true, message: action.payload });
+            resolve({ success: true, message: action.payload.message });
           } else if (action.type === ColorActionTypes.SAVE_COLOR_FAILURE){
             resolve({
               success: false,

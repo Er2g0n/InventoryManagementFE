@@ -12,7 +12,6 @@
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isEditing, setIsEditing] = useState(false);
       const [currentProductType, setCurrentProductType] = useState<ProductType | null>(null);
-      const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handleAddProductType = useCallback(() => {
       setIsEditing(false);
@@ -45,7 +44,7 @@
             }
             variant="borderless"
           >
-            <ListProductType onEdit={handleEditProductType} refreshTrigger={refreshTrigger} />
+            <ListProductType onEdit={handleEditProductType} />
           </Card>
         </Col>
         <FormProductType
@@ -54,8 +53,7 @@
           setIsModalOpen={setIsModalOpen}
           isEditing={isEditing}
           currentProductType={currentProductType}
-          refreshTrigger={refreshTrigger}
-          setRefreshTrigger={setRefreshTrigger}
+         
         />
       </Row>
     );

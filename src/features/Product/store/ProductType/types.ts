@@ -1,3 +1,4 @@
+import { ResultService } from "@/types/Base/ResultService";
 import { ProductType } from "@/types/MasterData/Product/ProductClassification";
 
 export interface ProductTypeState{
@@ -37,7 +38,7 @@ export interface SaveProductTypeRequest {
 }
 export interface SaveProductTypeSuccess {
     type: typeof ProductTypeActionTypes.SAVE_PRODUCT_TYPE_SUCCESS;
-    payload: ProductType;
+    payload: ResultService<ProductType>;
 }
 export interface SaveProductTypeFailure {
     type: typeof ProductTypeActionTypes.SAVE_PRODUCT_TYPE_FAILURE;

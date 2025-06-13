@@ -14,8 +14,7 @@ interface FormProductTypeProps {
     setIsModalOpen: (open: boolean) => void;
     isEditing: boolean;
     currentProductType: ProductType | null;
-    refreshTrigger: number;
-    setRefreshTrigger: (value: number) => void;
+    
 }
 
 const FormProductType: React.FC<FormProductTypeProps> = ({
@@ -23,8 +22,7 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
     setIsModalOpen,
     isEditing,
     currentProductType,
-    refreshTrigger,
-    setRefreshTrigger,
+    
 }) => {
     const { productTypes, saveProductType } = useProductTypes();
 
@@ -59,8 +57,11 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                     updatedDate: new Date().toISOString(),
                 };
 
-                await saveProductType(productType);
-                setRefreshTrigger(refreshTrigger + 1);
+                const result = await saveProductType(productType);
+                if (!result.success) {
+                    message.error(result.message || "Error saving product type");
+                    return;
+                }
                 message.success("Product type saved successfully");
             }
             catch (error) {
@@ -70,7 +71,7 @@ const FormProductType: React.FC<FormProductTypeProps> = ({
                 handleCancel();
             }
         },
-        [isEditing, currentProductType, saveProductType, refreshTrigger, setRefreshTrigger, handleCancel]
+        [isEditing, currentProductType, saveProductType, handleCancel]
     );
 
     const checkDuplicate = (

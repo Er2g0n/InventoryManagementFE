@@ -9,7 +9,7 @@ export async function getAllProductType (): Promise<ResultService<ProductType[]>
     "ProductType",
   );
   
-  if (response.code == "-1") {
+  if (response.code !== "0") {
     
     response.message = "Failed to Fetch Data";
     return response;
@@ -28,7 +28,7 @@ export async function saveProductType (
     productType
   );
   
-  if ( response.code == "-1") {
+  if ( response.code !== "0") {
     response.message = "Failed to save this product type";
     return response;
   }
@@ -43,7 +43,7 @@ export async function getProductTypeByCode (productTypeCode: string): Promise<Re
     `ProductType/${productTypeCode}`,
   );
   
-  if (response.code == "-1") {
+  if (response.code !== "0") {
     
     response.message = "Failed to get data";
     return response;
@@ -63,7 +63,7 @@ export async function deleteProductType (
   );
  
 
-  if (response.code == "-1") {
+  if (response.code !== "0") {
    
     response.message = "Failed to delete this product type";
     return response;

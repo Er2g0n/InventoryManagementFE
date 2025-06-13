@@ -1,3 +1,4 @@
+import { ResultService } from "@/types/Base/ResultService";
 import { Color } from "@/types/MasterData/Product/ProductProperties";
 
 export interface ColorState {
@@ -37,7 +38,7 @@ export interface SaveColorRequest {
 }
 export interface SaveColorSuccess {
     type: typeof ColorActionTypes.SAVE_COLOR_SUCCESS;
-    payload: string;
+    payload: ResultService<Color>;
 }
 export interface SaveColorFailure {
     type: typeof ColorActionTypes.SAVE_COLOR_FAILURE;
