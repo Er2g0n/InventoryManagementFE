@@ -12,6 +12,7 @@ export const WEB_ENDPOINT = {
   Category: "/Category",
   Type: "/Type",
   Color: "/Color",
+  Brand: "/Brand",
   VehicleModelPage : "/VehicleModel"
 };
 const routes : RouteObject[] = [

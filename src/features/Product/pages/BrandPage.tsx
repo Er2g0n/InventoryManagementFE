@@ -3,6 +3,7 @@ import { Button, Card, Col, ConfigProvider, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import ListBrand from "../Components/Brand/ProductBrandList";
+import FormProductBrand from "../Components/Brand/ProductBrandForm";
 
 const BrandPage: React.FC = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,12 +46,12 @@ const BrandPage: React.FC = () => {
           <ListBrand onEdit={handleEditBrand} refreshTrigger={refreshTrigger} />
         </Card>
       </Col>
-      <FormBrand
+      <FormProductBrand
        
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         isEditing={isEditing}
-        currentProductCategory={currentBrand}
+        currentBrand={currentBrand}
         refreshTrigger={refreshTrigger}
         setRefreshTrigger={setRefreshTrigger}
       />
