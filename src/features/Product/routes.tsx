@@ -15,10 +15,9 @@ export const WEB_ENDPOINT = {
   Type: "/Type",
   Color: "/Color",
   Material: "/Material",
-  VehicleModelPage : "/VehicleModel",
   TransactionTypePage:"/TransactionType",
   Brand: "/Brand",
-  VehicleModelPage : "/VehicleModel"
+  VehicleModelPage : "/VehicleModel",
 };
 const routes : RouteObject[] = [
     {

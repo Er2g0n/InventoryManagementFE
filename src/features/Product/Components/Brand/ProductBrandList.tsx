@@ -18,7 +18,7 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
 
   useEffect(() => {
     loadBrands();
-  }, [refreshTrigger, loadBrands]);
+  }, []);
 
   const handleDelete = async (brandCode: string) => {
     try {

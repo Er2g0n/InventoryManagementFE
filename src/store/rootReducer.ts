@@ -1,5 +1,4 @@
-import { productSlice, productTypeSlice, productCategorySlice, colorSlice, TransactionTypeSlice, MaterialSlice } from '@features/Product';
-import { productSlice, productTypeSlice, productCategorySlice, colorSlice,brandSlice } from '@features/Product';
+import { productSlice, productTypeSlice, productCategorySlice, colorSlice, TransactionTypeSlice, MaterialSlice, brandSlice } from '@features/Product';
 import { combineReducers } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
@@ -8,8 +7,7 @@ const rootReducer = combineReducers({
   productType: productTypeSlice,
   color: colorSlice,
   transactionType: TransactionTypeSlice,
-  material: MaterialSlice
-  color: colorSlice,
+  material: MaterialSlice,
   brand: brandSlice,
 })
 export default rootReducer;
