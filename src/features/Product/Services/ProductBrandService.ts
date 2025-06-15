@@ -48,7 +48,7 @@ export async function getBrandByCode (brandCode: string): Promise<ResultService<
     return response;
   }
   response.code = "0";
-  // response.message = "Brand retrieved successfully";
+  response.message = "Brand retrieved successfully";
 
   return response;
 }
@@ -58,7 +58,8 @@ export async function deleteBrand (
 ): Promise<ResultService<string>> {
   const response = await fetchClient<string, string>(
     httpMethod.DELETE,
-    `Brand/${brandCode}`,
+    `Brand/DeleteByDapper/${brandCode}`,
+    brandCode
   );
 
   if (response.code === "-1") {

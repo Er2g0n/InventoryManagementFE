@@ -14,8 +14,7 @@ interface FormProductBrandProps {
   setIsModalOpen: (open: boolean) => void;
   isEditing: boolean;
   currentBrand: Brand | null;
-  refreshTrigger: number;
-  setRefreshTrigger: (value: number) => void;
+
 }
 
 const FormProductBrand: React.FC<FormProductBrandProps> = ({
@@ -23,8 +22,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
   setIsModalOpen,
   isEditing,
   currentBrand,
-  refreshTrigger,
-  setRefreshTrigger,
+
 }) => {
   const { brands, saveBrand } = useBrands();
 
@@ -58,9 +56,14 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
           updatedDate: new Date().toISOString(),
         };
 
-        await saveBrand(brand);
-        setRefreshTrigger(refreshTrigger + 1);
-        message.success("Brand saved successfully");
+        const result = await saveBrand(brand);
+        if (!result.success) {
+          message.error(result.message || "Lỗi khi lưu danh mục sản phẩm");
+          return;
+        }
+
+        // setRefreshTrigger(refreshTrigger + 1);
+        message.success(result.message);
       } catch (error) {
         console.error("Error saving brand:", error);
         message.error("Failed to save brand");
@@ -68,7 +71,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
         handleCancel();
       }
     },
-    [isEditing, currentBrand, saveBrand, refreshTrigger, setRefreshTrigger, handleCancel]
+    [isEditing, currentBrand, saveBrand, handleCancel]
   );
 
   const checkDuplicate = (
@@ -85,7 +88,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
 
   return (
     <Modal
-      title={isEditing ? "Chỉnh sửa thương hiệu" : "Thêm thương hiệu mới"}
+      title={isEditing ? "Edit Brand" : "Add Brand"}
       open={isModalOpen}
       onCancel={handleCancel}
       footer={null}
@@ -108,7 +111,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
             onBlur: (value) => {
               const isDuplicate = checkDuplicate(value.value, brands, currentBrand?.id);
               if (isDuplicate) {
-                return [{ message: "Tên thương hiệu đã tồn tại" }];
+                return [{ message: "Brand name already exist" }];
               }
               return undefined;
             },
@@ -135,10 +138,10 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
         })}
         <div>
           <Button type="primary" htmlType="submit" loading={form.state.isSubmitting}>
-            Lưu
+            Save
           </Button>
           <Button danger style={{ marginLeft: 8 }} onClick={handleCancel}>
-            Hủy
+            Cancel
           </Button>
         </div>
       </form>

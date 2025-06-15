@@ -1,15 +1,14 @@
-import { Brand } from "@/types/MasterData/Product/ProductClassification";
 import { Button, Card, Col, ConfigProvider, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import ListBrand from "../Components/Brand/ProductBrandList";
 import FormProductBrand from "../Components/Brand/ProductBrandForm";
+import { Brand } from "@/types/MasterData/Product/ProductClassification";
 
 const BrandPage: React.FC = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isEditing, setIsEditing] = useState(false);
       const [currentBrand, setCurrentBrand] = useState<Brand | null>(null);
-      const [refreshTrigger, setRefreshTrigger] = useState(0);
 
 
       const handleAddBrand = useCallback(() => {
@@ -43,7 +42,7 @@ const BrandPage: React.FC = () => {
           }
           variant="borderless"
         >
-          <ListBrand onEdit={handleEditBrand} refreshTrigger={refreshTrigger} />
+          <ListBrand onEdit={handleEditBrand} />
         </Card>
       </Col>
       <FormProductBrand
@@ -52,8 +51,6 @@ const BrandPage: React.FC = () => {
         setIsModalOpen={setIsModalOpen}
         isEditing={isEditing}
         currentBrand={currentBrand}
-        refreshTrigger={refreshTrigger}
-        setRefreshTrigger={setRefreshTrigger}
       />
     </Row>
   );

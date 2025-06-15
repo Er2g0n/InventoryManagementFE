@@ -1,20 +1,20 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Brand } from "@/types/MasterData/Product/ProductClassification";
 import { useBrands } from "@features/Product/store/Brand/hooks/useBrand";
-import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
+import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import { Space, Button, Input, Modal, notification } from "antd";
-import { SearchOutlined, EditOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { SearchOutlined, EditOutlined, DeleteOutlined, QuestionCircleOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from "@ant-design/icons";
 
 interface ListBrandProps {
   onEdit: (brand: Brand) => void;
-  refreshTrigger: number;
 }
 
-const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger }) => {
+const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit }) => {
   const { brands, loading, error, loadBrands, deleteBrand } = useBrands();
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
     loadBrands();
@@ -24,13 +24,13 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
     try {
       await deleteBrand(brandCode);
       notification.success({
-        message: 'Success',
-        description: `Brand ${brandCode} deleted successfully`,
+        message: 'Thành công',
+        description: `Đã xóa thương hiệu ${brandCode} thành công`,
       });
     } catch (err: any) {
       notification.error({
-        message: 'Error',
-        description: `Failed to delete brand ${brandCode}: ${err.message}`,
+        message: 'Lỗi',
+        description: `Không thể xóa thương hiệu ${brandCode}: ${err.message}`,
       });
     }
   };
@@ -103,7 +103,17 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: 'Created Date',
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
+        >
+          Created Date
+          <span style={{ float: 'right' }}>
+            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
+          </span>
+        </div>
+      ),
       accessorKey: 'createdDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -116,7 +126,17 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
       cell: ({ getValue }) => getValue() || 'N/A',
     },
     {
-      header: 'Updated Date',
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          style={{ fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}
+        >
+          Updated Date
+          <span style={{ float: 'right' }}>
+            {column.getIsSorted() === 'asc' ? <ArrowUpOutlined /> : column.getIsSorted() === 'desc' ? <ArrowDownOutlined /> : <SwapOutlined />}
+          </span>
+        </div>
+      ),
       accessorKey: 'updatedDate',
       cell: ({ getValue }) => {
         const value = getValue() as string | null;
@@ -151,12 +171,14 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
     data: brands || [],
     columns,
     state: {
+      sorting,
       globalFilter,
       pagination: {
         pageIndex,
         pageSize,
       },
     },
+    autoResetPageIndex: false,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -166,6 +188,8 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
       setPageIndex(newState.pageIndex);
       setPageSize(newState.pageSize);
     },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const showDeleteConfirm = (record: Brand) => {
@@ -188,14 +212,12 @@ const ListBrand: React.FC<ListBrandProps> = React.memo(({ onEdit, refreshTrigger
     });
   };
 
-  if (loading) {
+  if (loading && (!brands || brands.length === 0)) {
     return <div style={{ padding: 20, textAlign: 'center' }}>Loading...</div>;
   }
-
   if (error) {
     return <div style={{ padding: 20, textAlign: 'center', color: 'red' }}>{error}</div>;
   }
-
   if (!brands || brands.length === 0) {
     return <div style={{ padding: 20, textAlign: 'center' }}>No brands available</div>;
   }

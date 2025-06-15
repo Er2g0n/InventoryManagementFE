@@ -33,12 +33,12 @@ const brandSlice = createSlice({
             .addCase(BrandActionTypes.SAVE_BRAND_SUCCESS, (state, action: SaveBrandSuccess) => {
                 state.loading = false;
                 const index = state.brands.findIndex(
-                    (b) => b.brandCode === action.payload.brandCode
+                    (b) => b.brandCode === action.payload.data!.brandCode
                 );
                 if (index !== -1) {
-                    state.brands[index] = action.payload;
+                    state.brands[index] = action.payload.data!;
                 } else {
-                    state.brands.push(action.payload);
+                    state.brands.push(action.payload.data!);
                 }
             })
             .addCase(BrandActionTypes.SAVE_BRAND_FAILURE, (state, action: SaveBrandFailure) => {
