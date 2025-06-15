@@ -94,7 +94,7 @@ export default function PartnerList () {
         />
       )}
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mb-6">
+      <div className="overflow-x-auto bg-white rounded-lg shadow mb-6 pb-2">
         <PartnerTable addColumns={columnAdd} ref={partnerTableRef} data={partners ?? []} />
       </div>
 

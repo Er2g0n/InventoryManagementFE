@@ -1,4 +1,4 @@
-import {  ColumnDef, flexRender, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, Header, useReactTable } from "@tanstack/react-table";
+import {  ColumnDef, flexRender, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, Header, PaginationState, useReactTable } from "@tanstack/react-table";
 
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -167,6 +167,10 @@ function GenericTable<T extends Record<string, any>> (
     columnsDefault.map(c => c.id!)
   );
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
+  const [pagination, setPagination] =useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 5
+  });
 
   const table = useReactTable({
     data: data || [],
@@ -174,13 +178,17 @@ function GenericTable<T extends Record<string, any>> (
     getCoreRowModel: getCoreRowModel(),
     enableColumnResizing: true,
     columnResizeMode: "onChange",
+
     state: {
       columnOrder,
-      columnFilters
+      columnFilters,
+      pagination
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    getPaginationRowModel:   getPaginationRowModel(),
+    onPaginationChange: setPagination,
     debugTable: true
   });
 
@@ -210,38 +218,123 @@ function GenericTable<T extends Record<string, any>> (
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
-      <table className="w-full border-collapse border border-gray-300" {...attribute}>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id} className="bg-gray-200">
-              {headerGroup.headers.map(header => (
-                <SortableContext
-                  key={header.id}
-                  items={columnOrder}
-                  strategy={horizontalListSortingStrategy}
-                >
-                  <DraggableTableHeader<T> key={header.id} header={header} />
-                </SortableContext>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="hover:bg-gray-50">
-              {row.getVisibleCells().map(cell => (
-                <SortableContext
-                  key={cell.id}
-                  items={columnOrder}
-                  strategy={horizontalListSortingStrategy}
-                >
-                  <DragAlongCell<T> key={cell.id} cell={cell} />
-                </SortableContext>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      
+      <div className="w-full overflow-auto">
+
+        <table className="w-full overflow-auto border-collapse border border-gray-300" {...attribute}>
+          <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id} className="bg-gray-200">
+                {headerGroup.headers.map(header => (
+                  <SortableContext
+                    key={header.id}
+                    items={columnOrder}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    <DraggableTableHeader<T> key={header.id} header={header} />
+                  </SortableContext>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map(row => (
+              <tr key={row.id} className="hover:bg-gray-50">
+                {row.getVisibleCells().map(cell => (
+                  <SortableContext
+                    key={cell.id}
+                    items={columnOrder}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    <DragAlongCell<T> key={cell.id} cell={cell} />
+                  </SortableContext>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        
+        
+    
+      </div>
+      <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm mt-3">
+        {/* Navigation buttons */}
+        <div className="flex items-center gap-1">
+          <button
+            className="px-2 py-0.5 border rounded text-gray-700 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.firstPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<<"}
+          </button>
+          <button
+            className="px-2 py-0.5 border rounded text-gray-700 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<"}
+          </button>
+          <button
+            className="px-2 py-0.5 border rounded text-gray-700 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {">"}
+          </button>
+          <button
+            className="px-2 py-0.5 border rounded text-gray-700 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.lastPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {">>"}
+          </button>
+        </div>
+
+        {/* Page info */}
+        <span className="text-gray-600">
+    Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+          <strong>{table.getPageCount()}</strong>
+        </span>
+
+        {/* Go to page input */}
+        <div className="flex items-center gap-1">
+          <span className="text-gray-600">Go to</span>
+          <input
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+
+              table.setPageIndex(page);
+            }}
+            className="w-14 px-1.5 py-0.5 border rounded focus:outline-none focus:ring-1 focus:ring-blue-300 text-center text-xs"
+          />
+        </div>
+
+        {/* Page size selector */}
+        <div className="flex items-center gap-1">
+          <label htmlFor="page-size" className="text-gray-600">Show</label>
+          <select
+            id="page-size"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => table.setPageSize(Number(e.target.value))}
+            className="px-1.5 py-0.5 border rounded focus:outline-none focus:ring-1 focus:ring-blue-300 text-xs"
+          >
+            {[5, 10, 20, 30, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+     
+
+     
+    
+      
     </DndContext>
   );
 };
