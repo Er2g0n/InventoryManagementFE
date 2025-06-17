@@ -188,8 +188,7 @@ function GenericTable<T extends Record<string, any>> (
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getPaginationRowModel:   getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    debugTable: true
+    onPaginationChange: setPagination
   });
 
   function handleDragEnd (event: DragEndEvent) {
