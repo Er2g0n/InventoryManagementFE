@@ -5,7 +5,7 @@ import { Link, UIMatch, useLocation, useMatches } from "react-router-dom";
 import { Menu, Typography } from "antd";
 import type { MenuProps } from "antd";
 import {
-  ShoppingOutlined,
+  ShoppingOutlined
 } from "@ant-design/icons";
 
 import SubMenu from "antd/es/menu/SubMenu";
@@ -30,11 +30,11 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
         const newOpenKeys: string[] = [];
         const pathname = location.pathname;
 
-        const segments = pathname.split('/').filter(Boolean); // remove empty segments
+        const segments = pathname.split("/").filter(Boolean); // remove empty segments
 
 
         for (let i = 1; i <= segments.length; i++) {
-          newOpenKeys.push('/' + segments.slice(0, i).join('/'));
+          newOpenKeys.push("/" + segments.slice(0, i).join("/"));
         }
         setOpenKeys(newOpenKeys);
 
@@ -48,7 +48,8 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
     };
     const selectedKeys = useMemo<string[]>(() => {
       const select = [];
-      select.push(location.pathname)
+
+      select.push(location.pathname);
       return select;
 
     }, [location])
@@ -56,7 +57,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
       ;
 
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col pb-10 ">
         <div className="flex justify-center items-center h-16 m-4">
           <Title level={4} style={{ margin: 0, color: "white" }}>
             {collapsed ? "App" : "My App"}
@@ -106,7 +107,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             </Menu.Item>
 
           </SubMenu>
-           <SubMenu
+          <SubMenu
             icon={<ShoppingOutlined />}
             title="Warehouse"
             key={"/warehouse"}
@@ -115,7 +116,9 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
               <Link to={"/warehouse"}>Main</Link>
             </MenuItem>
           </SubMenu>
-
+          <MenuItem key={"/partner"} icon={<ShoppingOutlined />}>
+            <Link to={"/partner"}>Partner</Link>
+          </MenuItem>
         </Menu>
       </div>
     );

@@ -1,5 +1,5 @@
 export const msg = {
-  required:      (f: string) => `${f} là bắt buộc.`,
+  required:      (f: string = "field") => `This ${f} is required..`,
   min:           (f: string, n: number) => `${f} phải có ít nhất ${n} ký tự.`,
   max:           (f: string, n: number) => `${f} không được vượt quá ${n} ký tự.`,
   email:         (f: string) => `${f} không hợp lệ.`,
@@ -14,5 +14,5 @@ export const msg = {
   positive:      (f: string) => `${f} phải là số dương.`,
   negative:      (f: string) => `${f} phải là số âm.`,
   integer:       (f: string) => `${f} phải là số nguyên.`,
-  custom:        (msg: string) => msg, // Dùng cho custom message
+  custom:        (msg: string) => msg // Dùng cho custom message
 };
