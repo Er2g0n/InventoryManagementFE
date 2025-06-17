@@ -12,8 +12,8 @@ export async function PartnerSave (dataSave : BusinessPartner) : Promise<Busines
 
   return response.data ?? null;
 }
-export async function ParnterDeleteById (id : string) : Promise<boolean> {
-  const response = await fetchClient("DELETE", `${defaultUrl}?id=${id}`);
+export async function ParnterDeleteByCode (code : string) : Promise<boolean> {
+  const response = await fetchClient("DELETE", `${defaultUrl}/DeleteByDapper/${code}`);
 
   return response.code+"" === 200+"";
 }

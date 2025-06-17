@@ -1,7 +1,6 @@
 import { msg } from "@/constants/errormessage";
 import { z } from "zod";
 export const PartnerSchema = z.object({
-  partnerCode: z.string().nonempty(msg.required()),
   partnerName: z.string().nonempty(msg.required()),
   isSupplier: z.boolean(),
   isCustomer: z.boolean(),

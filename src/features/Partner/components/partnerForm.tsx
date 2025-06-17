@@ -5,7 +5,7 @@ import { PartnerFormValues, PartnerSchema } from "../types";
 import { fieldStatus } from "../utils/FormUtils";
 import { z } from "zod";
 import { BusinessPartner } from "@/types/BusinessPartner";
-import { ParnterDeleteById, PartnerSave } from "../services/partnerServices";
+import { ParnterDeleteByCode, ParnterDeleteById, PartnerSave } from "../services/partnerServices";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import {
   DeleteFilled
@@ -34,7 +34,6 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
   }));
   const form = useForm({
     defaultValues: {
-      partnerCode: defaultValue2?.partnerCode ?? "",
       partnerName: defaultValue2?.partnerName ?? "",
       isSupplier: defaultValue2?.isSupplier ?? false,
       isCustomer: defaultValue2?.isCustomer ?? false,
@@ -46,6 +45,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
     },
     onSubmit: async (e) => {
       try {
+        console.log("met moi") ;
         await saveParnter(e.value);
 
 
@@ -68,7 +68,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
 
   async function deleteChoose () {
     const promiseDelete = async (): Promise<boolean> => {
-      return await ParnterDeleteById(defaultValue2?.id + "");
+      return await ParnterDeleteByCode(defaultValue2?.partnerCode + "");
     };
 
     try {
@@ -97,7 +97,6 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
         await deleteChoose();
       },
       onCancel () {
-        console.log("User canceled the action");
       }
     });
   };
@@ -112,7 +111,6 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
 
   async function saveParnter (value: PartnerFormValues): Promise<boolean> {
     const dataSave = {
-      partnerCode: value.partnerCode,
       partnerName: value.partnerName,
       isSupplier: value.isSupplier,
       isCustomer: value.isCustomer,
@@ -124,7 +122,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
 
     if (type == "create") {
       dataSave.createdDate = new Date().toISOString();
-      dataSave.createdBy = "mij";
+      dataSave.createdBy = "me";
     } else if (type == "update") {
       if (defaultValue2 && defaultValue2.id) {
         dataSave.id = defaultValue2.id;
@@ -133,6 +131,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
         dataSave.rowPointer = defaultValue2.rowPointer;
         dataSave.createdDate = defaultValue2.createdDate;
         dataSave.createdBy = defaultValue2.createdBy;
+        dataSave.partnerCode = defaultValue2.partnerCode;
       }
     }
     try {
@@ -162,27 +161,28 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
     >
       <Row gutter={[16, 16]} {...attributes} >
         {/* Partner Code */}
+        {(type=="update" && defaultValue2?.partnerCode) &&
         <Col xs={24} md={12} >
-          <form.Field name="partnerCode">
-            {(field) => (
-              <Form.Item
-                label="Code"
-                layout="vertical"
-                validateStatus={fieldStatus(field)}
-                hasFeedback
-                help={<FieldInfo field={field} />}
-              >
-                <Input
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  placeholder="Enter partner code"
-                  className="w-full transition-all duration-300 "
-                />
-              </Form.Item>
-            )}
-          </form.Field>
+          
+          <Form.Item
+            label="Code"
+            layout="vertical"
+           
+            hasFeedback
+          >
+            <Input
+              value={defaultValue2?.partnerCode}
+              readOnly
+              disabled
+              
+              className="w-full transition-all duration-300 "
+            />
+          </Form.Item>
+          
         </Col>
+        }
+        
+        
 
         {/* Partner Name */}
         <Col xs={24} md={12} >
@@ -300,7 +300,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
         </Col>
         <Col xs={24}
           className=" !flex flex-wrap justify-between gap-1" >
-          {(type == "update" && defaultValue2?.id) &&
+          {(type == "update" && defaultValue2?.partnerCode) &&
             <Form.Item noStyle className="">
               <Button disabled={form.state.isSubmitting} loading={loadingDelete} type="primary" danger={true} icon={<DeleteFilled />}
                 onClick={showDeleteConfirm}
@@ -313,7 +313,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
           }
           {/* Submit button */}
           <Form.Item noStyle className="">
-            <Button loading={form.state.isSubmitting} disabled={loadingDelete} type="primary" htmlType="submit" size="large"
+            <Button   type="primary" htmlType="submit" size="large"
               className="md:w-auto w-full" >
               Save
             </Button>
