@@ -6,6 +6,7 @@ import NotFoundPage from "@pages/NotFoundPage";
 import { ProductRoutes } from "@features/Product";
 import { Home } from "@pages/Home";
 import { WarehouseRoute } from "@features/Warehouse";
+import { PartnerRoutes } from "@features/Partner";
 
 export type HandleRoutes = {
   pattern: string;
@@ -24,7 +25,8 @@ const routes: RouteObject[] = [
 
       },
      ...ProductRoutes,
-     ...WarehouseRoute
+     ...WarehouseRoute,
+     ...PartnerRoutes
     ]
   },
   {
