@@ -1,4 +1,4 @@
-import {  ColumnDef, flexRender, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, Header, PaginationState, useReactTable } from "@tanstack/react-table";
+import {  ColumnDef, flexRender, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel,  PaginationState, useReactTable } from "@tanstack/react-table";
 
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -34,7 +34,7 @@ export interface GenericTableHandle<T extends Record<string, any>> {
   table: ReturnType<typeof useReactTable<T>>;
 }
 
-function Filter<T extends Record<string, any>> ({ column }: { column: any }) {
+function Filter ({ column }: { column: any }) {
   const { filterVariant } = column.columnDef.meta ?? {};
   const columnFilterValue = column.getFilterValue();
   const sortedUniqueValues = useMemo(
@@ -80,7 +80,7 @@ function Filter<T extends Record<string, any>> ({ column }: { column: any }) {
   ) : null;
 }
 
-const DraggableTableHeader = <T extends Record<string, any>>({
+const DraggableTableHeader = ({
   header
 }: {
   header: any;
@@ -132,7 +132,7 @@ const DraggableTableHeader = <T extends Record<string, any>>({
   );
 };
 
-const DragAlongCell = <T extends Record<string, any>>({ cell }: { cell: any }) => {
+const DragAlongCell = ({ cell }: { cell: any }) => {
   const { isDragging, setNodeRef, transform } = useSortable({
     id: cell.column.id
   });
@@ -231,7 +231,7 @@ function GenericTable<T extends Record<string, any>> (
                     items={columnOrder}
                     strategy={horizontalListSortingStrategy}
                   >
-                    <DraggableTableHeader<T> key={header.id} header={header} />
+                    <DraggableTableHeader key={header.id} header={header} />
                   </SortableContext>
                 ))}
               </tr>
@@ -246,7 +246,7 @@ function GenericTable<T extends Record<string, any>> (
                     items={columnOrder}
                     strategy={horizontalListSortingStrategy}
                   >
-                    <DragAlongCell<T> key={cell.id} cell={cell} />
+                    <DragAlongCell key={cell.id} cell={cell} />
                   </SortableContext>
                 ))}
               </tr>

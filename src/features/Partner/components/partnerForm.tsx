@@ -5,7 +5,7 @@ import { PartnerFormValues, PartnerSchema } from "../types";
 import { fieldStatus } from "../utils/FormUtils";
 import { z } from "zod";
 import { BusinessPartner } from "@/types/BusinessPartner";
-import { ParnterDeleteByCode, ParnterDeleteById, PartnerSave } from "../services/partnerServices";
+import { ParnterDeleteByCode,  PartnerSave } from "../services/partnerServices";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import {
   DeleteFilled
@@ -19,16 +19,13 @@ export type IPartnerFormProps = RowProps & React.RefAttributes<HTMLDivElement> &
   afterSave?: (isSave: boolean) => void,
   afterDelete?: (isDelete: boolean) => void
 }
-export interface PartnerFormHandles {
-}
 
-
-const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
+const PartnerForm = forwardRef<any, IPartnerFormProps>((
   { type = "create", defaultValue2,
     afterSave = () => { },
     afterDelete = () => { },
     ...attributes }, ref) => {
-  const { loading: loadingDelete, fetchData: fetchDataDelete } = useFetchData<boolean>([]);
+  const { loading: loadingDelete, fetchData: fetchDataDelete } = useFetchData<boolean>();
 
   useImperativeHandle(ref, () => ({
   }));
@@ -45,7 +42,6 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
     },
     onSubmit: async (e) => {
       try {
-        console.log("met moi") ;
         await saveParnter(e.value);
 
 
@@ -313,7 +309,7 @@ const PartnerForm = forwardRef<PartnerFormHandles, IPartnerFormProps>((
           }
           {/* Submit button */}
           <Form.Item noStyle className="">
-            <Button   type="primary" htmlType="submit" size="large"
+            <Button loading={form.state.isSubmitting} disabled={loadingDelete}  type="primary" htmlType="submit" size="large"
               className="md:w-auto w-full" >
               Save
             </Button>
