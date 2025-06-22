@@ -98,7 +98,7 @@ function MainLayout () {
         <meta property="og:title" content="Trang Chủ " />
         <meta property="og:description" content="Trang chủ" />
         <meta property="og:type" content="website" />
-        <title>Trang Chủ | Ứng Dụng Của Tôi</title>
+        <title>Inventory Management</title>
         <meta name="description" content="Đây là trang chủ của ứng dụng React của tôi." />
         <link rel="canonical" href="https://example.com/"  />
       </Helmet>

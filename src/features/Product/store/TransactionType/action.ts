@@ -93,15 +93,16 @@ export const addOrUpdateTransactionType = (
 
 export const removeTransactionType = (
   transactionTypeCode: string
-): ThunkAction<void, RootState, unknown, TransactionTypeAction> => async (dispatch) => {
+): ThunkAction<Promise<TransactionTypeAction>, RootState, unknown, TransactionTypeAction> => async (dispatch) => {
   try {
     const response = await TransactionType_Delete(transactionTypeCode);
     if (response.code === "0") {
-      dispatch(deleteTransactionTypeSuccess(transactionTypeCode));
-    } else {
-      dispatch(deleteTransactionTypeFailure(response.message || 'Failed to delete'));
+       return dispatch(deleteTransactionTypeSuccess(transactionTypeCode));
+        } 
+        else {
+          return  dispatch(deleteTransactionTypeFailure(response.message || "Failed to delete"));
     }
   } catch (error) {
-    dispatch(deleteTransactionTypeFailure(error instanceof Error ? error.message : 'Failed to delete'));
+    return dispatch(deleteTransactionTypeFailure(error instanceof Error ? error.message : 'Failed to delete'));
   }
 };

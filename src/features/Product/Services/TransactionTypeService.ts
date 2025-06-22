@@ -50,7 +50,8 @@ export async function TransactionType_Update(TransactionType: TransactionType): 
 export async function TransactionType_Delete(transactionTypeCode: string): Promise<ResultService<TransactionType>> {
     const url = `TransactionType/Delete?TransactionTypeCode=${encodeURIComponent(transactionTypeCode)}`;
     const response = await fetchClient<TransactionType>(httpMethod.DELETE, url);
-    if (response.data === null) {
+    console.log(response)
+    if (response.code !== "0") {
         response.message = "Failed to Fetch Data";
         return response;
     }
