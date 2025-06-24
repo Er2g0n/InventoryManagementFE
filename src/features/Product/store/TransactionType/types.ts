@@ -41,7 +41,7 @@ export interface SaveTransactionTypeRequest{
 
 export interface SaveTransactionTypeSuccess{
     type: typeof TransactionTypeActionTypes.SAVE_TRANSACTION_TYPE_SUCCESS,
-    payload:TransactionType;
+    payload:string;
 }
 
 export interface SaveTransactionTypeFailure{

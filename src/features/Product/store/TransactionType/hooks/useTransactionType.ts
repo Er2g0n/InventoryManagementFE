@@ -11,8 +11,26 @@ export const useTransactionTypes = () => {
    const error = useSelector((state: RootState) => state.transactionType.error);
 
    const loadTransactionType = () => dispatch(fetchTransactionTypes());
-   const saveTransactionType = (transactionType: TransactionType) =>
-      dispatch(addOrUpdateTransactionType(transactionType));
+   
+
+   const saveTransactionType = (transactionType: TransactionType): Promise<{ success: boolean; message?: string }> =>
+       new Promise((resolve, reject) => {
+         dispatch(addOrUpdateTransactionType(transactionType))
+           .then((action) => {
+             if (action.type === TransactionTypeActionTypes.SAVE_TRANSACTION_TYPE_SUCCESS) {
+               resolve({ success: true, message: action.payload });
+             } else if (action.type === TransactionTypeActionTypes.SAVE_TRANSACTION_TYPE_FAILURE) {
+               resolve({ success: false, message: action.payload || "Failed to save Transaction Type." });
+             }
+           })
+           .catch((error) => {
+             reject({
+               success: false,
+               message: error instanceof Error ? error.message : "An error occurred while save TransactionType.",
+             });
+           });
+       });
+
    // const deleteTransactionType = (transactionType: string) =>
    //    dispatch(removeTransactionType(transactionType));
 

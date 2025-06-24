@@ -28,7 +28,7 @@ export const saveTransactionTypeRequest = (): SaveTransactionTypeRequest => ({
 });
 
 export const saveTransactionTypeSuccess = (
-    TransactionType: TransactionType
+    TransactionType: string
 ): SaveTransactionTypeSuccess => ({
     type: TransactionTypeActionTypes.SAVE_TRANSACTION_TYPE_SUCCESS,
     payload: TransactionType,
@@ -66,7 +66,8 @@ export const fetchTransactionTypes = (): ThunkAction<
     try {
         const response = await TransactionType_GetAll();
         if (response.code == '0' && response.data) {
-            dispatch(fetchTransactionTypeSuccess(response.data));
+          const rs = response.data.sort((a: TransactionType, b: TransactionType)=> a.transactionTypeCode.localeCompare(b.transactionTypeCode))
+            dispatch(fetchTransactionTypeSuccess(rs));
         } else {
             dispatch(fetchTransactionTypeFailure(response.message || 'Failed to fetch'))
         }
@@ -77,17 +78,17 @@ export const fetchTransactionTypes = (): ThunkAction<
 
 export const addOrUpdateTransactionType = (
   TransactionType: TransactionType
-): ThunkAction<void, RootState, unknown, TransactionTypeAction> => async (dispatch) => {
+): ThunkAction<Promise<TransactionTypeAction>, RootState, unknown, TransactionTypeAction> => async (dispatch) => {
   dispatch(saveTransactionTypeRequest());
   try {
     const response = await TransactionType_Save(TransactionType);
-    if (response.code === "0" && response.data) {
-      dispatch(saveTransactionTypeSuccess(response.data));
+    if (response.code === 'Success') {
+      return dispatch(saveTransactionTypeSuccess(response.message));
     } else {
-      dispatch(saveTransactionTypeFailure(response.message || 'Failed to save'));
+     return dispatch(saveTransactionTypeFailure(response.message || 'Failed to save'));
     }
   } catch (error) {
-    dispatch(saveTransactionTypeFailure(error instanceof Error ? error.message : 'Failed to save'));
+    return dispatch(saveTransactionTypeFailure(error instanceof Error ? error.message : 'Failed to save'));
   }
 };
 
