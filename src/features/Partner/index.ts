@@ -1,1 +1,1 @@
-export { default as PartnerRoutes} from "./routes"
+export { default as PartnerRoutes } from "./routes";

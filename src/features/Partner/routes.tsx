@@ -3,7 +3,7 @@ import { lazy } from "react";
 import MainPage from "./pages/main";
 const MainIdPage = lazy(()=> import("./pages/[id]/mainId"));
 const routes : RouteObject[] = [
-    {
+  {
     path: "Partner",
     children: [
       {
@@ -15,7 +15,7 @@ const routes : RouteObject[] = [
         path : ":id",
         element: <MainIdPage />
      
-      },
+      }
     ]}
 ];
 

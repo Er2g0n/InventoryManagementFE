@@ -1,22 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [],
-  selectedProduct: null,
+  selectedProduct: null
 };
 
 const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
-    setProducts(state, action) {
+    setProducts (state, action) {
       state.products = action.payload;
     },
-    selectProduct(state, action) {
+    selectProduct (state, action) {
       state.selectedProduct = action.payload;
-    },
+    }
     // Thêm các reducer khác nếu cần
-  },
+  }
 });
 
 export const { setProducts, selectProduct } = productSlice.actions;

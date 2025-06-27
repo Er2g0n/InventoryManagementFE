@@ -1,13 +1,14 @@
 import { Button } from "antd";
-import { PoweroffOutlined, SyncOutlined } from "@ant-design/icons";
+import { PoweroffOutlined } from "@ant-design/icons";
 
 import React, { useState } from "react";
 
 export default function Loading () {
   const [loadings, setLoadings] = useState<boolean[]>([false, false, false, false]);
 
-  function enterLoading(index: number): void {
+  function enterLoading (index: number): void {
     const newLoadings = [...loadings];
+
     newLoadings[index] = true;
     setLoadings(newLoadings);
     setTimeout(() => {
@@ -17,11 +18,11 @@ export default function Loading () {
   }
 
   return <Button
-          type="primary"
-          icon={<PoweroffOutlined />}
-          loading={loadings[3]}
-          onClick={() => enterLoading(3)}
-        >
+    type="primary"
+    icon={<PoweroffOutlined />}
+    loading={loadings[3]}
+    onClick={() => enterLoading(3)}
+  >
           Loading Icon
-        </Button>;
+  </Button>;
 }
