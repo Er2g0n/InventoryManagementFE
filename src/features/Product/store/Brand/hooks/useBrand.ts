@@ -19,14 +19,14 @@ export const useBrands = () => {
           } else {
             resolve({
               success: false,
-              message: "Failed to fetch brands.",
+              message: "Failed to fetch brands."
             });
           }
         })
         .catch((error) => {
           reject({
             success: false,
-            message: error instanceof Error ? error.message : "An error occurred while fetching brands.",
+            message: error instanceof Error ? error.message : "An error occurred while fetching brands."
           });
         });
     });
@@ -44,7 +44,7 @@ export const useBrands = () => {
         .catch((error) => {
           reject({
             success: false,
-            message: error instanceof Error ? error.message : "An error occurred while saving brand.",
+            message: error instanceof Error ? error.message : "An error occurred while saving brand."
           });
         });
     });
@@ -62,7 +62,7 @@ export const useBrands = () => {
         .catch((error) => {
           reject({
             success: false,
-            message: error instanceof Error ? error.message : "An error occurred while deleting brand.",
+            message: error instanceof Error ? error.message : "An error occurred while deleting brand."
           });
         });
     });
@@ -73,6 +73,6 @@ export const useBrands = () => {
     error,
     loadBrands,
     saveBrand,
-    deleteBrand,
+    deleteBrand
   };
 };

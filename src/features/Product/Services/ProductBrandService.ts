@@ -6,9 +6,10 @@ import { Brand } from "@/types/MasterData/Product/ProductClassification";
 
 export async function getAllBrands (): Promise<ResultService<Brand[]>> {
   const response = await fetchClient<Brand[]>(
-    httpMethod.GET, 
+    httpMethod.GET,
     "Brand"
   );
+
   if (response.code === "-1") {
     response.message = "Failed to Fetch Data";
     return response;
@@ -40,7 +41,7 @@ export async function saveBrand (
 export async function getBrandByCode (brandCode: string): Promise<ResultService<Brand>> {
   const response = await fetchClient<Brand, string>(
     httpMethod.GET,
-    `Brand/${brandCode}`,
+    `Brand/${brandCode}`
   );
 
   if (response.code === "-1") {

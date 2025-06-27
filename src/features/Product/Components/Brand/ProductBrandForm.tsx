@@ -21,21 +21,21 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
   isModalOpen,
   setIsModalOpen,
   isEditing,
-  currentBrand,
+  currentBrand
 
 }) => {
   const { brands, saveBrand } = useBrands();
 
   const form = useForm({
     defaultValues: {
-      brandName: isEditing && currentBrand ? currentBrand.brandName : "",
+      brandName: isEditing && currentBrand ? currentBrand.brandName : ""
     },
     validators: {
-      onBlur: productBrandSchema,
+      onBlur: productBrandSchema
     },
     onSubmit: async ({ value }) => {
       await onSubmit(value);
-    },
+    }
   });
 
   const handleCancel = useCallback(() => {
@@ -53,10 +53,11 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
           createdBy: "admin",
           updatedBy: "admin",
           createdDate: isEditing && currentBrand ? currentBrand.createdDate : new Date().toISOString(),
-          updatedDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString()
         };
 
         const result = await saveBrand(brand);
+
         if (!result.success) {
           message.error(result.message || "Lỗi khi lưu danh mục sản phẩm");
           return;
@@ -110,16 +111,18 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
           validators: {
             onBlur: (value) => {
               const isDuplicate = checkDuplicate(value.value, brands, currentBrand?.id);
+
               if (isDuplicate) {
                 return [{ message: "Brand name already exist" }];
               }
               return undefined;
-            },
+            }
           },
           children: (field) => {
             const errs = field.state.meta.errors;
+
             if (errs && errs.length > 0) {
-              console.log("Errors in field:", errs);
+              console.error("Errors in field:", errs);
             }
             return (
               <div style={{ marginBottom: 16 }}>
@@ -134,7 +137,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
                 <FieldInfo field={field} />
               </div>
             );
-          },
+          }
         })}
         <div>
           <Button type="primary" htmlType="submit" loading={form.state.isSubmitting}>
@@ -149,7 +152,7 @@ const FormProductBrand: React.FC<FormProductBrandProps> = ({
   );
 };
 
-function FieldInfo({ field }: { field: AnyFieldApi }) {
+function FieldInfo ({ field }: { field: AnyFieldApi }) {
   return (
     <>
       {field.state.meta.errors.length > 0 ? (
