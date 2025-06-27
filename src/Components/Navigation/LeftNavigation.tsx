@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, UIMatch, useLocation, useMatches } from "react-router-dom";
+import { Link, useLocation, useMatches } from "react-router-dom";
 import { Menu, Typography } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -109,11 +109,14 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           </SubMenu>
           <SubMenu
             icon={<ShoppingOutlined />}
-            title="Warehouse"
-            key={"/warehouse"}
+            title="Inventory Management"
+            key={"/inventory"}
           >
-            <MenuItem key={"/warehouse"}>
-              <Link to={"/warehouse"}>Main</Link>
+            <MenuItem key={"/inventory/warehouseDashboard"}>
+              <Link to={"/inventory/warehouseDashboard"}>Warehouse Dashboard</Link>
+            </MenuItem>
+            <MenuItem key={"/inventory/warehouse"}>
+              <Link to={"/inventory/warehouse"}>Warehouse</Link>
             </MenuItem>
           </SubMenu>
           <MenuItem key={"/partner"} icon={<ShoppingOutlined />}>
