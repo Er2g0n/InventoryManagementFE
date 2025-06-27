@@ -2,7 +2,7 @@ import { TransactionType } from "@/types/MasterData/TransactionType";
 import { useTransactionTypes } from "@features/Product/store/TransactionType/hooks/useTransactionType";
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space } from "antd";
+import { Button, Input, Modal, notification, Space } from "antd";
 import React, { useEffect, useState } from "react";
 
 interface ListTransactionTypeProps {
@@ -15,14 +15,39 @@ const ListTransactionType: React.FC<ListTransactionTypeProps> = React.memo(({ on
   const [globalFilter, setGlobalFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [isFunction, setIsFunction] = useState(false);
+  const [currentPageIndex, setcurrentPageIndex] = useState(0);
 
   useEffect(() => {
     loadTransactionType();
 
   }, [refreshTrigger])
 
-  const handleDelete = (TransactionTypeCode: string) => {
-    deleteTransactionType(TransactionTypeCode);
+  const handleDelete = async (TransactionTypeCode: string) => {
+    try {
+      const response = await deleteTransactionType(TransactionTypeCode);
+      if (response.success === true) {
+        notification.success({
+          message: 'Thành công',
+          description: `Đã xóa phiếu ${TransactionTypeCode} thành công`,
+        });
+        setIsFunction(true);
+        setcurrentPageIndex(pageIndex);
+        loadTransactionType();
+      }
+      else {
+        notification.error({
+          message: 'Thất bại',
+          description: `Không thể phiếu ${TransactionTypeCode}`,
+        });
+      }
+
+    } catch (err: any) {
+      notification.error({
+        message: 'Lỗi',
+        description: `Không thể xóa phiếu ${TransactionTypeCode}: ${err.message}`,
+      });
+    }
   };
 
   const uniqueTransactionTypeCodes = [...new Set(transactionTypes.map(tt => tt.transactionTypeCode))];
@@ -147,8 +172,15 @@ const ListTransactionType: React.FC<ListTransactionTypeProps> = React.memo(({ on
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: updater => {
       const newState = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater;
-      setPageIndex(newState.pageIndex);
-      setPageSize(newState.pageSize);
+      if (isFunction) {
+        setPageIndex(currentPageIndex);
+        setPageSize(newState.pageSize);
+        setIsFunction(false);
+      }
+      else {
+        setPageIndex(newState.pageIndex);
+        setPageSize(newState.pageSize);
+      }
     },
   });
 

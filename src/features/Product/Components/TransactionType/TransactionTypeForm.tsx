@@ -2,7 +2,7 @@ import { TransactionType } from "@/types/MasterData/TransactionType";
 import { TransactionTypeSchema } from "@features/Product/schemas/TransactionTypeSchema";
 import { useTransactionTypes } from "@features/Product/store/TransactionType/hooks/useTransactionType";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
-import { Button, Input, Modal, message } from "antd";
+import { Button, Input, Modal, message, notification } from "antd";
 import { useCallback } from "react";
 
 type FormValues = {
@@ -62,9 +62,22 @@ const FormTransactionType: React.FC<FormTransactionTypeProps> = ({
                     documentTypeID: 0
                 };
 
-                await saveTransactionType(transactionType);
+                const rs = await saveTransactionType(transactionType);
                 setRefreshTrigger(refreshTrigger + 1);
-                message.success("Saved successfully");
+                if(rs.success === true)
+                {
+                    notification.success({
+                        message:"Success",
+                        description: `Lưu phiếu ${transactionType.transactionTypeName} thành công`,
+                    });
+                }
+                else
+                {
+                     notification.error({
+                        message:"error",
+                        description: `Tạo phiếu ${transactionType.transactionTypeName} không thành công`,
+                    });
+                }
             } catch (error) {
                 console.error("Error while saving:", error);
                 message.error("Failed to save");
