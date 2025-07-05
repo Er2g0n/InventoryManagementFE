@@ -7,7 +7,9 @@ const WarehousePage = lazy(() => import("./Pages/[id]/WarehousePage"));
 const IssuePage = lazy(() => import("./Pages/[id]/IssuePage"));
 const ReceiptPage = lazy(() => import("./Pages/[id]/ReceiptPage"));
 const StockPage = lazy(() => import("./Pages/[id]/StockPage"));
-const MainIdPage=lazy(()=>import("./Pages/[id]/MainId"));
+const MainIdPage = lazy(() => import("./Pages/[id]/MainId"));
+const GoodsReceiptNotePage = lazy(() => import("./Pages/[id]/GoodsReceiptNotePage"));
+
 
 export const WEB_ENDPOINT = {
   main: "/",
@@ -24,6 +26,10 @@ const routes: RouteObject[] = [
 
       },
       {
+        path: "GoodsReceiptNote",
+        element: <GoodsReceiptNotePage />
+      },
+      {
         path: "WarehouseDashboard",
         element: <WarehouseDashboardPage />
       },
@@ -31,11 +37,11 @@ const routes: RouteObject[] = [
         path: ":id",
         children: [
           {
-            index :true,
+            index: true,
             element: <MainIdPage />
 
           },
-      
+
           {
             path: "Warehouse",
             element: <WarehousePage />

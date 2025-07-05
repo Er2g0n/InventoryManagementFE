@@ -1,4 +1,4 @@
-import { warehouseSlice } from "@features/Inventory";
+import { GoodsReceiptNoteSlice, warehouseSlice } from "@features/Inventory";
 import { productSlice, productTypeSlice, productCategorySlice, colorSlice, TransactionTypeSlice, MaterialSlice, brandSlice, vehicleModelSlice } from "@features/Product";
 import { combineReducers } from "@reduxjs/toolkit";
 
@@ -14,7 +14,8 @@ const rootReducer = combineReducers({
   vehicleModel: vehicleModelSlice,
 
   // Inventory domain
-  warehouse: warehouseSlice
+  warehouse: warehouseSlice,
+  goodsReceiptNotes: GoodsReceiptNoteSlice
 });
 
 export default rootReducer;
