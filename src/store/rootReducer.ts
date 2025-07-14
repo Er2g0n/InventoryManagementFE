@@ -7,6 +7,6 @@ const rootReducer = combineReducers({
   productType: productTypeSlice,
   color: colorSlice,
   transactionType: TransactionTypeSlice,
-  material: MaterialSlice
+  material: MaterialSlice,
 })
 export default rootReducer;
