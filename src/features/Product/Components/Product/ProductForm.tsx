@@ -14,6 +14,9 @@ import { useBrands } from "@features/Product/store/Brand/hooks/useBrand";
 import { useVehicleModels } from "@features/Product/store/VehicleModel/hooks/useVehicleModel";
 import { useProductTypes } from "@features/Product/store/ProductType/hooks/useProductType";
 import { useProductCategories } from "@features/Product/store/ProductCategory/hooks/useProductCategory";
+import { useUoM } from "@features/Product/store/UoM/hooks/useUoM";
+import { useColors } from "@features/Product/store/Color/hooks/useColor";
+import { useMaterials } from "@features/Product/store/Material/hooks/useMaterial";
 
 
 interface ProductFormProps {
@@ -21,68 +24,50 @@ interface ProductFormProps {
     mode: "add" | "edit";
 }
 
-// Mock dropdown data
-const mockVehicleModels: VehicleModel[] = [
-    { id: 1, modelName: "Toyota Hilux", modelCode: "TH2023", brandCode: "TOYOTA" },
-    { id: 2, modelName: "Ford Ranger", modelCode: "FR2023", brandCode: "FORD" },
-    { id: 3, modelName: "Isuzu D-Max", modelCode: "ID2023", brandCode: "ISUZU" },
-];
-
-const mockCategories: ProductCategory[] = [
-    { id: 1, categoryName: "Phụ kiện ô tô", categoryCode: "PAO" },
-    { id: 2, categoryName: "Phụ tùng xe máy", categoryCode: "PTXM" },
-    { id: 3, categoryName: "Phụ kiện xe máy", categoryCode: "PKXM" },
-];
-
-const mockProductTypes: ProductType[] = [
-    { id: 1, productTypeName: "Gương chiếu hậu", productTypeCode: "GCH2023" },
-    { id: 2, productTypeName: "Đèn pha", productTypeCode: "DP2023" },
-    { id: 3, productTypeName: "Bộ lọc gió", productTypeCode: "BLG2023" },
-];
-
-const mockBrands: Brand[] = [
-    { id: 1, brandName: "OEM Parts", brandCode: "OEM" },
-    { id: 2, brandName: "Toyota", brandCode: "TOYOTA" },
-    { id: 3, brandName: "Ford", brandCode: "FORD" },
-];
-
-const mockUnitOfMeasures: UnitOfMeasure[] = [
-    { id: 1, uoMName: "Pieces (Cái)", uoMCode: "PCS", uoMDescription: "Đơn vị tính theo cái" },
-    { id: 2, uoMName: "Set (Bộ)", uoMCode: "SET", uoMDescription: "Đơn vị tính theo bộ" },
-    { id: 3, uoMName: "Pair (Đôi)", uoMCode: "PR", uoMDescription: "Đơn vị tính theo đôi" },
-];
-
-const mockColors: Color[] = [
-    { id: 1, colorName: "Đen", colorCode: "#000000" },
-    { id: 2, colorName: "Trắng", colorCode: "#FFFFFF" },
-    { id: 3, colorName: "Đỏ", colorCode: "#FF0000" },
-];
-
-const mockMaterials: Material[] = [
-    { id: 1, materialName: "Nhựa ABS", materialCode: "ABS" },
-    { id: 2, materialName: "Kim loại", materialCode: "METAL" },
-    { id: 3, materialName: "Thủy tinh", materialCode: "GLASS" },
-];
-
 
 
 export default function ProductForm({ productCode, mode }: ProductFormProps) {
     const navigate = useNavigate();
     const { saveProduct, loading, usegetProductByCode, product, error } = useProducts();
     const { loadBrands, brands } = useBrands();
-    const {loadVehicleModels} = useVehicleModels();
-    const {loadProductTypes} = useProductTypes();
-    const {loadProductCategories} = useProductCategories();
+    const { loadVehicleModels, vehicleModels } = useVehicleModels();
+    const { loadProductTypes, productTypes } = useProductTypes();
+    const { loadProductCategories, productCategories } = useProductCategories();
+    const { loadColors, colors } = useColors();
+    const { loadUoM, uoMList } = useUoM();
+    const { loadMaterials, materials } = useMaterials();
     const [productImgFileList, setProductImgFileList] = useState<UploadFile[]>([]);
     const [imageFilesList, setImageFilesList] = useState<UploadFile[]>([]);
     const [variantImgFiles, setVariantImgFiles] = useState<{ [key: number]: UploadFile[] }>({});
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
 
     //Khởi tạo data cho các select
     useEffect(() => {
-        loadBrands();
-        loadVehicleModels();
-    });
-
+        const loadData = async () => {
+            try {
+                setIsDataLoaded(true);
+                await Promise.all([
+                    loadBrands(),
+                    loadVehicleModels(),
+                    loadProductTypes(),
+                    loadProductCategories(),
+                    loadUoM(),
+                    loadColors(),
+                    loadMaterials(),
+                ]);
+            } catch (err) {
+                message.error("Failed to load dropdown data");
+                console.error("Error loading data:", err);
+            } finally {
+                setIsDataLoaded(false);
+            }
+        };
+        if (!brands || !vehicleModels || !productTypes || !productCategories || !uoMList || !colors || !materials) {
+            setIsDataLoaded(true);
+        }
+        loadData();
+    }, []);
 
 
     const form = useForm({
@@ -238,6 +223,8 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                         uoMLengthCode: productData.dimension?.uoMLengthCode || "CM",
                         uoMWidthCode: productData.dimension?.uoMWidthCode || "CM",
                         id: productData.dimension?.id || 0,
+                        createdBy: productData.dimension?.createdBy || "admin",
+                        updatedBy: productData.dimension?.updatedBy || "admin",
                     });
 
                     // Ánh xạ ban đầu cho variantParams
@@ -465,31 +452,31 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
         </div>
     );
 
-    const vehicleModelOptions = mockVehicleModels.map((model) => ({
+    const vehicleModelOptions = vehicleModels?.map((model) => ({
         value: model.id,
         label: model.modelName,
     }));
-    const categoryOptions = mockCategories.map((category) => ({
+    const categoryOptions = productCategories?.map((category) => ({
         value: category.id,
         label: category.categoryName,
     }));
-    const productTypeOptions = mockProductTypes.map((type) => ({
+    const productTypeOptions = productTypes?.map((type) => ({
         value: type.id,
         label: type.productTypeName,
     }));
-    const brandOptions = mockBrands.map((brand) => ({
+    const brandOptions = brands?.map((brand) => ({
         value: brand.id,
         label: brand.brandName,
     }));
-    const uomOptions = mockUnitOfMeasures.map((uom) => ({
+    const uomOptions = uoMList?.map((uom) => ({
         value: uom.id,
         label: uom.uoMName,
     }));
-    const colorOptions = mockColors.map((color) => ({
+    const colorOptions = colors?.map((color) => ({
         value: color.id,
         label: color.colorName,
     }));
-    const materialOptions = mockMaterials.map((material) => ({
+    const materialOptions = materials?.map((material) => ({
         value: material.id,
         label: material.materialName,
     }));
@@ -497,6 +484,9 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
 
     if (error) {
         message.error(error);
+    }
+    if (isDataLoaded) {
+        return <Spin tip="Đang tải dữ liệu..." />
     }
 
     return (
@@ -518,7 +508,7 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                         console.log("Form submitted, form state:", form.getAllErrors()); // Debug trạng thái form
                         console.log("Form errors before submit:", form.state.errors);
 
-                        console.log("Form field Value", form.getFieldValue("variantParams"));
+                        console.log("Form field Value", form.getFieldValue("variantImgs"));
                         form.handleSubmit().catch((error) => {
                             console.error("HandleSubmit error:", error); // Bắt lỗi từ handleSubmit
                         });
