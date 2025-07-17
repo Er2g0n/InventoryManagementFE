@@ -39,16 +39,16 @@ export interface Product extends BaseEntity {
   typeID: number;
   brandID: number;
   uoMID: number;
-  description?: string;
-  publicImgID?: string;
-  imagePath?: string;
+  description: string;
+  publicImgID?: string | null;
+  imagePath?: string | null;
   purchasePrice: number;
   salePrice: number;
 }
 
 export interface ImageFileDTO {
   imageFile?: File | null;
-  isPrimary: boolean;
+  isPrimary?: boolean;
 }
 
 export interface VariantParam {
@@ -56,23 +56,25 @@ export interface VariantParam {
   imageCode?: string;
   attributeCode?: string;
   refProductCode?: string;
-  position: number;
+  position?: number;
   imagePath?: string;
   isPrimary?: boolean;
   colorID: number;
+  colorName?: string | null;
   materialID: number;
+  materialName?: string | null;
 }
 
 export interface ProductSave {
   product: Product;
   dimension: Dimension;
   variantParams?: VariantParam[];
-  productImg: File | null;
-  imageFiles?: ImageFileDTO[];
+  productImg?: File | null;
+  imageFiles?: ImageFileDTO[] | null;
   variantImgs?: ImageFileDTO[];
 }
 
-export interface ProductParam {
+export interface ProductParam extends BaseEntity {
   productCode: string;
   productName: string;
   description: string;
