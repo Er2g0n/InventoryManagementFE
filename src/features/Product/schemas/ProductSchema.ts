@@ -6,12 +6,12 @@ export const productSaveSchema = z.object({
     productName: z.string().min(1, "Tên sản phẩm là bắt buộc"),
     modelID: z.number().min(1, "Vui lòng chọn mẫu xe"),
     categoryID: z.number().min(1, "Vui lòng chọn danh mục"),
-    typeID: z.number().min(1, "Vui lòng chọn loại sản phẩm"), // Đặt là bắt buộc nếu cần
-    brandID: z.number().min(1, "Vui lòng chọn thương hiệu"), // Đặt là bắt buộc nếu cần
-    uoMID: z.number().min(1, "Vui lòng chọn đơn vị tính"), // Đặt là bắt buộc nếu cần
-    description: z.string().optional(),
-    imagePath: z.string().optional(),
-    publicImgID: z.string().optional(),
+    typeID: z.number().min(1, "Vui lòng chọn loại sản phẩm"), 
+    brandID: z.number().min(1, "Vui lòng chọn thương hiệu"),
+    uoMID: z.number().min(1, "Vui lòng chọn đơn vị tính"),
+    description: z.string(),
+    imagePath: z.string().nullable().optional(),
+    publicImgID: z.string().nullable().optional(),
     purchasePrice: z.number().min(0, "Giá mua phải lớn hơn hoặc bằng 0"),
     salePrice: z.number().min(0, "Giá bán phải lớn hơn hoặc bằng 0"),
   }),
@@ -30,20 +30,22 @@ export const productSaveSchema = z.object({
       imageCode: z.string().optional(),
       attributeCode: z.string().optional(),
       refProductCode: z.string().optional(),
-      position: z.number().min(0, "Vị trí phải lớn hơn hoặc bằng 0"),
+      position: z.number().optional(),
       imagePath: z.string().optional(),
       isPrimary: z.boolean().optional(),
-      colorID: z.number().min(1, "Vui lòng chọn màu sắc"),
-      materialID: z.number().min(1, "Vui lòng chọn chất liệu"),
+      colorID: z.number().min(0, "Vui lòng chọn màu sắc"),
+      colorName: z.string().nullable().optional(),
+      materialID: z.number().min(0, "Vui lòng chọn chất liệu"),
+      materialName: z.string().nullable().optional(),
     })
   ).optional(),
-  productImg: z.instanceof(File, { message: "Ảnh chính sản phẩm là bắt buộc" }),
+  productImg: z.instanceof(File, { message: "Ảnh chính sản phẩm là bắt buộc" }).nullable().optional(),
   imageFiles: z.array(
     z.object({
       imageFile: z.instanceof(File).nullable().optional(),
-      isPrimary: z.boolean(),
+      isPrimary: z.boolean().optional(),
     })
-  ).optional(),
+  ).nullable().optional(),
   variantImgs: z.array(
     z.object({
       imageFile: z.instanceof(File).nullable().optional(),
