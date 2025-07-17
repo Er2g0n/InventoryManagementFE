@@ -7,6 +7,7 @@ import { ProductSave } from "@/types/MasterData/Product/ProductManagement";
 export const useProducts = () =>{
     const dispatch = useDispatch<AppDispatch>();
     const products = useSelector((state: RootState) => state.product.products);
+    const product = useSelector((state: RootState) => state.product.product);
     const loading = useSelector((state: RootState) => state.product.loading);
     const error = useSelector((state: RootState) => state.product.error);
 
@@ -71,6 +72,7 @@ export const useProducts = () =>{
         });
 
     return {
+        product,
         products,
         loading,
         error,

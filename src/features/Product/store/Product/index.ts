@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { FetchProductsFailure, FetchProductsSuccess, GetProductByCodeFailure, GetProductByCodeSuccess, ProductActionTypes, ProductState, SaveProductFailure, SaveProductSuccess } from "./types";
+import { ProductParam } from "@/types/MasterData/Product/ProductManagement";
 
 const initialState: ProductState = {
     products: [],
@@ -53,8 +54,12 @@ const productSlice = createSlice({
                 state.error = null;
             })
             .addCase(ProductActionTypes.GET_PRODUCT_BY_CODE_SUCCESS, (state, action: GetProductByCodeSuccess) => {
+
+                state.product = action.payload.data as ProductParam;
+                if (!state.product) {
+                    state.error = "Product not found";
+                }
                 state.loading = false;
-               state.product = action.payload.data || null;
             })
             .addCase(ProductActionTypes.GET_PRODUCT_BY_CODE_FAILURE, (state, action: GetProductByCodeFailure) => {
                 state.loading = false;

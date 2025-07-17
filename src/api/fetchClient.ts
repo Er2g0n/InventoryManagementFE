@@ -17,7 +17,7 @@ const axiosInstance: AxiosInstance & CacheInstance = setupCache(
     baseURL: "/api",
     timeout: 300000, // 30 seconds
     headers: {
-      "Content-Type": "application/json",
+      
       Accept: "application/json"
     }
   }),
@@ -32,6 +32,16 @@ const axiosInstance: AxiosInstance & CacheInstance = setupCache(
 // Request interceptor to add user and client info to all requests
 axiosInstance.interceptors.request.use(
   (config) => {
+    console.log("Interceptor - Data type:", config.data instanceof FormData ? "FormData" : typeof config.data);
+    console.log("Interceptor - Headers:", config.headers);
+    // Xử lý Content-Type cho FormData
+    if (config.data instanceof FormData) {
+      // Không đặt Content-Type, để trình duyệt tự động đặt multipart/form-data
+      config.headers["Content-Type"] = undefined;
+    } else {
+      // Đặt Content-Type: application/json cho các yêu cầu không phải FormData
+      config.headers["Content-Type"] = "application/json";
+    }
     // Only modify the body for POST, PUT, PATCH requests
     if (
       config.method?.toLowerCase() === "post" ||
@@ -89,6 +99,12 @@ export const fetchClient = async <T, D = any>(
   try {
     let response;
     const myConfig = { cache: false, ...config } as myAxiosRequestConfig;
+    if (data instanceof FormData) {
+      myConfig.headers = {
+        ...myConfig.headers,
+        "Content-Type": undefined,
+      };
+    }
     switch (method) {
     case "GET":
       // add logic isactice memory cache
