@@ -1,11 +1,11 @@
 import type { RouteObject } from "react-router-dom";
-import { lazy } from "react";
 import { ROUTES } from "@/constants/endpoint";
 import MainLayout from "@/Components/Layout/MainLayout";
 import NotFoundPage from "@pages/NotFoundPage";
-import { ProductRoutes } from "@features/Product";
 import { Home } from "@pages/Home";
-import { WarehouseRoute } from "@features/Warehouse";
+import { PartnerRoutes } from "@features/Partner";
+import { ProductRoutes } from "@features/Product";
+import { InventoryRoutes } from "@features/Inventory";
 
 export type HandleRoutes = {
   pattern: string;
@@ -21,10 +21,10 @@ const routes: RouteObject[] = [
       {
         index : true,
         element : <Home />
-
       },
-     ...ProductRoutes,
-     ...WarehouseRoute
+      ...ProductRoutes,
+      ...InventoryRoutes,
+      ...PartnerRoutes
     ]
   },
   {

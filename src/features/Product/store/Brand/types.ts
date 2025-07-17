@@ -1,3 +1,4 @@
+import { ResultService } from "@/types/Base/ResultService";
 import { Brand } from "@/types/MasterData/Product/ProductClassification";
 
 export interface BrandState {
@@ -7,16 +8,16 @@ export interface BrandState {
 }
 export enum BrandActionTypes {
     // Get all
-    FETCH_BRANDS_REQUEST = 'brand/FETCH_BRANDS_REQUEST',
-    FETCH_BRANDS_SUCCESS = 'brand/FETCH_BRANDS_SUCCESS',
-    FETCH_BRANDS_FAILURE = 'brand/FETCH_BRANDS_FAILURE',
+    FETCH_BRANDS_REQUEST = "brand/FETCH_BRANDS_REQUEST",
+    FETCH_BRANDS_SUCCESS = "brand/FETCH_BRANDS_SUCCESS",
+    FETCH_BRANDS_FAILURE = "brand/FETCH_BRANDS_FAILURE",
     // Save or Update
-    SAVE_BRAND_REQUEST = 'brand/SAVE_BRAND_REQUEST',
-    SAVE_BRAND_SUCCESS = 'brand/SAVE_BRAND_SUCCESS',
-    SAVE_BRAND_FAILURE = 'brand/SAVE_BRAND_FAILURE',
+    SAVE_BRAND_REQUEST = "brand/SAVE_BRAND_REQUEST",
+    SAVE_BRAND_SUCCESS = "brand/SAVE_BRAND_SUCCESS",
+    SAVE_BRAND_FAILURE = "brand/SAVE_BRAND_FAILURE",
     // Delete
-    DELETE_BRAND_SUCCESS = 'brand/DELETE_BRAND_SUCCESS',
-    DELETE_BRAND_FAILURE = 'brand/DELETE_BRAND_FAILURE'
+    DELETE_BRAND_SUCCESS = "brand/DELETE_BRAND_SUCCESS",
+    DELETE_BRAND_FAILURE = "brand/DELETE_BRAND_FAILURE"
 }
 
 export interface FetchBrandsRequest {
@@ -36,7 +37,7 @@ export interface SaveBrandRequest {
 }
 export interface SaveBrandSuccess {
     type: typeof BrandActionTypes.SAVE_BRAND_SUCCESS;
-    payload: Brand;
+    payload: ResultService<Brand>;
 }
 export interface SaveBrandFailure {
     type: typeof BrandActionTypes.SAVE_BRAND_FAILURE;

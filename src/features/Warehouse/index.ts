@@ -1,1 +1,2 @@
-export { default as WarehouseRoute} from "./routes"
+export { default as InventoryRoutes } from "./routes";
+

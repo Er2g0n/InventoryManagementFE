@@ -11,7 +11,8 @@
   "eslint.nodePath": "${workspaceFolder}/node_modules",
   "eslint.runtime": "node",
   "eslint.format.enable": true,
-  "eslint.enable": false, 
+  "eslint.enable": true, 
+    "eslint.quiet": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"

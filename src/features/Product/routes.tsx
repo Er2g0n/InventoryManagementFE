@@ -10,6 +10,7 @@ const BrandPage = lazy(() => import("./pages/BrandPage"));
 const VehicleModelPage = lazy(()=> import("./pages/VehicleModelPage"));
 const TransactionTypePage = lazy(()=> import("./pages/TransactionTypePage"));
 const AddProductPage = lazy(() => import("./pages/Product/add/AddProductPage"));
+
 export const WEB_ENDPOINT = {
   main: "/",
   AddProduct: "Add",
@@ -17,11 +18,12 @@ export const WEB_ENDPOINT = {
   Type: "/Type",
   Color: "/Color",
   Material: "/Material",
-  VehicleModelPage : "/VehicleModel",
-  TransactionTypePage:"/TransactionType"
+  TransactionTypePage:"/TransactionType",
+  Brand: "/Brand",
+  VehicleModel : "/VehicleModel"
 };
 const routes : RouteObject[] = [
-    {
+  {
     path: "product",
     children: [
       {

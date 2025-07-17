@@ -1,30 +1,30 @@
-import { Brand } from "@/types/MasterData/Product/ProductClassification";
 import { Button, Card, Col, ConfigProvider, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import ListBrand from "../Components/Brand/ProductBrandList";
+import FormProductBrand from "../Components/Brand/ProductBrandForm";
+import { Brand } from "@/types/MasterData/Product/ProductClassification";
 
 const BrandPage: React.FC = () => {
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [isEditing, setIsEditing] = useState(false);
-      const [currentBrand, setCurrentBrand] = useState<Brand | null>(null);
-      const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentBrand, setCurrentBrand] = useState<Brand | null>(null);
 
 
-      const handleAddBrand = useCallback(() => {
-        setIsEditing(false);
-        setCurrentBrand(null);
-        setIsModalOpen(true);
-      }, []);
+  const handleAddBrand = useCallback(() => {
+    setIsEditing(false);
+    setCurrentBrand(null);
+    setIsModalOpen(true);
+  }, []);
 
-      const handleEditBrand = useCallback((brand: Brand) => {
-        setIsEditing(true);
-        setCurrentBrand(brand);
-        setIsModalOpen(true);
-      }, []);
+  const handleEditBrand = useCallback((brand: Brand) => {
+    setIsEditing(true);
+    setCurrentBrand(brand);
+    setIsModalOpen(true);
+  }, []);
 
   return (
-   <Row gutter={24}>
+    <Row gutter={24}>
       <Col span={24}>
         <Card
           title="Product Brand Management"
@@ -42,17 +42,15 @@ const BrandPage: React.FC = () => {
           }
           variant="borderless"
         >
-          <ListBrand onEdit={handleEditBrand} refreshTrigger={refreshTrigger} />
+          <ListBrand onEdit={handleEditBrand} />
         </Card>
       </Col>
-      <FormBrand
+      <FormProductBrand
        
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         isEditing={isEditing}
-        currentProductCategory={currentBrand}
-        refreshTrigger={refreshTrigger}
-        setRefreshTrigger={setRefreshTrigger}
+        currentBrand={currentBrand}
       />
     </Row>
   );
