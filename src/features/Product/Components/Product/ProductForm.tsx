@@ -4,8 +4,6 @@ import { useForm } from "@tanstack/react-form";
 import { Form, Input, InputNumber, Select, Button, Card, Row, Col, Upload, message, Spin } from "antd";
 import { PlusOutlined, DeleteOutlined, ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import type { UploadFile, UploadProps } from "antd";
-import { Brand, ProductCategory, ProductType, VehicleModel } from "@/types/MasterData/Product/ProductClassification";
-import { Color, Material, UnitOfMeasure } from "@/types/MasterData/Product/ProductProperties";
 import { useProducts } from "@features/Product/store/Product/hooks/useProduct";
 import { ProductSave, VariantParam } from "@/types/MasterData/Product/ProductManagement";
 import { productSaveSchema } from "@features/Product/schemas/ProductSchema";
@@ -17,7 +15,6 @@ import { useProductCategories } from "@features/Product/store/ProductCategory/ho
 import { useUoM } from "@features/Product/store/UoM/hooks/useUoM";
 import { useColors } from "@features/Product/store/Color/hooks/useColor";
 import { useMaterials } from "@features/Product/store/Material/hooks/useMaterial";
-import { log } from "console";
 
 
 interface ProductFormProps {
