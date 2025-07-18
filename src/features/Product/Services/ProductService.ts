@@ -106,7 +106,9 @@ function appendFileArrayToFormData(formData: FormData, array: ImageFileDTO[], pr
   array?.forEach((file, index) => {
     if (file.imageFile && file.imageFile instanceof File) {
       formData.append(`${prefix}[${index}].ImageFile`, file.imageFile);
-      formData.append(`${prefix}[${index}].IsPrimary`, file.isPrimary.toString());
+      formData.append(`${prefix}[${index}].IsPrimary`, file.isPrimary!.toString());
+      formData.append(`${prefix}[${index}].Position`, file.position!.toString());
+      
     }
   });
 }

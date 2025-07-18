@@ -49,6 +49,7 @@ export interface Product extends BaseEntity {
 export interface ImageFileDTO {
   imageFile?: File | null;
   isPrimary?: boolean;
+  position?: number;
 }
 
 export interface VariantParam {
@@ -71,7 +72,7 @@ export interface ProductSave {
   variantParams?: VariantParam[];
   productImg?: File | null;
   imageFiles?: ImageFileDTO[] | null;
-  variantImgs?: ImageFileDTO[];
+  variantImgs?: ImageFileDTO[] | null;
 }
 
 export interface ProductParam extends BaseEntity {

@@ -44,12 +44,14 @@ export const productSaveSchema = z.object({
     z.object({
       imageFile: z.instanceof(File).nullable().optional(),
       isPrimary: z.boolean().optional(),
+      position: z.number().optional(),
     })
   ).nullable().optional(),
   variantImgs: z.array(
     z.object({
       imageFile: z.instanceof(File).nullable().optional(),
       isPrimary: z.boolean(),
+      position: z.number().optional(),
     })
-  ).optional(),
+  ).nullable().optional(),
 });

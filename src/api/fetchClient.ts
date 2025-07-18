@@ -32,8 +32,8 @@ const axiosInstance: AxiosInstance & CacheInstance = setupCache(
 // Request interceptor to add user and client info to all requests
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log("Interceptor - Data type:", config.data instanceof FormData ? "FormData" : typeof config.data);
-    console.log("Interceptor - Headers:", config.headers);
+    // console.log("Interceptor - Data type:", config.data instanceof FormData ? "FormData" : typeof config.data);
+    // console.log("Interceptor - Headers:", config.headers);
     // Xử lý Content-Type cho FormData
     if (config.data instanceof FormData) {
       // Không đặt Content-Type, để trình duyệt tự động đặt multipart/form-data

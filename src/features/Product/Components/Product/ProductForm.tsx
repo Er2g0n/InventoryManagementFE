@@ -17,6 +17,7 @@ import { useProductCategories } from "@features/Product/store/ProductCategory/ho
 import { useUoM } from "@features/Product/store/UoM/hooks/useUoM";
 import { useColors } from "@features/Product/store/Color/hooks/useColor";
 import { useMaterials } from "@features/Product/store/Material/hooks/useMaterial";
+import { log } from "console";
 
 
 interface ProductFormProps {
@@ -160,6 +161,7 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                     productImg: value.productImg,
                     imageFiles: value.imageFiles || [],
                     variantImgs: value.variantImgs || [],
+
                 };
                 console.log("Product Save Data:", productSave);
 
@@ -184,6 +186,7 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
         const fetchProduct = async () => {
             if (productCode && mode === "edit" && (!product || productCode != product?.productCode)) {
                 const result = await usegetProductByCode(productCode);
+
                 if (!result.success) {
                     message.error("Product not found ")
                 }
@@ -238,7 +241,8 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                         attributeCode: variant.attributeCode || "",
                         refProductCode: variant.refProductCode || "",
                         imagePath: variant.imagePath || "",
-                        isPrimary: variant.isPrimary || false,
+                        isPrimary: variant.isPrimary || true,
+
                     }));
                     form.setFieldValue('variantParams', initialVariantParams);
 
@@ -248,15 +252,16 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                     const productImagesList = productData.productImages || [];
                     const existingVariantParams = form.getFieldValue("variantParams") || [];
                     const newVariantParamsFromImages = productImagesList.map((img) => ({
-                        colorID: 0, // Giá trị mặc định, có thể điều chỉnh
-                        materialID: 0, // Giá trị mặc định, có thể điều chỉnh
+                        colorID: 0,
+                        materialID: 0,
                         position: img.position,
-                        productVariantCode: "", // Có thể cần logic để tạo mã mới
+                        productVariantCode: "",
                         imageCode: img.imageCode,
-                        attributeCode: "", // Giá trị mặc định, có thể điều chỉnh
+                        attributeCode: "",
                         refProductCode: img.refProductCode,
                         imagePath: img.imagePath,
-                        isPrimary: img.isPrimary,
+                        isPrimary: img.isPrimary || false,
+
                     } as VariantParam));
 
                     // Kết hợp existingVariantParams và newVariantParamsFromImages
@@ -270,36 +275,41 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
 
                     // Hiển thị ảnh lên khung upload theo imagePath
                     // Ảnh chính sản phẩm
-                    if (productData.productImages.length > 0) {
-                        setProductImgFileList([{
-                            uid: productData.publicImgID,
-                            name: productData.publicImgID,
-                            url: productData.imagePath,
-                            status: "done",
-                        }]);
-                    }
+                    setProductImgFileList([{
+                        uid: productData.publicImgID,
+                        name: productData.publicImgID,
+                        url: productData.imagePath,
+                        status: "done",
+                    }]);
+
 
                     // Ảnh phụ sản phẩm (imageFilesList)
-                    setImageFilesList(productData.productImages.map(img => ({
-                        uid: img.imageCode,
-                        name: img.imageCode,
-                        url: img.imagePath,
-                        status: "done",
-                    })));
+                    if (productData.productImages.length > 0) {
+                        setImageFilesList(productData.productImages.map(img => ({
+                            uid: img.imageCode,
+                            name: img.imageCode,
+                            url: img.imagePath,
+                            status: "done",
+                        })));
+                    }
 
                     // Gắn ProductImages vào variantParams và hiển thị ảnh
 
 
                     const updatedVariantImgFiles: { [key: number]: UploadFile[] } = {};
-                    productData.variantParams.forEach((variant, index) => {
+                    const variantImgFormData = productData.variantParams.filter(p => p.isPrimary == true);
+                    variantImgFormData.forEach((variant, index) => {
                         updatedVariantImgFiles[index] = [{
                             uid: variant.imageCode || "",
-                            name: " ",
+                            name: variant.imageCode || "",
                             url: variant.imagePath,
                             status: "done",
+
                         }];
                     });
+                    setVariantImgFiles([]);
                     setVariantImgFiles(updatedVariantImgFiles);
+                    console.log("Variant Img Files:", updatedVariantImgFiles);
 
                     // setIsDataLoading(false);
                 }
@@ -393,25 +403,31 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
             return true;
         });
 
+        console.log("Valid image files:", imageFilesList);
         setImageFilesList(validFiles);
+
+        console.log("Valid image files: after set", imageFilesList);
         const files = validFiles
             .map((file) => ({
                 imageFile: file.originFileObj || null,
                 isPrimary: false,
+                position: 0
             }))
             .filter((file) => file.imageFile);
+        console.log("Valid image files:", files);
         form.setFieldValue("imageFiles", files);
 
         // Đồng bộ variantParams với imageFiles
-        const currentVariants = form.getFieldValue("variantParams") || [];
-        const currentImages = currentVariants.filter(v => !v.isPrimary); //Lấy ảnh phụ 
+        var currentVariants = form.getFieldValue("variantParams") || [];
+        const currentImages = currentVariants.filter(v => v.isPrimary == false); //Lấy ảnh phụ 
         const currentImageCodes = new Set(validFiles.map(file => file.uid)); // Lấy imageCode từ fileList hiện tại
         const removedcurrentImages = currentImages.filter(variant => !currentImageCodes.has(variant.imageCode!));
 
         removedcurrentImages.forEach(e => {
-            currentVariants.filter((v) => v.imageCode !== e.imageCode);
+            currentVariants = currentVariants.filter((v) => v.imageCode !== e.imageCode);
         });
-
+        console.log("Removed current images:", removedcurrentImages);
+        console.log("Current variants after removal:", currentVariants);
         form.setFieldValue("variantParams", currentVariants);
     };
 
@@ -437,12 +453,18 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                 setVariantImgFiles((prev) => ({ ...prev, [variantIndex]: validFiles }));
 
                 const currentVariantImgs = form.getFieldValue("variantImgs") || [];
-                const updatedVariantImgs = [...currentVariantImgs];
+                console.log("Current Variant Imgs:", currentVariantImgs);
+                var updatedVariantImgs = [...currentVariantImgs]
                 updatedVariantImgs[variantIndex] = {
                     imageFile: validFiles[0]?.originFileObj || null,
                     isPrimary: true,
+                    position: variantIndex
                 };
+                updatedVariantImgs = updatedVariantImgs.filter((img) => img !== null && img !== undefined);
                 form.setFieldValue("variantImgs", updatedVariantImgs);
+
+                console.log("Updated variantImgs:", updatedVariantImgs);
+
             };
 
     const uploadButton = (
@@ -508,9 +530,10 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                         console.log("Form submitted, form state:", form.getAllErrors()); // Debug trạng thái form
                         console.log("Form errors before submit:", form.state.errors);
 
-                        console.log("Form field Value", form.getFieldValue("variantImgs"));
+                        console.log("VariantParams", form.getFieldValue("variantParams"));
+                        console.log("Variant Imgs", form.getFieldValue("variantImgs"));
                         form.handleSubmit().catch((error) => {
-                            console.error("HandleSubmit error:", error); // Bắt lỗi từ handleSubmit
+                            console.error("HandleSubmit error:", error);
                         });
                     }}
                 >
@@ -858,61 +881,61 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                                     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                                         {variants.map((variant, index) => (
                                             (variant.isPrimary &&
-                                                <Card
-                                                    key={index}
-                                                    size="small"
-                                                    title={`Biến thể #${index + 1}`}
-                                                    extra={
-                                                        <Button type="text" danger icon={<DeleteOutlined />} onClick={() => removeVariant(index)}>
-                                                            Xóa
-                                                        </Button>
-                                                    }
-                                                >
-                                                    <Row gutter={[16, 16]}>
-                                                        <Col xs={24} sm={12} md={6}>
-                                                            <Form.Item label="Màu sắc" required>
-                                                                <Select
-                                                                    value={variant.colorID || undefined}
-                                                                    onChange={(value) => {
-                                                                        const updatedVariants = [...variants];
-                                                                        updatedVariants[index] = { ...variant, colorID: value };
-                                                                        field.handleChange(updatedVariants);
-                                                                    }}
-                                                                    placeholder="Chọn màu sắc"
-                                                                    options={colorOptions}
-                                                                />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col xs={24} sm={12} md={6}>
-                                                            <Form.Item label="Chất liệu" required>
-                                                                <Select
-                                                                    value={variant.materialID || undefined}
-                                                                    onChange={(value) => {
-                                                                        const updatedVariants = [...variants];
-                                                                        updatedVariants[index] = { ...variant, materialID: value };
-                                                                        field.handleChange(updatedVariants);
-                                                                    }}
-                                                                    placeholder="Chọn chất liệu"
-                                                                    options={materialOptions}
-                                                                />
-                                                            </Form.Item>
-                                                        </Col>
+                                            <Card
+                                                key={index}
+                                                size="small"
+                                                title={`Biến thể`}
+                                                extra={
+                                                    <Button type="text" danger icon={<DeleteOutlined />} onClick={() => removeVariant(index)}>
+                                                        Xóa
+                                                    </Button>
+                                                }
+                                            >
+                                                <Row gutter={[16, 16]}>
+                                                    <Col xs={24} sm={12} md={6}>
+                                                        <Form.Item label="Màu sắc" required>
+                                                            <Select
+                                                                value={variant.colorID || undefined}
+                                                                onChange={(value) => {
+                                                                    const updatedVariants = [...variants];
+                                                                    updatedVariants[index] = { ...variant, colorID: value };
+                                                                    field.handleChange(updatedVariants);
+                                                                }}
+                                                                placeholder="Chọn màu sắc"
+                                                                options={colorOptions}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col xs={24} sm={12} md={6}>
+                                                        <Form.Item label="Chất liệu" required>
+                                                            <Select
+                                                                value={variant.materialID || undefined}
+                                                                onChange={(value) => {
+                                                                    const updatedVariants = [...variants];
+                                                                    updatedVariants[index] = { ...variant, materialID: value };
+                                                                    field.handleChange(updatedVariants);
+                                                                }}
+                                                                placeholder="Chọn chất liệu"
+                                                                options={materialOptions}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
 
-                                                        <Col xs={24} sm={12} md={6}>
-                                                            <Form.Item label="Ảnh biến thể">
-                                                                <Upload
-                                                                    listType="picture-card"
-                                                                    fileList={variantImgFiles[index] || []}
-                                                                    onChange={handleVariantImgChange(index)}
-                                                                    beforeUpload={() => false}
-                                                                    maxCount={1}
-                                                                >
-                                                                    {(variantImgFiles[index]?.length || 0) >= 1 ? null : uploadButton}
-                                                                </Upload>
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                </Card>
+                                                    <Col xs={24} sm={12} md={6}>
+                                                        <Form.Item label="Ảnh biến thể">
+                                                            <Upload
+                                                                listType="picture-card"
+                                                                fileList={variantImgFiles[index] || []}
+                                                                onChange={handleVariantImgChange(index)}
+                                                                beforeUpload={() => false}
+                                                                maxCount={1}
+                                                            >
+                                                                {(variantImgFiles[index]?.length || 0) >= 1 ? null : uploadButton}
+                                                            </Upload>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            </Card>
                                             )
                                         ))}
                                     </div>

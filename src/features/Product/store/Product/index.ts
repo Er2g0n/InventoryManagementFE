@@ -43,6 +43,7 @@ const productSlice = createSlice({
                 } else {
                     state.products.push(action.payload.data!);
                 }
+                state.product = null;
             })
             .addCase(ProductActionTypes.SAVE_PRODUCT_FAILURE, (state, action: SaveProductFailure) => {
                 state.loading = false;
