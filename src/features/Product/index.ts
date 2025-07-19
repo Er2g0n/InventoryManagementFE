@@ -9,4 +9,5 @@ export { default as ProductSlice} from "./store/Product/index";
 export { default as brandSlice } from "./store/Brand/index";
 export { default as vehicleModelSlice } from "./store/VehicleModel/index";
 export { default as UoMSlice } from "./store/UoM/index";
+export { default as productUoMConversionSlice } from "./store/ProductUoMConversion/index";
 // export { default as unitOfMeasure } from "./store/UnitOfMeasure/index";

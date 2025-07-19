@@ -11,12 +11,16 @@ const VehicleModelPage = lazy(()=> import("./pages/VehicleModelPage"));
 const TransactionTypePage = lazy(()=> import("./pages/TransactionTypePage"));
 const AddProductPage = lazy(() => import("./pages/Product/add/AddProductPage"));
 const ListProductPage = lazy(() => import("./pages/Product/ListProductPage"));
+
 const UoMPage = lazy(() => import("./pages/UoMPage"));
-import EditProductPage from "./pages/Product/[code]/EditProductPage";
+const EditProductPage = lazy(() => import("./pages/Product/[code]/EditProductPage"));
+const ProductDetailPage = lazy(() => import("./pages/Product/[code]/ProductDetailPage"));
+const ProductConversion = lazy(() => import("./pages/ProductUoMConversionPage"));
 export const WEB_ENDPOINT = {
   main: "/",
   AddProduct: "Add",
   EditProduct: "Edit/:productCode",
+  ProductDetail: "Detail/:productCode",
   ListProduct: "List",
   Category: "/Category",
   Type: "/Type",
@@ -25,7 +29,8 @@ export const WEB_ENDPOINT = {
   TransactionTypePage:"/TransactionType",
   Brand: "/Brand",
   VehicleModel : "/VehicleModel",
-  UoM: "/UoM"
+  UoM: "/UoM",
+  Conversion: "/Conversion"
 };
 const routes : RouteObject[] = [
   {
@@ -41,8 +46,17 @@ const routes : RouteObject[] = [
         element: <EditProductPage  />
       },
       {
+        path: "detail/:productCode",
+        element: <ProductDetailPage />
+      },
+      {
         path: "",
         element: <ListProductPage />
+      },
+      {
+        path:"Conversion",
+        element: <ProductConversion />
+
       },
       {
         path: "Category",

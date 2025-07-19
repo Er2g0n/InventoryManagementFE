@@ -21,7 +21,9 @@ export interface ProductUoMConversion extends BaseEntity {
   productUoMConversionCode: string;
   productID: number;
   fromUoMID: number;
+  fromUoMName?: string;
   toUoMID: number;
+  toUoMName?: string;
   conversionRate: number;
 }
 
