@@ -79,7 +79,7 @@ export default function ProductDetail({ }: ProductDetailProps) {
                 <h1 style={{ fontSize: "24px", fontWeight: 600, color: "#1f2937" }}>Chi tiết sản phẩm</h1>
             </div>
 
-            {/* Main Product Information */}
+            {/* Main Product Information */} 
             <Card title="Thông tin sản phẩm" style={{ marginBottom: "24px" }}>
                 <Descriptions column={2} bordered size="middle">
                     <Descriptions.Item label="Mã sản phẩm">
@@ -110,19 +110,19 @@ export default function ProductDetail({ }: ProductDetailProps) {
                     <Col xs={24} sm={8}>
                         <div style={{ textAlign: "center", padding: "16px", border: "1px solid #e5e7eb", borderRadius: "4px" }}>
                             <div style={{ fontSize: "20px", fontWeight: 500, color: "#dc2626" }}>{productData.dimension?.length || 0}</div>
-                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều dài {productData.dimension.uoMLengthCode}</div>
+                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều dài({productData.dimensionUoM})</div>
                         </div>
                     </Col>
                     <Col xs={24} sm={8}>
                         <div style={{ textAlign: "center", padding: "16px", border: "1px solid #e5e7eb", borderRadius: "4px" }}>
                             <div style={{ fontSize: "20px", fontWeight: 500, color: "#065f46" }}>{productData.dimension?.width || 0}</div>
-                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều rộng (cm)</div>
+                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều rộng ({productData.dimensionUoM})</div>
                         </div>
                     </Col>
                     <Col xs={24} sm={8}>
                         <div style={{ textAlign: "center", padding: "16px", border: "1px solid #e5e7eb", borderRadius: "4px" }}>
                             <div style={{ fontSize: "20px", fontWeight: 500, color: "#1e40af" }}>{productData.dimension?.height || 0}</div>
-                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều cao (cm)</div>
+                            <div style={{ color: "#6b7280", marginTop: "4px" }}>Chiều cao ({productData.dimensionUoM})</div>
                         </div>
                     </Col>
                 </Row>

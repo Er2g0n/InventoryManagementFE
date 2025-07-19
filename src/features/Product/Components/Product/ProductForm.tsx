@@ -756,65 +756,113 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                     {/* Dimensions */}
                     <Card title="Kích thước" style={{ marginBottom: 24 }}>
                         <Row gutter={[16, 16]}>
-                            <Col xs={24} sm={12} md={8}>
+                            {/* Row riêng cho chọn đơn vị tính */}
+                            <Col span={24}>
                                 <form.Field
-                                    name="dimension.length"
+                                    name="dimension.uoMHeightCode"
                                     children={(field) => (
                                         <Form.Item
-                                            label="Chiều dài (cm)"
+                                            label="Đơn vị tính kích thước"
+                                            required
                                             validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
                                             help={field.state.meta.errors[0]?.message}
+                                            style={{ marginBottom: 0 }}
                                         >
-                                            <InputNumber
+                                            <Select
                                                 value={field.state.value}
-                                                onChange={(value) => field.handleChange(value ?? 0)}
-                                                placeholder="0"
-                                                style={{ width: "100%" }}
-                                                step={0.1}
+                                                onChange={(value) => {
+                                                    field.handleChange(value);
+                                                    form.setFieldValue("dimension.uoMLengthCode", value);
+                                                    form.setFieldValue("dimension.uoMWidthCode", value);
+                                                  
+                                                }}
+                                                placeholder="Chọn đơn vị tính"
+                                                options={uoMList?.map((uom) => ({
+                                                    value: uom.uoMCode,
+                                                    label: uom.uoMName,
+                                                }))}
+                                                style={{ width: "30%" }}
                                             />
                                         </Form.Item>
                                     )}
                                 />
                             </Col>
-                            <Col xs={24} sm={12} md={8}>
-                                <form.Field
-                                    name="dimension.width"
-                                    children={(field) => (
-                                        <Form.Item
-                                            label="Chiều rộng (cm)"
-                                            validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
-                                            help={field.state.meta.errors[0]?.message}
-                                        >
-                                            <InputNumber
-                                                value={field.state.value}
-                                                onChange={(value) => field.handleChange(value ?? 0)}
-                                                placeholder="0"
-                                                style={{ width: "100%" }}
-                                                step={0.1}
-                                            />
-                                        </Form.Item>
-                                    )}
-                                />
-                            </Col>
-                            <Col xs={24} sm={12} md={8}>
-                                <form.Field
-                                    name="dimension.height"
-                                    children={(field) => (
-                                        <Form.Item
-                                            label="Chiều cao (cm)"
-                                            validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
-                                            help={field.state.meta.errors[0]?.message}
-                                        >
-                                            <InputNumber
-                                                value={field.state.value}
-                                                onChange={(value) => field.handleChange(value ?? 0)}
-                                                placeholder="0"
-                                                style={{ width: "100%" }}
-                                                step={0.1}
-                                            />
-                                        </Form.Item>
-                                    )}
-                                />
+                            {/* Row cho 3 field kích thước */}
+                            <Col span={24}>
+                                <Row gutter={[16, 16]}>
+                                    <Col xs={24} sm={12} md={8}>
+                                        <form.Field
+                                            name="dimension.length"
+                                            children={(field) => (
+                                                <Form.Item
+                                                    label="Chiều dài"
+                                                    required
+                                                    validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
+                                                    help={field.state.meta.errors[0]?.message}
+                                                >
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                                        <InputNumber
+                                                            value={field.state.value}
+                                                            onChange={(value) => field.handleChange(value ?? 0)}
+                                                            placeholder="0"
+                                                            style={{ flex: 1 }}
+                                                            step={0.1}
+                                                        />
+                                                        
+                                                    </div>
+                                                </Form.Item>
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col xs={24} sm={12} md={8}>
+                                        <form.Field
+                                            name="dimension.width"
+                                            children={(field) => (
+                                                <Form.Item
+                                                    label="Chiều rộng"
+                                                    required
+                                                    validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
+                                                    help={field.state.meta.errors[0]?.message}
+                                                >
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                                        <InputNumber
+                                                            value={field.state.value}
+                                                            onChange={(value) => field.handleChange(value ?? 0)}
+                                                            placeholder="0"
+                                                            style={{ flex: 1 }}
+                                                            step={0.1}
+                                                        />
+                                                        
+                                                    </div>
+                                                </Form.Item>
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col xs={24} sm={12} md={8}>
+                                        <form.Field
+                                            name="dimension.height"
+                                            children={(field) => (
+                                                <Form.Item
+                                                    label="Chiều cao"
+                                                    required
+                                                    validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
+                                                    help={field.state.meta.errors[0]?.message}
+                                                >
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                                        <InputNumber
+                                                            value={field.state.value}
+                                                            onChange={(value) => field.handleChange(value ?? 0)}
+                                                            placeholder="0"
+                                                            style={{ flex: 1 }}
+                                                            step={0.1}
+                                                        />
+                                                       
+                                                    </div>
+                                                </Form.Item>
+                                            )}
+                                        />
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
                     </Card>
@@ -878,61 +926,61 @@ export default function ProductForm({ productCode, mode }: ProductFormProps) {
                                     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                                         {variants.map((variant, index) => (
                                             (variant.isPrimary &&
-                                            <Card
-                                                key={index}
-                                                size="small"
-                                                title={`Biến thể`}
-                                                extra={
-                                                    <Button type="text" danger icon={<DeleteOutlined />} onClick={() => removeVariant(index)}>
-                                                        Xóa
-                                                    </Button>
-                                                }
-                                            >
-                                                <Row gutter={[16, 16]}>
-                                                    <Col xs={24} sm={12} md={6}>
-                                                        <Form.Item label="Màu sắc" required>
-                                                            <Select
-                                                                value={variant.colorID || undefined}
-                                                                onChange={(value) => {
-                                                                    const updatedVariants = [...variants];
-                                                                    updatedVariants[index] = { ...variant, colorID: value };
-                                                                    field.handleChange(updatedVariants);
-                                                                }}
-                                                                placeholder="Chọn màu sắc"
-                                                                options={colorOptions}
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col xs={24} sm={12} md={6}>
-                                                        <Form.Item label="Chất liệu" required>
-                                                            <Select
-                                                                value={variant.materialID || undefined}
-                                                                onChange={(value) => {
-                                                                    const updatedVariants = [...variants];
-                                                                    updatedVariants[index] = { ...variant, materialID: value };
-                                                                    field.handleChange(updatedVariants);
-                                                                }}
-                                                                placeholder="Chọn chất liệu"
-                                                                options={materialOptions}
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
+                                                <Card
+                                                    key={index}
+                                                    size="small"
+                                                    title={`Biến thể`}
+                                                    extra={
+                                                        <Button type="text" danger icon={<DeleteOutlined />} onClick={() => removeVariant(index)}>
+                                                            Xóa
+                                                        </Button>
+                                                    }
+                                                >
+                                                    <Row gutter={[16, 16]}>
+                                                        <Col xs={24} sm={12} md={6}>
+                                                            <Form.Item label="Màu sắc" required>
+                                                                <Select
+                                                                    value={variant.colorID || undefined}
+                                                                    onChange={(value) => {
+                                                                        const updatedVariants = [...variants];
+                                                                        updatedVariants[index] = { ...variant, colorID: value };
+                                                                        field.handleChange(updatedVariants);
+                                                                    }}
+                                                                    placeholder="Chọn màu sắc"
+                                                                    options={colorOptions}
+                                                                />
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col xs={24} sm={12} md={6}>
+                                                            <Form.Item label="Chất liệu" required>
+                                                                <Select
+                                                                    value={variant.materialID || undefined}
+                                                                    onChange={(value) => {
+                                                                        const updatedVariants = [...variants];
+                                                                        updatedVariants[index] = { ...variant, materialID: value };
+                                                                        field.handleChange(updatedVariants);
+                                                                    }}
+                                                                    placeholder="Chọn chất liệu"
+                                                                    options={materialOptions}
+                                                                />
+                                                            </Form.Item>
+                                                        </Col>
 
-                                                    <Col xs={24} sm={12} md={6}>
-                                                        <Form.Item label="Ảnh biến thể">
-                                                            <Upload
-                                                                listType="picture-card"
-                                                                fileList={variantImgFiles[index] || []}
-                                                                onChange={handleVariantImgChange(index)}
-                                                                beforeUpload={() => false}
-                                                                maxCount={1}
-                                                            >
-                                                                {(variantImgFiles[index]?.length || 0) >= 1 ? null : uploadButton}
-                                                            </Upload>
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                            </Card>
+                                                        <Col xs={24} sm={12} md={6}>
+                                                            <Form.Item label="Ảnh biến thể">
+                                                                <Upload
+                                                                    listType="picture-card"
+                                                                    fileList={variantImgFiles[index] || []}
+                                                                    onChange={handleVariantImgChange(index)}
+                                                                    beforeUpload={() => false}
+                                                                    maxCount={1}
+                                                                >
+                                                                    {(variantImgFiles[index]?.length || 0) >= 1 ? null : uploadButton}
+                                                                </Upload>
+                                                            </Form.Item>
+                                                        </Col>
+                                                    </Row>
+                                                </Card>
                                             )
                                         ))}
                                     </div>

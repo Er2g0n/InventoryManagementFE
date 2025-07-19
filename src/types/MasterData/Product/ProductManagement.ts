@@ -89,6 +89,7 @@ export interface ProductParam extends BaseEntity {
   productType: ProductType;
   brand: Brand;
   dimension: Dimension;
+  dimensionUoM: string;
   unitOfMeasure: UnitOfMeasure;
 
   variantParams: VariantParam[];
