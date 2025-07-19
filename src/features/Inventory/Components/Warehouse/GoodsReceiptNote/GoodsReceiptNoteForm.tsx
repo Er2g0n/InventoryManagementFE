@@ -196,6 +196,7 @@ const FormGoodsReceiptNote: React.FC<FormGoodsReceiptNoteProps> = ({
                                         value={field.state.value ? dayjs(field.state.value, "DD-MM-YYYY", true) : null}
                                         onChange={(date, dateString) => {
                                             if (dateString) {
+                                                console.log(date)
                                                 field.handleChange(dateString as string);
                                             } else {
                                                 field.handleChange(""); // Đặt giá trị rỗng nếu không có dateString
