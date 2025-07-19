@@ -2,7 +2,7 @@ import { GoodsReceiptNote } from "@/types/WarehouseManagement/GoodsReceiptNote";
 import { DeleteGoodsReceiptNoteFailure, DeleteGoodsReceiptNoteSuccess, FetchGoodsReceiptNoteFailure, FetchGoodsReceiptNoteRequest, FetchGoodsReceiptNoteSucess, GoodsReceiptNoteAction, GoodsReceiptNoteActionTypes, SaveGoodsReceiptNoteFailure, SaveGoodsReceiptNoteRequest, SaveGoodsReceiptNoteSuccess } from "./types";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "@/store/store";
-import { GoodsReceiptNote_GetAll, GoodsReceiptNoteCode_Delete, GoodsReceiptNoteCode_Save } from "@features/Inventory/Services/ReceiptService";
+import { GoodsReceiptNote_GetAll, GoodsReceiptNoteCode_DeleteHeaderAndDetail, GoodsReceiptNoteCode_Save } from "@features/Inventory/Services/ReceiptService";
 
 export const fetchGoodsReceiptNoteRequest = (): FetchGoodsReceiptNoteRequest => ({
     type: GoodsReceiptNoteActionTypes.FETCH_GOODS_RECEIPT_NOTE_REQUEST
@@ -28,14 +28,14 @@ export const saveGoodsReceiptNoteRequest = (): SaveGoodsReceiptNoteRequest => ({
 });
 
 export const saveGoodsReceiptNoteSuccess = (
-    GoodsReceiptNote: GoodsReceiptNote
+    GoodsReceiptNote: GoodsReceiptNote,
 ): SaveGoodsReceiptNoteSuccess => ({
     type: GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_SUCCESS,
     payload: GoodsReceiptNote,
 });
 
 export const saveGoodsReceiptNoteFailure = (
-    error: string
+    error: string,
 ): SaveGoodsReceiptNoteFailure => ({
     type: GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_FAILURE,
     payload: error,
@@ -43,13 +43,13 @@ export const saveGoodsReceiptNoteFailure = (
 
 
 export const deleteGoodsReceiptNoteSuccess = (
-    GoodsReceiptNoteCode: string
+    GoodsReceiptNoteCode: string,
 ): DeleteGoodsReceiptNoteSuccess => ({
     type: GoodsReceiptNoteActionTypes.DELETE_GOODS_RECEIPT_NOTE_SUCCESS,
-    payload: GoodsReceiptNoteCode,
+    payload: GoodsReceiptNoteCode
 });
 export const deleteGoodsReceiptNoteFailure = (
-    error: string
+    error: string,
 ): DeleteGoodsReceiptNoteFailure => ({
     type: GoodsReceiptNoteActionTypes.DELETE_GOODS_RECEIPT_NOTE_FAILURE,
     payload: error,
@@ -65,7 +65,7 @@ GoodsReceiptNoteAction
     try{
         const response = await GoodsReceiptNote_GetAll();
         if(response.code === 'Success' && response.data){
-            dispath(fetchGoodsReceiptNoteSuccess(response.data));
+            dispath(fetchGoodsReceiptNoteSuccess(response.data.filter(x=>x.grnCode)));
         }
         else{
             dispath(fetchGoodsReceiptNoteFailure(response.message || 'Failed to get data'))
@@ -77,32 +77,32 @@ GoodsReceiptNoteAction
 
 
 export const addOrUpdateGoodsReceiptNote = (
-  GoodsReceiptNote: GoodsReceiptNote
-): ThunkAction<void, RootState, unknown, GoodsReceiptNoteAction> => async (dispatch) => {
+  GoodsReceiptNote: GoodsReceiptNote,
+): ThunkAction<Promise<GoodsReceiptNoteAction>, RootState, unknown, GoodsReceiptNoteAction> => async (dispatch) => {
   dispatch(saveGoodsReceiptNoteRequest());
   try {
     const response = await GoodsReceiptNoteCode_Save(GoodsReceiptNote);
     if (response.code === 'Success' && response.data) {
-      dispatch(saveGoodsReceiptNoteSuccess(response.data));
+      return dispatch(saveGoodsReceiptNoteSuccess(response.data));
     } else {
-      dispatch(saveGoodsReceiptNoteFailure(response.message || 'Failed to save'));
+      return dispatch(saveGoodsReceiptNoteFailure(response.message || 'Failed to save'));
     }
   } catch (error) {
-    dispatch(saveGoodsReceiptNoteFailure(error instanceof Error ? error.message : 'Failed to save'));
+    return dispatch(saveGoodsReceiptNoteFailure(error instanceof Error ? error.message : 'Failed to save'));
   }
 };
 
 export const removeGoodsReceiptNote = (
   GoodsReceiptNoteCode: string
-): ThunkAction<void, RootState, unknown, GoodsReceiptNoteAction> => async (dispatch) => {
+): ThunkAction<Promise<GoodsReceiptNoteAction>, RootState, unknown, GoodsReceiptNoteAction> => async (dispatch) => {
   try {
-    const response = await GoodsReceiptNoteCode_Delete(GoodsReceiptNoteCode);
-    if (response.code === "0") {
-      dispatch(deleteGoodsReceiptNoteSuccess(GoodsReceiptNoteCode));
+    const response = await GoodsReceiptNoteCode_DeleteHeaderAndDetail(GoodsReceiptNoteCode);
+    if (response.code === 'Success') {
+      return dispatch(deleteGoodsReceiptNoteSuccess(GoodsReceiptNoteCode));
     } else {
-      dispatch(deleteGoodsReceiptNoteFailure(response.message || 'Failed to delete'));
+      return dispatch(deleteGoodsReceiptNoteFailure(response.message || 'Failed to delete'));
     }
   } catch (error) {
-    dispatch(deleteGoodsReceiptNoteFailure(error instanceof Error ? error.message : 'Failed to delete'));
+    return dispatch(deleteGoodsReceiptNoteFailure(error instanceof Error ? error.message : 'Failed to delete'));
   }
 };
