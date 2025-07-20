@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useForm, AnyFieldApi } from "@tanstack/react-form";
-import { Button, InputNumber, Modal, message, Row, Col, Card, Image, Form, Select, Descriptions, Tag } from "antd";
+import { Button, InputNumber, Modal, message, Row, Col, Card, Image, Form, Select, Descriptions, Tag, Input } from "antd";
 import { useProducts } from "@features/Product/store/Product/hooks/useProduct";
 import { useUoM } from "@features/Product/store/UoM/hooks/useUoM";
 import { Product, ProductParam, ProductUoMConversion } from "@/types/MasterData/Product/ProductManagement";
@@ -40,8 +40,9 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
             conversionRate: isEditing && currentProductUoMConversion ? currentProductUoMConversion.conversionRate : 0,
         },
         validators: {
-            onBlur: productUoMConversionSchema,
             onChange: productUoMConversionSchema,
+            onBlur: productUoMConversionSchema,
+            onSubmit: productUoMConversionSchema
         },
         onSubmit: async ({ value }) => {
             await onSubmit(value);
@@ -55,7 +56,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
 
     // Cập nhật selectedProduct khi currentProductUoMConversion thay đổi (chế độ edit)
     useEffect(() => {
-        if (isEditing && currentProductUoMConversion) {
+        if (isEditing && currentProductUoMConversion && products) {
             const product = products.find((p) => p.productCode === currentProductUoMConversion.productCode) || null;
             setSelectedProduct(product);
         } else {
@@ -63,7 +64,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
         }
     }, [isEditing, currentProductUoMConversion, products]);
 
-    // Đồng bộ selectedProduct với productID từ form
+    // Đồng bộ selectedProduct với productCode từ form
     useEffect(() => {
         const productCode = form.getFieldValue("productCode");
         if (productCode) {
@@ -137,14 +138,14 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                     >
                         <form.Field
                             name="productCode"
-                            validators={{
-                                onBlur: (value) => {
-                                    if (!value.value) {
-                                        return [{ message: "Product is required" }];
-                                    }
-                                    return undefined;
-                                },
-                            }}
+                            // validators={{
+                            //     onBlur: (value) => {
+                            //         if (!value.value) {
+                            //             return [{ message: "Product is required" }];
+                            //         }
+                            //         return undefined;
+                            //     },
+                            // }}
                             children={(field) => {
                         const errs = field.state.meta.errors;
                         if (errs && errs.length > 0) {
@@ -159,7 +160,10 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                 >
                                     <Select
                                         value={field.state.value}
-                                        onChange={handleProductChange}
+                                        onChange={(value)=> {
+                                            field.handleChange(value);
+                                            handleProductChange(value);
+                                        }}
                                         placeholder="Select Product"
                                         loading={productLoading}
                                         options={products.map((p) => ({
@@ -173,14 +177,14 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                         />
                         <form.Field
                             name="fromUoMID"
-                            validators={{
-                                onBlur: (value) => {
-                                    if (!value.value) {
-                                        return [{ message: "From UoM is required" }];
-                                    }
-                                    return undefined;
-                                },
-                            }}
+                            // validators={{
+                            //     onBlur: (value) => {
+                            //         if (!value.value) {
+                            //             return [{ message: "From UoM is required" }];
+                            //         }
+                            //         return undefined;
+                            //     },
+                            // }}
                             children={(field) => (
                                 <Form.Item
                                     label="From UoM"
@@ -203,14 +207,14 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                         />
                         <form.Field
                             name="toUoMID"
-                            validators={{
-                                onBlur: (value) => {
-                                    if (!value.value) {
-                                        return [{ message: "To UoM is required" }];
-                                    }
-                                    return undefined;
-                                },
-                            }}
+                            // validators={{
+                            //     onBlur: (value) => {
+                            //         if (!value.value) {
+                            //             return [{ message: "To UoM is required" }];
+                            //         }
+                            //         return undefined;
+                            //     },
+                            // }}
                             children={(field) => (
                                 <Form.Item
                                     label="To UoM"
@@ -233,27 +237,29 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                         />
                         <form.Field
                             name="conversionRate"
-                            validators={{
-                                onBlur: (value) => {
-                                    if (value.value as number <= 0) {
-                                        return [{ message: "Conversion rate must be a positive number" }];
-                                    }
-                                    return undefined;
-                                },
-                            }}
+                            // validators={{
+                            //     onBlur: (value) => {
+                            //         if (value.value as number <= 0) {
+                            //             return [{ message: "Conversion rate must be a positive number" }];
+                            //         }
+                            //         return undefined;
+                            //     },
+                            // }}
                             children={(field) => (
                                 <Form.Item
                                     label="Conversion Rate"
                                     validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
                                     help={field.state.meta.errors[0]?.message}
                                 >
-                                    <InputNumber
+                                    <Input
+                                        type="number"
                                         value={field.state.value}
-                                        onChange={(value) => field.handleChange(value!)}
+                                        onChange={(e) => field.handleChange(Number(e.target.value))}
+                                        onBlur={field.handleBlur}
                                         placeholder="Enter Conversion Rate"
                                         style={{ width: "100%" }}
                                         min={0}
-                                        step={0.1}
+                                        step={1}
                                     />
                                     {/* <FieldInfo field={field} /> */}
                                 </Form.Item>
