@@ -6,6 +6,7 @@ import { Home } from "@pages/Home";
 import { PartnerRoutes } from "@features/Partner";
 import { ProductRoutes } from "@features/Product";
 import { InventoryRoutes } from "@features/Inventory";
+import { StatusMasterRoutes } from "@features/StatusMaster";
 
 export type HandleRoutes = {
   pattern: string;
@@ -24,7 +25,8 @@ const routes: RouteObject[] = [
       },
       ...ProductRoutes,
       ...InventoryRoutes,
-      ...PartnerRoutes
+      ...PartnerRoutes,
+      ...StatusMasterRoutes
     ]
   },
   {
