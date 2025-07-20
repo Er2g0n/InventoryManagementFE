@@ -3,7 +3,7 @@ import { useProductUoMConversion } from "@features/Product/store/ProductUoMConve
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
-import { Button, Input, Modal, Space, Tag } from "antd";
+import { Button, Input, Modal, Space } from "antd";
 
 interface ListProductUoMConversionProps {
   onEdit: (productUoMConversion: ProductUoMConversion) => void;
@@ -24,7 +24,7 @@ const ListProductUoMConversion: React.FC<ListProductUoMConversionProps> = React.
   };
 
   const uniqueConversionCodes = [...new Set(productUoMConversions.map(pc => pc.productUoMConversionCode))];
-  const uniqueProductIDs = [...new Set(productUoMConversions.map(pc => pc.productID))];
+  const uniqueProductCodes = [...new Set(productUoMConversions.map(pc => pc.productCode))];
   const uniqueFromUoMNames = [...new Set(productUoMConversions.map(pc => pc.fromUoMName))];
   const uniqueToUoMNames = [...new Set(productUoMConversions.map(pc => pc.toUoMName))];
 
@@ -58,10 +58,10 @@ const ListProductUoMConversion: React.FC<ListProductUoMConversionProps> = React.
     {
       header: ({ column }) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontWeight: 600 }}>Product ID</span>
+          <span style={{ fontWeight: 600 }}>Product Code</span>
           <select
-            value={(column.getFilterValue() as number) || ''}
-            onChange={e => column.setFilterValue(e.target.value ? Number(e.target.value) : '')}
+            value={(column.getFilterValue() as string) || ''}
+            onChange={e => column.setFilterValue(e.target.value)}
             style={{
               padding: '8px',
               borderRadius: '6px',
@@ -72,13 +72,13 @@ const ListProductUoMConversion: React.FC<ListProductUoMConversionProps> = React.
             }}
           >
             <option value="">All</option>
-            {uniqueProductIDs.map(id => (
-              <option key={id} value={id}>{id}</option>
+            {uniqueProductCodes.map(code => (
+              <option key={code} value={code}>{code}</option>
             ))}
           </select>
         </div>
       ),
-      accessorKey: 'productID',
+      accessorKey: 'productCode',
       filterFn: 'equals',
     },
     {
@@ -216,7 +216,7 @@ const ListProductUoMConversion: React.FC<ListProductUoMConversionProps> = React.
         <div>
           <div>Bạn có chắc chắn muốn xóa:</div>
           <div style={{ fontWeight: 600, marginTop: 4 }}>
-            {record.productUoMConversionCode} - Product ID: {record.productID}
+            {record.productUoMConversionCode} - Product Code: {record.productCode}
           </div>
         </div>
       ),

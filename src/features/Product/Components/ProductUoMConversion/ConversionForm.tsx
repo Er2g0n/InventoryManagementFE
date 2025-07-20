@@ -8,7 +8,7 @@ import { useProductUoMConversion } from "@features/Product/store/ProductUoMConve
 import { productUoMConversionSchema } from "@features/Product/schemas/ProductUoMConversionSchema";
 
 type FormValues = {
-    productID: number;
+    productCode: string;
     fromUoMID: number;
     toUoMID: number;
     conversionRate: number;
@@ -34,13 +34,14 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
 
     const form = useForm({
         defaultValues: {
-            productID: isEditing && currentProductUoMConversion ? currentProductUoMConversion.productID : 0,
+            productCode: isEditing && currentProductUoMConversion ? currentProductUoMConversion.productCode : "",
             fromUoMID: isEditing && currentProductUoMConversion ? currentProductUoMConversion.fromUoMID : 0,
             toUoMID: isEditing && currentProductUoMConversion ? currentProductUoMConversion.toUoMID : 0,
             conversionRate: isEditing && currentProductUoMConversion ? currentProductUoMConversion.conversionRate : 0,
         },
         validators: {
             onBlur: productUoMConversionSchema,
+            onChange: productUoMConversionSchema,
         },
         onSubmit: async ({ value }) => {
             await onSubmit(value);
@@ -55,7 +56,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
     // Cập nhật selectedProduct khi currentProductUoMConversion thay đổi (chế độ edit)
     useEffect(() => {
         if (isEditing && currentProductUoMConversion) {
-            const product = products.find((p) => p.id === currentProductUoMConversion.productID) || null;
+            const product = products.find((p) => p.productCode === currentProductUoMConversion.productCode) || null;
             setSelectedProduct(product);
         } else {
             setSelectedProduct(null);
@@ -64,14 +65,14 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
 
     // Đồng bộ selectedProduct với productID từ form
     useEffect(() => {
-        const productId = form.getFieldValue("productID");
-        if (productId) {
-            const product = products.find((p) => p.id === productId) || null;
+        const productCode = form.getFieldValue("productCode");
+        if (productCode) {
+            const product = products.find((p) => p.productCode === productCode) || null;
             setSelectedProduct(product);
         } else {
             setSelectedProduct(null);
         }
-    }, [form.getFieldValue("productID"), products]);
+    }, [form.getFieldValue("productCode"), products]);
 
     const handleCancel = useCallback(() => {
         setIsModalOpen(false);
@@ -85,7 +86,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                 const productUoMConversion: ProductUoMConversion = {
                     id: isEditing && currentProductUoMConversion ? currentProductUoMConversion.id : 0,
                     productUoMConversionCode: isEditing && currentProductUoMConversion ? currentProductUoMConversion.productUoMConversionCode : "",
-                    productID: values.productID,
+                    productCode: values.productCode,
                     fromUoMID: values.fromUoMID,
                     toUoMID: values.toUoMID,
                     conversionRate: values.conversionRate,
@@ -101,6 +102,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                     return;
                 }
                 message.success("Product UoM conversion saved successfully");
+                form.reset();
             } catch (error) {
                 message.error("Error saving product UoM conversion");
             } finally {
@@ -110,10 +112,10 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
         [isEditing, currentProductUoMConversion, saveConversion, handleCancel]
     );
 
-    const handleProductChange = (value: number) => {
-        const product = products.find((p) => p.id === value) || null;
+    const handleProductChange = (value: string) => {
+        const product = products.find((p) => p.productCode === value) || null;
         setSelectedProduct(product);
-        form.setFieldValue("productID", value);
+        form.setFieldValue("productCode", value);
     };
 
     return (
@@ -134,7 +136,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                         }}
                     >
                         <form.Field
-                            name="productID"
+                            name="productCode"
                             validators={{
                                 onBlur: (value) => {
                                     if (!value.value) {
@@ -143,7 +145,13 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                     return undefined;
                                 },
                             }}
-                            children={(field) => (
+                            children={(field) => {
+                        const errs = field.state.meta.errors;
+                        if (errs && errs.length > 0) {
+                            console.log("Errors in field:", errs);
+                        }
+                        return (
+                                
                                 <Form.Item
                                     label="Product"
                                     validateStatus={field.state.meta.errors.length > 0 ? "error" : ""}
@@ -155,12 +163,13 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                         placeholder="Select Product"
                                         loading={productLoading}
                                         options={products.map((p) => ({
-                                            value: p.id,
+                                            value: p.productCode,
                                             label: p.productName,
                                         }))}
                                     />
+                                    {/* <FieldInfo field={field} /> */}
                                 </Form.Item>
-                            )}
+                            )}}
                         />
                         <form.Field
                             name="fromUoMID"
@@ -188,6 +197,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                             label: uom.uoMName,
                                         }))}
                                     />
+                                    {/* <FieldInfo field={field} /> */}
                                 </Form.Item>
                             )}
                         />
@@ -217,6 +227,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                             label: uom.uoMName,
                                         }))}
                                     />
+                                    {/* <FieldInfo field={field} /> */}
                                 </Form.Item>
                             )}
                         />
@@ -224,7 +235,7 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                             name="conversionRate"
                             validators={{
                                 onBlur: (value) => {
-                                    if (!value.value || value.value <= 0) {
+                                    if (value.value as number <= 0) {
                                         return [{ message: "Conversion rate must be a positive number" }];
                                     }
                                     return undefined;
@@ -238,12 +249,13 @@ const FormProductUoMConversion: React.FC<FormProductUoMConversionProps> = ({
                                 >
                                     <InputNumber
                                         value={field.state.value}
-                                        onChange={(value) => field.handleChange(value || 0)}
+                                        onChange={(value) => field.handleChange(value!)}
                                         placeholder="Enter Conversion Rate"
                                         style={{ width: "100%" }}
                                         min={0}
                                         step={0.1}
                                     />
+                                    {/* <FieldInfo field={field} /> */}
                                 </Form.Item>
                             )}
                         />

@@ -19,7 +19,7 @@ export interface ProductImages extends BaseEntity {
 
 export interface ProductUoMConversion extends BaseEntity {
   productUoMConversionCode: string;
-  productID: number;
+  productCode: string;
   fromUoMID: number;
   fromUoMName?: string;
   toUoMID: number;
