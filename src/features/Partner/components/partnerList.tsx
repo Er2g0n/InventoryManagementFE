@@ -1,11 +1,11 @@
 import { BusinessPartner } from "@/types/BusinessPartner";
-import useFetchData from "../hooks/useFectchData";
 import { getAll } from "../services/partnerServices";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Button, message, Modal, Spin } from "antd";
 
 import PartnerForm from "./partnerForm";
 import PartnerTable, { PartnerTableHandle } from "./PartnerTableData";
+import useFetchData from "@features/StatusMaster/hooks/useFetchData";
 
 export default function PartnerList () {
   const { data: partners, loading, hasError, fetchData } = useFetchData<BusinessPartner[]>([]);

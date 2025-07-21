@@ -11,7 +11,7 @@ import {
   DeleteFilled
 } from "@ant-design/icons";
 import confirm from "antd/es/modal/confirm";
-import useFetchData from "../hooks/useFectchData";
+import useFetchData from "@features/StatusMaster/hooks/useFetchData";
 
 export type IPartnerFormProps = RowProps & React.RefAttributes<HTMLDivElement> & {
   readonly type?: "create" | "update",

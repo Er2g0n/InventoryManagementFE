@@ -5,7 +5,6 @@ import MainPage from "./Pages/Main";
 const WarehouseDashboardPage = lazy(() => import("./Pages/WarehouseDashboardPage"));
 const WarehousePage = lazy(() => import("./Pages/[id]/WarehousePage"));
 const IssuePage = lazy(() => import("./Pages/[id]/IssuePage"));
-const ReceiptPage = lazy(() => import("./Pages/[id]/ReceiptPage"));
 const StockPage = lazy(() => import("./Pages/[id]/StockPage"));
 const MainIdPage = lazy(() => import("./Pages/[id]/MainId"));
 const GoodsReceiptNotePage = lazy(() => import("./Pages/[id]/GoodsReceiptNotePage"));
@@ -33,6 +32,7 @@ const routes: RouteObject[] = [
         path: "WarehouseDashboard",
         element: <WarehouseDashboardPage />
       },
+      
       {
         path: ":id",
         children: [
@@ -55,11 +55,8 @@ const routes: RouteObject[] = [
           {
             path: "Issue",
             element: <IssuePage />
-          },
-          {
-            path: "Receipt",
-            element: <ReceiptPage />
           }
+
         ]
       }
 
