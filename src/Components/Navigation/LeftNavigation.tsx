@@ -75,11 +75,9 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           <SubMenu
             icon={<ShoppingOutlined />}
             title="Master Data"
-            key={"/product"}
+            key={"/masterData"}
           >
-            <MenuItem key={"/product"}>
-              <Link to={"/product"}>Product</Link>
-            </MenuItem>
+           
             <MenuItem key={"/product/category"}>
               <Link to={"/product/category"}>Category</Link>
             </MenuItem>
@@ -92,6 +90,7 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             <MenuItem key={"/product/material"}>
               <Link to={"/product/material"}>Material</Link>
             </MenuItem>
+           
 
             <MenuItem key={"/product/brand"}>
               <Link to={"/product/brand"}>Brand</Link>
@@ -102,11 +101,26 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             <Menu.Item key={"/product/vehicleModel"}>
               <Link to={"/product/vehicleModel"}>Vehicle Model</Link>
             </Menu.Item>
-            <Menu.Item key={"/product/unitOfMeasure"}>
-              <Link to={"/product/unitOfMeasure"}>Unit Of Measure</Link>
+            <Menu.Item key={"/product/UoM"}>
+              <Link to={"/product/UoM"}>Unit Of Measure</Link>
             </Menu.Item>
 
           </SubMenu>
+           <SubMenu
+              key={"/product"}
+              title="Product"
+              icon={<ShoppingOutlined />}
+            >
+              <MenuItem key={"/product"}>
+                <Link to={"/product"}>List Products</Link>
+              </MenuItem>
+              <MenuItem key={"/product/add"}>
+                <Link to={"/product/add"}>Add Product</Link>
+              </MenuItem>
+              <MenuItem key={"/product/conversion"}>
+              <Link to={"/product/conversion"}>Conversion</Link>
+            </MenuItem>
+            </SubMenu>
           <SubMenu
             icon={<ShoppingOutlined />}
             title="Inventory Management"

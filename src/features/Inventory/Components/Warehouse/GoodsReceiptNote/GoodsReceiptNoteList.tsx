@@ -1,9 +1,10 @@
 import { GoodsReceiptNote } from "@/types/WarehouseManagement/GoodsReceiptNote";
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space } from "antd";
+import { Button, Input, Modal, notification, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useGoodsReceiptNote } from "@features/Inventory/Store/GoodsReceiptNote/hooks/useGoodsReceiptNote";
+import dayjs from "dayjs";
 
 
 interface ListGoodsReceiptNoteProps {
@@ -12,28 +13,45 @@ interface ListGoodsReceiptNoteProps {
 }
 
 const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ onEdit, refreshTrigger }) => {
-    const { GoodsReceiptNotes, loading, error,loadGoodsReceiptNote,deleteGoodsReceiptNote  } = useGoodsReceiptNote();
+    const { GoodsReceiptNotes, loading, error, loadGoodsReceiptNote, deleteGoodsReceiptNote } = useGoodsReceiptNote();
     const [globalFilter, setGlobalFilter] = useState('');
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(10);
+    const [isFunction, setIsFunction] = useState(false);
+    const [currentPageIndex, setcurrentPageIndex] = useState(0);
 
     useEffect(() => {
         loadGoodsReceiptNote();
 
     }, [refreshTrigger])
 
-    const handleDelete = (GoodsReceiptNoteCode: string) => {
-        deleteGoodsReceiptNote(GoodsReceiptNoteCode);
+
+    const handleDelete = async (GoodsReceiptNoteCode: string) => {
+
+        const response = await deleteGoodsReceiptNote(GoodsReceiptNoteCode);
+
+        if (response.success === true) {
+            notification.success({
+                message: "Success",
+                description: `Xoá phiếu ${GoodsReceiptNoteCode} thành công`,
+            });
+            setIsFunction(true);
+            setcurrentPageIndex(pageIndex);
+            loadGoodsReceiptNote();
+        } else {
+            notification.error({
+                message: "Error",
+                description: `Xoá phiếu ${GoodsReceiptNoteCode} không thành công`,
+            });
+        }
     };
 
     const uniqueGoodsReceiptNotesCodes = [...new Set(GoodsReceiptNotes.map(grn => grn.grnCode))];
-    const uniqueGoodsReceiptNotesNote = [...new Set(GoodsReceiptNotes.map(grn => grn.notes))];
-
     const columns: ColumnDef<GoodsReceiptNote>[] = [
         {
             header: ({ column }) => (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <span style={{ fontWeight: 600 }}>TransactionType Code</span>
+                    <span style={{ fontWeight: 600 }}>GoodsReceiptNote Code</span>
                     <select
                         value={(column.getFilterValue() as string) || ''}
                         onChange={e => column.setFilterValue(e.target.value)}
@@ -57,30 +75,12 @@ const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ 
             filterFn: 'equals',
         },
         {
-            header: ({ column }) => (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <span style={{ fontWeight: 600 }}>Transaction Name</span>
-                    <select
-                        value={(column.getFilterValue() as string) || ''}
-                        onChange={e => column.setFilterValue(e.target.value)}
-                        style={{
-                            padding: '8px',
-                            borderRadius: '6px',
-                            border: '1px solid #d9d9d9',
-                            width: '100%',
-                            backgroundColor: '#fff',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <option value="">All</option>
-                        {uniqueGoodsReceiptNotesNote.map(name => (
-                            <option key={name} value={name}>{name}</option>
-                        ))}
-                    </select>
-                </div>
-            ),
-            accessorKey: 'notes',
-            filterFn: 'includesString',
+            header: 'Transaction Type ID',
+            accessorKey: 'transactionTypeID',
+            cell: ({ getValue }) => {
+                const value = getValue() as number | null;
+                return value ? value : 0;
+            },
         },
         {
             header: 'Ware House',
@@ -99,22 +99,14 @@ const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ 
             },
         },
         {
-            header: 'Transaction Type',
-            accessorKey: 'transactionTypeID',
-            cell: ({ getValue }) => {
-                const value = getValue() as number | null;
-                return value ? value : 0;
-            },
-        },
-        {
             header: 'Receipt Date',
             accessorKey: 'receiptDate',
             cell: ({ getValue }) => {
                 const value = getValue() as number | null;
-                return value ? value : 0;
+                return value ? dayjs(value).format('DD/MM/YYYY') : 0;
             },
         },
-         {
+        {
             header: 'Note',
             accessorKey: 'notes',
             cell: ({ getValue }) => {
@@ -132,7 +124,7 @@ const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ 
             accessorKey: 'createdDate',
             cell: ({ getValue }) => {
                 const value = getValue() as string | null;
-                return value ? new Date(value).toLocaleString() : 'N/A';
+                return value ? dayjs(value).format('DD/MM/YYYY') : '';
             },
         },
         {
@@ -145,7 +137,7 @@ const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ 
             accessorKey: 'updatedDate',
             cell: ({ getValue }) => {
                 const value = getValue() as string | null;
-                return value ? new Date(value).toLocaleString() : 'N/A';
+                return value ? dayjs(value).format('DD/MM/YYYY') : '';
             },
         },
         {
@@ -188,8 +180,15 @@ const ListGoodsReceiptNote: React.FC<ListGoodsReceiptNoteProps> = React.memo(({ 
         getPaginationRowModel: getPaginationRowModel(),
         onPaginationChange: updater => {
             const newState = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater;
-            setPageIndex(newState.pageIndex);
-            setPageSize(newState.pageSize);
+            if (isFunction) {
+                setPageIndex(currentPageIndex);
+                setPageSize(newState.pageSize);
+                setIsFunction(false);
+            }
+            else {
+                setPageIndex(newState.pageIndex);
+                setPageSize(newState.pageSize);
+            }
         },
     });
 

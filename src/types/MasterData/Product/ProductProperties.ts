@@ -17,6 +17,7 @@ export interface Dimension extends BaseEntity {
   uoMHeightCode: string;
   uoMLengthCode: string;
   uoMWidthCode: string;
+  productCode?: string;
 }
 
 export interface UnitOfMeasure extends BaseEntity {
