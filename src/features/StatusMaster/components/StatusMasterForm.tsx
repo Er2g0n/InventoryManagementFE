@@ -34,6 +34,7 @@ const StatusMasterForm = forwardRef<any, IStatusMasterFormProps>(
       onSubmit: async (e) => {
         try {
           await saveStatusMaster(e.value);
+
         } catch (error) {
           if (error instanceof Error && "issues" in error) {
             const zodError = error as unknown as z.ZodError;
@@ -100,7 +101,6 @@ const StatusMasterForm = forwardRef<any, IStatusMasterFormProps>(
           dataSave.id = defaultValue2.id;
           dataSave.createdDate = defaultValue2.createdDate;
           dataSave.createdBy = defaultValue2.createdBy;
-          dataSave.rowPointer = defaultValue2.rowPointer;
           dataSave.statusCode = defaultValue2.statusCode;
         }
       }
