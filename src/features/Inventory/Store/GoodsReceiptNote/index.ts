@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DeleteGoodsReceiptNoteFailure, DeleteGoodsReceiptNoteSuccess, FetchGoodsReceiptNoteFailure, FetchGoodsReceiptNoteSucess, GoodsReceiptNoteActionTypes, GoodsReceiptNoteState, SaveGoodsReceiptNoteFailure, SaveGoodsReceiptNoteSuccess } from "./types";
+import { DeleteGoodsReceiptNoteFailure, DeleteGoodsReceiptNoteSuccess, FetchGoodsReceiptNoteFailure, FetchGoodsReceiptNoteLineFailure, FetchGoodsReceiptNoteLineSucess, FetchGoodsReceiptNoteSucess, GoodsReceiptNote_Line_ActionTypes, GoodsReceiptNoteActionTypes, GoodsReceiptNoteState, SaveGoodsReceiptNoteFailure, SaveGoodsReceiptNoteSuccess } from "./types";
 
 const initialState: GoodsReceiptNoteState = {
     GoodsReceiptNotes: [],
+    GoodsReceiptNoteLine: [],
     loading: false,
     error: null,
 }
@@ -13,7 +14,7 @@ const GoodsReceiptNoteSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        // Get GoodsReceiptNote
+            // Get GoodsReceiptNote
             .addCase(GoodsReceiptNoteActionTypes.FETCH_GOODS_RECEIPT_NOTE_REQUEST, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -23,11 +24,23 @@ const GoodsReceiptNoteSlice = createSlice({
                 state.GoodsReceiptNotes = action.payload;
             })
 
-            .addCase(GoodsReceiptNoteActionTypes.FETCH_GOODS_RECEIPT_NOTE_FAILURE,(state,action: FetchGoodsReceiptNoteFailure)=>{
-            state.loading = false;
-            state.error = action.payload;
+            .addCase(GoodsReceiptNoteActionTypes.FETCH_GOODS_RECEIPT_NOTE_FAILURE, (state, action: FetchGoodsReceiptNoteFailure) => {
+                state.loading = false;
+                state.error = action.payload;
             })
-           // Save transactionType
+            .addCase(GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_REQUEST, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_SUCCESS, (state, action: FetchGoodsReceiptNoteLineSucess) => {
+                state.loading = false;
+                state.GoodsReceiptNoteLine = action.payload;
+            })
+            .addCase(GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_FAILURE, (state, action: FetchGoodsReceiptNoteLineFailure) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Save transactionType
             .addCase(GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_REQUEST, (state) => {
                 state.loading = true;
                 state.error = null;

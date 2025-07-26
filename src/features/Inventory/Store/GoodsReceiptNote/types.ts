@@ -1,7 +1,8 @@
-import { GoodsReceiptNote } from "@/types/WarehouseManagement/GoodsReceiptNote";
+import { GoodsReceiptNote, GoodsReceiptNoteLine } from "@/types/WarehouseManagement/GoodsReceiptNote";
 
 export interface GoodsReceiptNoteState {
     GoodsReceiptNotes: GoodsReceiptNote[];
+    GoodsReceiptNoteLine: GoodsReceiptNoteLine[];
     loading: boolean;
     error: string | null;
 }
@@ -71,3 +72,76 @@ export type GoodsReceiptNoteAction =
 
     | DeleteGoodsReceiptNoteSuccess
     | DeleteGoodsReceiptNoteFailure
+
+    
+export interface GoodsReceiptNoteLineState {
+    GoodsReceiptNoteLines: GoodsReceiptNoteLine[];
+    loading: boolean;
+    error: string | null;
+}
+
+export enum GoodsReceiptNote_Line_ActionTypes {
+    //Get All GoodsReceiptNote
+    FETCH_GOODS_RECEIPT_NOTE_LINE_REQUEST = 'GoodsReceiptNoteLine/FETCH_GOODS_RECEIPT_NOTE_LINE_REQUEST',
+    FETCH_GOODS_RECEIPT_NOTE_LINE_SUCCESS = 'GoodsReceiptNoteLine/FETCH_GOODS_RECEIPT_NOTE_LINE_SUCCESS',
+    FETCH_GOODS_RECEIPT_NOTE_LINE_FAILURE = 'GoodsReceiptNoteLine/FETCH_GOODS_RECEIPT_NOTE_LINE_FAILURE',
+
+    //save: create or update
+    SAVE_GOODS_RECEIPT_NOTE_LINE_REQUEST = 'GoodsReceiptNoteLine/SAVE_GOODS_RECEIPT_NOTE_LINE_REQUEST',
+    SAVE_GOODS_RECEIPT_NOTE_LINE_SUCCESS = 'GoodsReceiptNoteLine/SAVE_GOODS_RECEIPT_NOTE_LINE_SUCCESS',
+    SAVE_GOODS_RECEIPT_NOTE_LINE_FAILURE = 'GoodsReceiptNoteLine/SAVE_GOODS_RECEIPT_NOTE_LINE_FAILURE',
+
+    //delete
+    DELETE_GOODS_RECEIPT_NOTE_LINE_SUCCESS = 'GoodsReceiptNoteLine/DELETE_GOODS_RECEIPT_NOTE_LINE_SUCCESS',
+    DELETE_GOODS_RECEIPT_NOTE_LINE_FAILURE = 'GoodsReceiptNoteLine/DELETE_GOODS_RECEIPT_NOTE_LINE_FAILURE',
+}
+
+export interface FetchGoodsReceiptNoteLineRequest {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_REQUEST
+}
+
+export interface FetchGoodsReceiptNoteLineSucess {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_SUCCESS;
+    payload: GoodsReceiptNoteLine[];
+}
+
+export interface FetchGoodsReceiptNoteLineFailure {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_FAILURE;
+    payload: string;
+}
+
+export interface SaveGoodsReceiptNoteLineRequest {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.SAVE_GOODS_RECEIPT_NOTE_LINE_REQUEST;
+}
+
+export interface SaveGoodsReceiptNoteLineSuccess {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.SAVE_GOODS_RECEIPT_NOTE_LINE_SUCCESS,
+    payload: GoodsReceiptNote;
+}
+
+export interface SaveGoodsReceiptNoteLineFailure {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.SAVE_GOODS_RECEIPT_NOTE_LINE_FAILURE,
+    payload: string;
+}
+
+export interface DeleteGoodsReceiptNoteLineSuccess {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.DELETE_GOODS_RECEIPT_NOTE_LINE_SUCCESS,
+    payload: string;
+}
+
+export interface DeleteGoodsReceiptNoteLineFailure {
+    type: typeof GoodsReceiptNote_Line_ActionTypes.DELETE_GOODS_RECEIPT_NOTE_LINE_FAILURE,
+    payload: string;
+}
+
+export type GoodsReceiptNoteLineAction =
+    | FetchGoodsReceiptNoteLineRequest
+    | FetchGoodsReceiptNoteLineSucess
+    | FetchGoodsReceiptNoteLineFailure
+
+    | SaveGoodsReceiptNoteLineRequest
+    | SaveGoodsReceiptNoteLineSuccess
+    | SaveGoodsReceiptNoteLineFailure
+
+    | DeleteGoodsReceiptNoteLineSuccess
+    | DeleteGoodsReceiptNoteLineFailure

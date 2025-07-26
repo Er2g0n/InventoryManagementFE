@@ -199,13 +199,13 @@ const FormGoodsReceiptNote: React.FC<FormGoodsReceiptNoteProps> = ({
                                                 console.log(date)
                                                 field.handleChange(dateString as string);
                                             } else {
-                                                field.handleChange(""); // Đặt giá trị rỗng nếu không có dateString
+                                                field.handleChange("");
                                             }
                                         }}
                                         onBlur={field.handleBlur}
                                         placeholder="Select Receipt Date"
                                         style={{ width: "100%", marginTop: 8 }}
-                                        format="DD-MM-YYYY" // Đổi thành DD-MM-YYYY theo yêu cầu
+                                        format="DD-MM-YYYY" 
                                     />
                                     <FieldInfo field={field} />
                                 </div>

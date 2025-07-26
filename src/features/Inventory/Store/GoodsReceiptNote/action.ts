@@ -1,8 +1,8 @@
-import { GoodsReceiptNote } from "@/types/WarehouseManagement/GoodsReceiptNote";
-import { DeleteGoodsReceiptNoteFailure, DeleteGoodsReceiptNoteSuccess, FetchGoodsReceiptNoteFailure, FetchGoodsReceiptNoteRequest, FetchGoodsReceiptNoteSucess, GoodsReceiptNoteAction, GoodsReceiptNoteActionTypes, SaveGoodsReceiptNoteFailure, SaveGoodsReceiptNoteRequest, SaveGoodsReceiptNoteSuccess } from "./types";
+import { GoodsReceiptNote, GoodsReceiptNoteLine } from "@/types/WarehouseManagement/GoodsReceiptNote";
+import { DeleteGoodsReceiptNoteFailure, DeleteGoodsReceiptNoteSuccess, FetchGoodsReceiptNoteFailure, FetchGoodsReceiptNoteLineFailure, FetchGoodsReceiptNoteLineRequest, FetchGoodsReceiptNoteLineSucess, FetchGoodsReceiptNoteRequest, FetchGoodsReceiptNoteSucess, GoodsReceiptNote_Line_ActionTypes, GoodsReceiptNoteAction, GoodsReceiptNoteActionTypes, GoodsReceiptNoteLineAction, SaveGoodsReceiptNoteFailure, SaveGoodsReceiptNoteRequest, SaveGoodsReceiptNoteSuccess } from "./types";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "@/store/store";
-import { GoodsReceiptNote_GetAll, GoodsReceiptNoteCode_DeleteHeaderAndDetail, GoodsReceiptNoteCode_Save } from "@features/Inventory/Services/ReceiptService";
+import { GoodsReceiptNote_GetAll, GoodsReceiptNoteCode_DeleteHeaderAndDetail, GoodsReceiptNoteCode_Save, GoodsReceiptNoteLine_Get_ByGRNCode } from "@features/Inventory/Services/ReceiptService";
 
 export const fetchGoodsReceiptNoteRequest = (): FetchGoodsReceiptNoteRequest => ({
     type: GoodsReceiptNoteActionTypes.FETCH_GOODS_RECEIPT_NOTE_REQUEST
@@ -22,6 +22,23 @@ export const fetchGoodsReceiptNoteFailure = (
     payload: error
 })
 
+export const fetchGoodsReceiptNoteLineRequest = (): FetchGoodsReceiptNoteLineRequest => ({
+    type: GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_REQUEST
+});
+
+export const fetchGoodsReceiptNoteLineSuccess = (
+    GoodsReceiptNoteLine: GoodsReceiptNoteLine[]
+): FetchGoodsReceiptNoteLineSucess => ({
+    type: GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_SUCCESS,
+    payload: GoodsReceiptNoteLine,
+})
+
+export const fetchGoodsReceiptNoteLineFailure = (
+    error: string
+): FetchGoodsReceiptNoteLineFailure => ({
+    type: GoodsReceiptNote_Line_ActionTypes.FETCH_GOODS_RECEIPT_NOTE_LINE_FAILURE,
+    payload: error
+})
 
 export const saveGoodsReceiptNoteRequest = (): SaveGoodsReceiptNoteRequest => ({
     type: GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_REQUEST,
@@ -75,6 +92,25 @@ GoodsReceiptNoteAction
     }
 }
 
+export const fetchGoodsReceiptNoteLine = (GoodsReceiptNoteCode: string): ThunkAction<
+void,
+RootState,
+unknown,
+GoodsReceiptNoteLineAction
+> => async (dispath) =>{
+    dispath(fetchGoodsReceiptNoteLineRequest());
+    try{
+        const response = await GoodsReceiptNoteLine_Get_ByGRNCode(GoodsReceiptNoteCode);
+        if(response.code === 'Success' && response.data){
+            return dispath(fetchGoodsReceiptNoteLineSuccess(response.data.filter(x=>x.refGRNCode)));
+        }
+        else{
+            return dispath(fetchGoodsReceiptNoteLineFailure(response.message || 'Failed to get data'))
+        }
+    }catch(error){
+       return dispath(fetchGoodsReceiptNoteLineFailure(error instanceof Error? error.message : "Failed to fetch"))
+    }
+}
 
 export const addOrUpdateGoodsReceiptNote = (
   GoodsReceiptNote: GoodsReceiptNote,
