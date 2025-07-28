@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Card, Row, Col } from "antd";
-import { useWarehouses } from "@features/Inventory/Store/Warehouse/hooks/useWarehouse";
 import { Warehouse } from "@/types/WarehouseManagement/Warehouse";
+import { useWarehouses } from "@features/WarehouseManagement/store/Warehouse/hooks/useWarehouse";
+import { Row, Col, Card } from "antd";
+import React, { useEffect } from "react";
 
 interface ListWarehouseProps {
   onEdit: (warehouse: Warehouse) => void;
 }
 
-const InventoryWarehouseList: React.FC<ListWarehouseProps> = React.memo(({ onEdit }) => {
+const WarehouseList: React.FC<ListWarehouseProps> = React.memo(({ onEdit }) => {
   const { loading, error, loadWarehouses, warehouses } = useWarehouses();
 
   useEffect(() => {
@@ -42,4 +42,4 @@ const InventoryWarehouseList: React.FC<ListWarehouseProps> = React.memo(({ onEdi
   );
 });
 
-export default InventoryWarehouseList;
+export default WarehouseList;

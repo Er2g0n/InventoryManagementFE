@@ -1,14 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  WarehouseActionTypes,
-  WarehouseState,
-  FetchWarehousesSuccess,
-  FetchWarehousesFailure,
-  SaveWarehouseSuccess,
-  SaveWarehouseFailure,
-  DeleteWarehouseSuccess,
-  DeleteWarehouseFailure
-} from "./types";
+import { WarehouseState, WarehouseActionTypes, FetchWarehousesSuccess, FetchWarehousesFailure, SaveWarehouseSuccess, SaveWarehouseFailure, DeleteWarehouseSuccess, DeleteWarehouseFailure } from "./types";
 
 const initialState: WarehouseState = {
   warehouses: [],

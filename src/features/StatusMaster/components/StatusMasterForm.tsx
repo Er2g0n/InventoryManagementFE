@@ -61,8 +61,9 @@ const StatusMasterForm = forwardRef<any, IStatusMasterFormProps>(
         const result = await fetchDataDelete(promiseDelete);
 
         afterDelete(!!result);
+        
       } catch (error) {
-        console.error(error, "delete error");
+        console.error("Delete error:", error);
         afterDelete(false);
       }
     }

@@ -1,8 +1,8 @@
 import { AppDispatch, RootState } from "@/store/store";
-import { addOrUpdateWarehouse, fetchWarehouses, removeWarehouse } from "../action";
-import { useDispatch, useSelector } from "react-redux";
-import { WarehouseActionTypes } from "../types"; // Giả định đã có WarehouseActionTypes
 import { Warehouse } from "@/types/WarehouseManagement/Warehouse";
+import { useDispatch, useSelector } from "react-redux";
+import { WarehouseActionTypes } from "../types";
+import { addOrUpdateWarehouse, fetchWarehouses, removeWarehouse } from "@features/WarehouseManagement/store/Warehouse/action";
 
 export const useWarehouses = () => {
   const dispatch = useDispatch<AppDispatch>();

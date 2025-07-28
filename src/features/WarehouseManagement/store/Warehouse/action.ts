@@ -1,20 +1,9 @@
-import {
-  WarehouseAction,
-  WarehouseActionTypes,
-  DeleteWarehouseFailure,
-  DeleteWarehouseSuccess,
-  FetchWarehousesFailure,
-  FetchWarehousesRequest,
-  FetchWarehousesSuccess,
-  SaveWarehouseFailure,
-  SaveWarehouseRequest,
-  SaveWarehouseSuccess
-} from "./types";
-import { ThunkAction } from "redux-thunk";
 import { RootState } from "@/store/store";
 import { ResultService } from "@/types/Base/ResultService";
 import { Warehouse } from "@/types/WarehouseManagement/Warehouse";
-import { deleteWarehouse, getAllWarehouses, saveWarehouse } from "@features/Inventory/Services/WarehouseService";
+import { ThunkAction } from "redux-thunk";
+import { FetchWarehousesRequest, WarehouseActionTypes, FetchWarehousesSuccess, FetchWarehousesFailure, SaveWarehouseRequest, SaveWarehouseSuccess, SaveWarehouseFailure, DeleteWarehouseSuccess, DeleteWarehouseFailure, WarehouseAction } from "./types";
+import { deleteWarehouse, getAllWarehouses, saveWarehouse } from "@features/WarehouseManagement/services/WarehouseService";
 
 export const fetchWarehousesRequest = (): FetchWarehousesRequest => ({
   type: WarehouseActionTypes.FETCH_WAREHOUSES_REQUEST

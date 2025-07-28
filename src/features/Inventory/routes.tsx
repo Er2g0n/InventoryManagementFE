@@ -2,8 +2,6 @@ import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
 import MainPage from "./Pages/Main";
 
-const WarehouseDashboardPage = lazy(() => import("./Pages/WarehouseDashboardPage"));
-const WarehousePage = lazy(() => import("./Pages/[id]/WarehousePage"));
 const IssuePage = lazy(() => import("./Pages/[id]/IssuePage"));
 const StockPage = lazy(() => import("./Pages/[id]/StockPage"));
 const MainIdPage = lazy(() => import("./Pages/[id]/MainId"));
@@ -28,11 +26,7 @@ const routes: RouteObject[] = [
         path: "GoodsReceiptNote",
         element: <GoodsReceiptNotePage />
       },
-      {
-        path: "WarehouseDashboard",
-        element: <WarehouseDashboardPage />
-      },
-      
+
       {
         path: ":id",
         children: [
@@ -42,11 +36,7 @@ const routes: RouteObject[] = [
 
           },
 
-          {
-            path: "Warehouse",
-            element: <WarehousePage />
-
-          },
+  
           {
             path: "Stock",
             element: <StockPage />

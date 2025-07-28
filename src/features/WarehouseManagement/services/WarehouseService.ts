@@ -22,7 +22,7 @@ export async function saveWarehouse (
 ): Promise<ResultService<Warehouse>> {
   const response = await fetchClient<Warehouse, Warehouse>(
     httpMethod.POST,
-    "Warehouse/SaveByDapper",
+    "Warehouse/Save",
     warehouse
   );
 

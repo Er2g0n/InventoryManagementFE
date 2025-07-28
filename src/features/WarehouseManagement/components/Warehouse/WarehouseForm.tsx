@@ -1,10 +1,9 @@
-import { Button, Modal, Input, message, Switch, InputNumber } from "antd";
-import { useCallback, useEffect } from "react";
-import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { Warehouse } from "@/types/WarehouseManagement/Warehouse";
-import { useWarehouses } from "@features/Inventory/Store/Warehouse/hooks/useWarehouse";
-import { warehouseSchema } from "@features/Inventory/Schemas/InventoryWarehouseSchema";
-import * as z from "zod";
+import { warehouseSchema } from "@features/WarehouseManagement/schemas/WarehouseSchema";
+import { useWarehouses } from "@features/WarehouseManagement/store/Warehouse/hooks/useWarehouse";
+import { useForm, AnyFieldApi } from "@tanstack/react-form";
+import { message, Modal, Input, Switch, InputNumber, Button } from "antd";
+import { useEffect, useCallback } from "react";
 
 type FormValues = {
   warehouseName: string;
@@ -20,7 +19,7 @@ interface InventoryWarehouseFormProps {
   currentWarehouse: Warehouse | null;
 }
 
-const InventoryWarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
+const WarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
   isModalOpen,
   setIsModalOpen,
   isEditing,
@@ -36,17 +35,7 @@ const InventoryWarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
       binLocationCount: isEditing && currentWarehouse ? currentWarehouse.binLocationCount ?? 0 : 0
     },
     validators: {
-      onBlur: async (value) => {
-        try {
-          await warehouseSchema.parseAsync(value);
-          return undefined;
-        } catch (err) {
-          return (err as z.ZodError).issues.map(issue => ({
-            path: issue.path.join("."),
-            message: issue.message
-          }));
-        }
-      }
+      onBlur: warehouseSchema
     },
     onSubmit: async ({ value }) => {
       await onSubmit(value);
@@ -124,6 +113,7 @@ const InventoryWarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
       )}
       <form
         onSubmit={(event) => {
+   
           event.preventDefault();
           form.handleSubmit();
         }}
@@ -141,11 +131,7 @@ const InventoryWarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
             }
           },
           children: (field) => {
-            const errs = field.state.meta.errors;
 
-            if (errs && errs.length > 0) {
-              console.error("Errors in field:", errs);
-            }
             return (
               <div style={{ marginBottom: 16 }}>
                 <label>Warehouse Name</label>
@@ -163,14 +149,14 @@ const InventoryWarehouseForm: React.FC<InventoryWarehouseFormProps> = ({
         })}
         {form.Field({
           name: "address",
-          validators: {
-            onBlur: (value) => {
-              if (!value.value) {
-                return [{ message: "Address is required" }];
-              }
-              return undefined;
-            }
-          },
+          // validators: {
+          //   onBlur: (value) => {
+          //     if (!value.value) {
+          //       return [{ message: "Address is required" }];
+          //     }
+          //     return undefined;
+          //   }
+          // },
           children: (field) => {
             const errs = field.state.meta.errors;
 
@@ -243,4 +229,4 @@ function FieldInfo ({ field }: { field: AnyFieldApi }) {
   );
 }
 
-export default InventoryWarehouseForm;
+export default WarehouseForm;

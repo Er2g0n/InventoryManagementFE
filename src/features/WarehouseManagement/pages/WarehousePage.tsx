@@ -2,8 +2,9 @@ import { Button, Card, Col, ConfigProvider, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import { Warehouse } from "@/types/WarehouseManagement/Warehouse";
-import ListWarehouse from "../Components/Warehouse/InventoryWarehouseList";
-import FormProductWarehouse from "../Components/Warehouse/InventoryWarehouseForm";
+import WarehouseForm from "../components/Warehouse/WarehouseForm";
+import WarehouseList from "../components/Warehouse/WarehouseList";
+
 
 const WarehousePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,10 +42,10 @@ const WarehousePage: React.FC = () => {
           }
           variant="borderless"
         >
-          <ListWarehouse onEdit={handleEditWarehouse} />
+          <WarehouseList onEdit={handleEditWarehouse} />
         </Card>
       </Col>
-      <FormProductWarehouse
+      <WarehouseForm
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         isEditing={isEditing}

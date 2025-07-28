@@ -106,21 +106,21 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
             </Menu.Item>
 
           </SubMenu>
-           <SubMenu
-              key={"/product"}
-              title="Product"
-              icon={<ShoppingOutlined />}
-            >
-              <MenuItem key={"/product"}>
-                <Link to={"/product"}>List Products</Link>
-              </MenuItem>
-              <MenuItem key={"/product/add"}>
-                <Link to={"/product/add"}>Add Product</Link>
-              </MenuItem>
-              <MenuItem key={"/product/conversion"}>
+          <SubMenu
+            key={"/product"}
+            title="Product"
+            icon={<ShoppingOutlined />}
+          >
+            <MenuItem key={"/product"}>
+              <Link to={"/product"}>List Products</Link>
+            </MenuItem>
+            <MenuItem key={"/product/add"}>
+              <Link to={"/product/add"}>Add Product</Link>
+            </MenuItem>
+            <MenuItem key={"/product/conversion"}>
               <Link to={"/product/conversion"}>Conversion</Link>
             </MenuItem>
-            </SubMenu>
+          </SubMenu>
           <SubMenu
             icon={<ShoppingOutlined />}
             title="Inventory Management"
@@ -144,6 +144,39 @@ const LeftNavigation: React.FC<LeftNavigationProps> = React.memo(
           <MenuItem key={"/statusMaster"} icon={<ShoppingOutlined />}>
             <Link to={"/statusMaster"}>Status Master</Link>
           </MenuItem>
+          <SubMenu
+            icon={<ShoppingOutlined />}
+            title="Warehouse Management"
+            key={"/warehouseManagement"}
+          >
+            <MenuItem key={"/warehouseManagement/warehouse"}>
+              <Link to={"/warehouseManagement/warehouse"}>Warehouse Dashboard</Link>
+            </MenuItem>
+
+
+            <MenuItem key={"/warehouseManagement/storageBin"}>
+              <Link to={"/warehouseManagement/storageBin"}>Storage Bin</Link>
+            </MenuItem>
+          </SubMenu>
+          
+
+          <SubMenu
+            icon={<ShoppingOutlined />}
+            title="Transaction Management"
+            key={"/transactionManagement"}
+          >
+            <MenuItem key={"/transactionManagement/goodsReceiptNote"}>
+              <Link to={"/transactionManagement/goodsReceiptNote"}>Goods Receipt Note</Link>
+            </MenuItem>
+
+            <MenuItem key={"/transactionManagement/goodsIssueNote"}>
+              <Link to={"/transactionManagement/goodsIssueNote"}>Goods Issue Note</Link>
+            </MenuItem>
+
+            <MenuItem key={"/transactionManagement/stockTransfer"}>
+              <Link to={"/transactionManagement/stockTransfer"}>Stock Transfer</Link>
+            </MenuItem>
+          </SubMenu>
         </Menu>
       </div>
     );

@@ -7,6 +7,7 @@ import { PartnerRoutes } from "@features/Partner";
 import { ProductRoutes } from "@features/Product";
 import { InventoryRoutes } from "@features/Inventory";
 import { StatusMasterRoutes } from "@features/StatusMaster";
+import { WarehouseManagementRoutes } from "@features/WarehouseManagement";
 
 export type HandleRoutes = {
   pattern: string;
@@ -26,7 +27,8 @@ const routes: RouteObject[] = [
       ...ProductRoutes,
       ...InventoryRoutes,
       ...PartnerRoutes,
-      ...StatusMasterRoutes
+      ...StatusMasterRoutes,
+      ...WarehouseManagementRoutes
     ]
   },
   {
