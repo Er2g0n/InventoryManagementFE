@@ -1,6 +1,6 @@
 export interface BaseEntity {
     id?: number;
-    rowPointer?: string;
+    rowPointer?: string ;
     createdBy?: string | null;
     createdDate?: string | null;
     updatedBy?: string | null;

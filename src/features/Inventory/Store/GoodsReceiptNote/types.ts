@@ -1,4 +1,4 @@
-import { GoodsReceiptNote, GoodsReceiptNoteLine } from "@/types/WarehouseManagement/GoodsReceiptNote";
+import { GoodsReceiptNote, GoodsReceiptNote_Param, GoodsReceiptNoteLine } from "@/types/WarehouseManagement/GoodsReceiptNote";
 
 export interface GoodsReceiptNoteState {
     GoodsReceiptNotes: GoodsReceiptNote[];
@@ -21,6 +21,10 @@ export enum GoodsReceiptNoteActionTypes {
     //delete
     DELETE_GOODS_RECEIPT_NOTE_SUCCESS = 'GoodsReceiptNote/DELETE_GOODS_RECEIPT_NOTE_SUCCESS',
     DELETE_GOODS_RECEIPT_NOTE_FAILURE = 'GoodsReceiptNote/DELETE_GOODS_RECEIPT_NOTE_FAILURE',
+
+    SAVE_GOODS_RECEIPT_NOTE_PARAM_REQUEST = 'GoodsReceiptNoteParam/SAVE_GOODS_RECEIPT_NOTE_PARAM_REQUEST',
+    SAVE_GOODS_RECEIPT_NOTE_PARAM_SUCCESS = 'GoodsReceiptNoteParam/SAVE_GOODS_RECEIPT_NOTE_PARAM_SUCCESS',
+    SAVE_GOODS_RECEIPT_NOTE_PARAM_FAILURE = 'GoodsReceiptNoteParam/SAVE_GOODS_RECEIPT_NOTE_PARAM_FAILURE',
 }
 
 export interface FetchGoodsReceiptNoteRequest {
@@ -61,6 +65,20 @@ export interface DeleteGoodsReceiptNoteFailure {
     payload: string;
 }
 
+export interface SaveGoodsReceiptNote_Param_Request {
+    type: typeof GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_PARAM_REQUEST;
+}
+
+export interface SaveGoodsReceiptNote_Param_Success {
+    type: typeof GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_PARAM_SUCCESS,
+    payload: GoodsReceiptNote_Param;
+}
+
+export interface SaveGoodsReceiptNote_Param_Failure {
+    type: typeof GoodsReceiptNoteActionTypes.SAVE_GOODS_RECEIPT_NOTE_PARAM_FAILURE,
+    payload: string;
+}
+
 export type GoodsReceiptNoteAction =
     | FetchGoodsReceiptNoteRequest
     | FetchGoodsReceiptNoteSucess
@@ -72,6 +90,10 @@ export type GoodsReceiptNoteAction =
 
     | DeleteGoodsReceiptNoteSuccess
     | DeleteGoodsReceiptNoteFailure
+
+    | SaveGoodsReceiptNote_Param_Request
+    | SaveGoodsReceiptNote_Param_Success
+    | SaveGoodsReceiptNote_Param_Failure
 
     
 export interface GoodsReceiptNoteLineState {

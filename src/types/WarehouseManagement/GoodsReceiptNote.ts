@@ -20,4 +20,10 @@ export interface GoodsReceiptNoteLine extends BaseEntity {
   storageBinID: number;
 }
 
+export interface GoodsReceiptNote_Param{
+  createdBy: string,
+  grNs: GoodsReceiptNote,
+  grnLines: GoodsReceiptNoteLine[]
+}
+
 
